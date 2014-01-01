@@ -57,7 +57,7 @@ namespace AnnotationProject.Controllers
         }
 
         [HttpPost]
-        public void PostAnnotation(AnnotationResult annotation) {
+        public List<AnnotationResult> PostAnnotation(AnnotationResult annotation) {
             var db = new TextAnnotationEntities();
             var newText = new Text() {
                 Content = annotation.Content,
@@ -72,6 +72,7 @@ namespace AnnotationProject.Controllers
                 TextAnchor = annotation.TextAnchor
             });
             db.SaveChanges();
+            return GetAnnotations(annotation.BaseTextID);
         }
 
         [HttpPost]

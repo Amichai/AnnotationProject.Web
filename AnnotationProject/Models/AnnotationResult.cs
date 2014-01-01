@@ -11,5 +11,15 @@ namespace AnnotationProject.Models {
         public List<string> Tags { get; set; }
         public int BaseTextID { get; set; }
         public string TextAnchor { get; set; }
+        public string PreviewText {
+            get {
+                return string.Concat(Content.Take(20));
+            }
+        }
+        public bool Expanded {
+            get {
+                return false;
+            }
+        }
     }
 }

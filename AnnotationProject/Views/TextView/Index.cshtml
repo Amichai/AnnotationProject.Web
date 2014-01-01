@@ -8,13 +8,13 @@
         left: 42%;
         right: 5%;
         bottom: 50px;
-        padding:10px;
+        padding: 10px;
         background-color: #efeeef;
-        font-family:Georgia;
+        font-family: Georgia;
     }
 
     .georgia {
-        font-family:Georgia;
+        font-family: Georgia;
     }
 
     .highlight {
@@ -25,21 +25,21 @@
 <html ng-app>
 <body>
     <div ng-controller="TextViewCtrl">
-        <div style="text-align:center">
+        <div style="text-align: center">
             <h1 class="georgia">{{title}}</h1>
             <h3 class="georgia">{{author}}</h3>
             <h3 class="georgia">{{description}}</h3>
-         </div>
+        </div>
         <div class="col-md-4">
-            <div ><b>Anchor:</b></div>
+            <div><b>Anchor:</b></div>
             <div>
-                <input type="text" ng-model="anchor"  ng-change="anchorUpdate()"/>
+                <input type="text" ng-model="anchor" ng-change="anchorUpdate()" />
             </div>
-            <div>   
+            <div>
                 <b>Annotation:</b>
             </div>
             <div>
-                <textarea ng-model="annotation" style="width:300px;max-width:300px"></textarea>
+                <textarea ng-model="annotation" style="width: 300px; max-width: 300px"></textarea>
             </div>
             <div><b>Matches:</b> {{matches}}</div>
             <div>
@@ -47,14 +47,26 @@
                     Add
                 </button>
             </div>
+
             <div ng-repeat="ann in annotations">
-                <div ng-mouseover="hover($index)">
+                <div ng-mouseover="hover($index)" ng-click="expand($index)"
+                        ng-mouseenter="isMouseOver = true"
+                        ng-mouseleave="isMouseOver = false"
+                    ng-class="{highlight: isMouseOver}"
+                    >
                     <b>{{ann.TextAnchor}}</b><br />
-                    {{ann.Content}}
+                    <div ng-if="!ann.Expanded">
+                        {{ann.PreviewText}}
+                    <span ng-if="ann.PreviewText.length != ann.Content.length">...
+                    </span>
+                    </div>
+                    <div ng-if="ann.Expanded">
+                        {{ann.Content}}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="contentBody" >
+        <div class="contentBody">
             <p id="content">{{text}}</p>
         </div>
     </div>

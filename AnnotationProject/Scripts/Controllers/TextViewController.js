@@ -11,6 +11,16 @@
         highlight($scope.annotations[idx].TextAnchor);
     }
 
+    var expandedIdx = -1;
+
+    $scope.expand = function (idx) {
+        if (idx != expandedIdx && expandedIdx != -1) {
+            $scope.annotations[expandedIdx].Expanded = false;
+        }
+        $scope.annotations[idx].Expanded = !$scope.annotations[idx].Expanded;
+        expandedIdx = idx;
+    }
+
     $scope.anchorUpdate = function () {
         var re = new RegExp($scope.anchor, "g");
         if ($scope.anchor == "") {
@@ -24,6 +34,7 @@
             $scope.matches = 0;
             $('#content').html($scope.text);
             highlightedText = "";
+            debugger;
         } else {
             $scope.matches = result.length;
             highlight($scope.anchor);
@@ -35,9 +46,10 @@
         newAnnotation.Content = $scope.annotation;
         newAnnotation.TextAnchor = $scope.anchor;
         newAnnotation.BaseTextID = $scope.textID;
-        $http.post(urlRoot + 'api/DataApi/PostAnnotation', newAnnotation).success(function () {
+        $http.post(urlRoot + 'api/DataApi/PostAnnotation', newAnnotation).success(function (annotations) {
             $scope.annotation = "";
             $scope.anchor = "";
+            $scope.annotations = annotations;
         });
     }
 
