@@ -10,6 +10,7 @@ namespace AnnotationProject.Models {
         public DateTime Timestamp { get; set; }
         public List<string> Tags { get; set; }
         public int BaseTextID { get; set; }
+        public string BaseTextTitle { get; set; }
         public string TextAnchor { get; set; }
         public string PreviewText {
             get {

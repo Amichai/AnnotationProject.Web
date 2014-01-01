@@ -17,6 +17,10 @@
         $scope.results = result;
     });
 
+    $http.get(urlRoot + 'api/DataApi/recentAnnotations').success(function (result) {
+        $scope.recentAnnotations = result;
+    });
+
     function clearForm(){ 
         $scope.text = "";
         $scope.author = "";

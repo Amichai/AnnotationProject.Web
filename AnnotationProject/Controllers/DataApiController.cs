@@ -45,8 +45,25 @@ namespace AnnotationProject.Controllers
                 Title = i.Title,
                 Author = i.Author,
                 Description = i.Description,
-                ID = i.ID
+                ID = i.ID,
             }).Single();
+        }
+
+        [HttpGet]
+        public List<AnnotationResult> RecentAnnotations() {
+            var db = new TextAnnotationEntities();
+            var annotationTexts = db.Texts.Where(i => !i.IsBaseText)
+                .OrderBy(i => i.Timestamp).Take(10)
+                .ToList();
+            var annotationIDs = annotationTexts.Select( i=> i.ID);
+            var annotations = db.Annotations.Where(i => annotationIDs.Contains(i.AnnotationTextID));
+            return annotations.Select(i => new AnnotationResult() {
+                Content = i.Text1.Content,
+                Timestamp = i.Text.Timestamp,
+                BaseTextID = i.BaseTextID,
+                TextAnchor = i.TextAnchor,
+                BaseTextTitle = i.Text.Title
+            }).OrderByDescending(i => i.Timestamp).ToList();
         }
 
         [HttpGet]

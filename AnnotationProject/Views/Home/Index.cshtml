@@ -1,87 +1,133 @@
 ﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
 
 <style>
+    h3 {
+        font-family: Georgia;
+        font-weight: bold;
+    }
+
     h1 {
-        font-family:Georgia;
+        font-family: Georgia;
     }
 
     th {
-        font-family:Georgia;
+        font-family: Georgia;
     }
 </style>
 <html ng-app>
 <body>
     <div ng-controller="UploadTextCtrl">
         <div class="row">
-        <div class="col-md-6">
-            <h1>Search</h1>
-            <div>
-                <input type="text" ng-model="searchQuery" />
-                <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="search()">
-                    Search
+            <h1 style="text-align: center;">Text Annotation Project</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Search</h3>
+                <div>
+                    <input type="text" ng-model="searchQuery" />
+                    <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="search()">
+                        Search
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h3>Upload</h3>
+                <table>
+                    <tr>
+                        <td>Author:</td>
+                        <td>
+                            <input type="text" ng-model="author" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Title:</td>
+                        <td>
+                            <input type="text" ng-model="title" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td>
+                            <input type="text" ng-model="description" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Content:</td>
+                        <td>
+                            <textarea ng-model="text" style="width: 100%"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="upload()">
+                    Upload
                 </button>
             </div>
         </div>
+        <div class="row">
+            <hr style="border-top: 1px solid black" />
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                (click the title)
+            <h3>Results</h3>
+                <table>
+                    <tr ng-show="results.length > 0">
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                    <tr ng-repeat="result in results">
+                        <td style="width: 25%" dir="auto"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
+                        <td style="width: 20%">{{result.Author}}</td>
+                        <td style="width: 20%">{{result.Description}}</td>
+                        <td style="width: 35%" dir="auto">{{result.Snippet}}...</td>
+                    </tr>
+                </table>
 
-        <div class="col-md-6">
-            <h1>Upload</h1>
-            <table>
-                <tr>
-                    <td>Author:</td>
-                    <td>
-                        <input type="text" ng-model="author" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Title:</td>
-                    <td>
-                        <input type="text" ng-model="title" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Description:</td>
-                    <td>
-                        <input type="text" ng-model="description" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Content:</td>
-                    <td>
-                        <textarea ng-model="text" style="width:100%"></textarea>
-                    </td>
-                </tr>
-            </table>
-            <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="upload()">
-                Upload
-            </button>
+            </div>
         </div>
-            </div>
         <div class="row">
-        <hr style="border-top: 1px solid black"/>
+            <div class="col-md-12">
+                <h3>Recent Annotations:</h3>
+                <table>
+                    <tr>
+                        <th style="width:15%">
+                            Time
+                        </th>
+                        <th style="width:15%">
+                            Base Text
+                        </th>
+                        <th style="width:25%">
+                            Anchor
+                        </th>
+                        <th>
+                            Annotation
+                        </th>
+
+                    </tr>
+                    <tr ng-repeat="ann in recentAnnotations">
+                        <td>
+                            {{ann.Timestamp}}
+                        </td>
+                        <td>
+                            <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
+                        </td>
+                        <td>
+                            {{ann.TextAnchor}}
+                        </td>
+                        <td>
+                            {{ann.PreviewText}}
+                        </td>
+                    </tr>
+                </table>
             </div>
-        <div class="row">
-        <div class="col-md-12">
-            (click the title)
-            <h1>Results</h1>
-            <table>
-                <tr ng-show="results.length > 0">
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Description</th>
-                    <th></th>
-                </tr>
-                <tr ng-repeat="result in results">
-                    <td style="width: 25%" dir="auto"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
-                    <td style="width: 20%">{{result.Author}}</td>
-                    <td style="width: 20%">{{result.Description}}</td>
-                    <td style="width: 35%" dir="auto">{{result.Snippet}}...</td>
-                </tr>
-            </table>
-            
         </div>
-            </div>
     </div>
+
 </body>
+
 </html>
 <script src="~/Scripts/jquery-1.9.1.js"></script>
 <script src="~/Scripts/bootstrap.js"></script>
