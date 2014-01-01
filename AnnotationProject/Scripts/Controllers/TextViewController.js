@@ -37,8 +37,8 @@
             highlightedText = "";
             return;
         }
-        var result =$scope.text.match(re);
-        if(result == undefined){
+        var result = $scope.text.match(re);
+        if (result == undefined) {
             $scope.matches = 0;
             $('#content').html($scope.text);
             highlightedText = "";
@@ -88,12 +88,12 @@
 
     function highlight(text) {
         if (text == highlightedText) {
-            return; 
+            return;
         }
         var innerHTML = $scope.text;
         var index = 0;
         var prefix = "<span class='highlight'>";
-        while(index != -1){
+        while (index != -1) {
             index = innerHTML.indexOf(text, index);
             if (index == -1) {
                 break;
@@ -105,12 +105,13 @@
                 break;
             }
         }
-            $('#content').html(innerHTML);
+        $('#content').html(innerHTML);
         highlightedText = text;
     }
 
     $http.get(urlRoot + 'api/DataApi/getText?id=' + $scope.textID).success(function (result) {
         $scope.text = result.Content;
+        
         $scope.title = result.Title;
         $scope.author = result.Author;
         $scope.description = result.Description;

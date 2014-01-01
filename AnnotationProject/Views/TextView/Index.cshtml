@@ -42,7 +42,7 @@
 <body>
     <div ng-controller="TextViewCtrl">
         <div style="float: left">
-            <a href="{{urlRoot}}">Home</a>
+            <a href="{{urlRoot}}" style="color:#428bca">Home</a>
         </div>
         <div style="text-align: center">
             <h1 class="georgia">{{title}}</h1>
@@ -100,7 +100,7 @@
             </div>
         </div>
         <div class="contentBody">
-            <p id="content" style="white-space: pre;">{{text}}</p>
+            <p id="content" style="white-space: pre-wrap;" dir="auto">{{text}}</p>
         </div>
     </div>
 </body>

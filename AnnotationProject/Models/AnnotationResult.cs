@@ -13,7 +13,7 @@ namespace AnnotationProject.Models {
         public string TextAnchor { get; set; }
         public string PreviewText {
             get {
-                return string.Concat(Content.Take(20));
+                return string.Concat(Content.Take(200));
             }
         }
         public bool Expanded {
