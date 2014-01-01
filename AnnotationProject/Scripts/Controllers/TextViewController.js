@@ -7,8 +7,15 @@
     $scope.author = "";
     $scope.description = "";
 
+    $scope.isAddAnnotationVisible = false;
+
     $scope.hover = function (idx) {
         highlight($scope.annotations[idx].TextAnchor);
+        //$('.contentBody').scrollTop(100)
+    }
+
+    $scope.toggleAddAnnotation = function () {
+        $scope.isAddAnnotationVisible = !$scope.isAddAnnotationVisible;
     }
 
     var expandedIdx = -1;
@@ -34,7 +41,6 @@
             $scope.matches = 0;
             $('#content').html($scope.text);
             highlightedText = "";
-            debugger;
         } else {
             $scope.matches = result.length;
             highlight($scope.anchor);

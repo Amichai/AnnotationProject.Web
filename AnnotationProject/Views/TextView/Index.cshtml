@@ -4,13 +4,29 @@
     .contentBody {
         overflow: auto;
         position: absolute;
-        top: 280px;
+        top: 200px;
         left: 42%;
         right: 5%;
         bottom: 50px;
         padding: 10px;
         background-color: #efeeef;
         font-family: Georgia;
+    }
+
+    .annotationPane {
+        overflow: auto;
+        position: absolute;
+        top: 200px;
+        left: 10%;
+        right: 60%;
+        bottom: 50px;
+        padding: 10px;
+        background-color: #efeeef;
+        font-family: Georgia;
+    }
+
+    .border {
+        border: 1px solid black;
     }
 
     .georgia {
@@ -30,44 +46,60 @@
             <h3 class="georgia">{{author}}</h3>
             <h3 class="georgia">{{description}}</h3>
         </div>
-        <div class="col-md-4">
-            <div><b>Anchor:</b></div>
+        <div class="annotationPane">
             <div>
-                <input type="text" ng-model="anchor" ng-change="anchorUpdate()" />
+                <div ng-click="toggleAddAnnotation()">
+                    <span class="glyphicon glyphicon-plus" ng-show="!isAddAnnotationVisible"></span>
+                    <span class="glyphicon glyphicon-minus" ng-show="isAddAnnotationVisible"></span>
+                    <a>Add annotation</a>
+                </div>
+                <div ng-show="isAddAnnotationVisible">
+                    <div><b>Anchor:</b></div>
+                    <div>
+                        <input type="text" ng-model="anchor" ng-change="anchorUpdate()" />
+                    </div>
+                    <div>
+                        <b>Annotation:</b>
+                    </div>
+                    <div>
+                        <textarea ng-model="annotation" style="width: 300px; max-width: 300px"></textarea>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>
+                                    <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" ng-click="addAnnotation()">
+                                        Add
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                <div><b>Matches:</b> {{matches}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div>
-                <b>Annotation:</b>
-            </div>
-            <div>
-                <textarea ng-model="annotation" style="width: 300px; max-width: 300px"></textarea>
-            </div>
-            <div><b>Matches:</b> {{matches}}</div>
-            <div>
-                <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" ng-click="addAnnotation()">
-                    Add
-                </button>
-            </div>
-
+            <hr style="border-top: 1px solid black" />
             <div ng-repeat="ann in annotations">
                 <div ng-mouseover="hover($index)" ng-click="expand($index)"
-                        ng-mouseenter="isMouseOver = true"
-                        ng-mouseleave="isMouseOver = false"
-                    ng-class="{highlight: isMouseOver}"
-                    >
+                    ng-mouseenter="isMouseOver = true"
+                    ng-mouseleave="isMouseOver = false"
+                    ng-class="{highlight: isMouseOver}">
                     <b>{{ann.TextAnchor}}</b><br />
                     <div ng-if="!ann.Expanded">
                         {{ann.PreviewText}}
                     <span ng-if="ann.PreviewText.length != ann.Content.length">...
                     </span>
                     </div>
-                    <div ng-if="ann.Expanded">
+                    <div ng-if="ann.Expanded" style="white-space:pre-wrap">
                         {{ann.Content}}
                     </div>
                 </div>
             </div>
         </div>
         <div class="contentBody">
-            <p id="content">{{text}}</p>
+            <p id="content" style="white-space: pre;">{{text}}</p>
         </div>
     </div>
 </body>
