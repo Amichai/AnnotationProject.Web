@@ -1,0 +1,67 @@
+﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<style>
+    .contentBody {
+        overflow: auto;
+        position: absolute;
+        top: 280px;
+        left: 42%;
+        right: 5%;
+        bottom: 50px;
+        padding:10px;
+        background-color: #efeeef;
+        font-family:Georgia;
+    }
+
+    .georgia {
+        font-family:Georgia;
+    }
+
+    .highlight {
+        background-color: darkgray;
+    }
+</style>
+
+<html ng-app>
+<body>
+    <div ng-controller="TextViewCtrl">
+        <div style="text-align:center">
+            <h1 class="georgia">{{title}}</h1>
+            <h3 class="georgia">{{author}}</h3>
+            <h3 class="georgia">{{description}}</h3>
+         </div>
+        <div class="col-md-4">
+            <div ><b>Anchor:</b></div>
+            <div>
+                <input type="text" ng-model="anchor"  ng-change="anchorUpdate()"/>
+            </div>
+            <div>   
+                <b>Annotation:</b>
+            </div>
+            <div>
+                <textarea ng-model="annotation" style="width:300px;max-width:300px"></textarea>
+            </div>
+            <div><b>Matches:</b> {{matches}}</div>
+            <div>
+                <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" ng-click="addAnnotation()">
+                    Add
+                </button>
+            </div>
+            <div ng-repeat="ann in annotations">
+                <div ng-mouseover="hover($index)">
+                    <b>{{ann.TextAnchor}}</b><br />
+                    {{ann.Content}}
+                </div>
+            </div>
+        </div>
+        <div class="contentBody" >
+            <p id="content">{{text}}</p>
+        </div>
+    </div>
+</body>
+</html>
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/jquery.highlight-4.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/TextViewController.js"></script>

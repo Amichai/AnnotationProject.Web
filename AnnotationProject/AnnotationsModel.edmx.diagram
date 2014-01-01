@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d774dc07e59d49edaffa9ca4120706e4" Name="Diagram1">
+        <EntityTypeShape EntityType="TextAnnotationModel.Annotation" Width="1.5" PointX="3" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TextAnnotationModel.Tag" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TextAnnotationModel.TextTag" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="TextAnnotationModel.FK_TextTag_1" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TextAnnotationModel.Text" Width="1.5" PointX="2.9155517792867274" PointY="4.1028875429662355" />
+        <AssociationConnector Association="TextAnnotationModel.FK_Annotation_0" />
+        <AssociationConnector Association="TextAnnotationModel.FK_Annotation_1" />
+        <AssociationConnector Association="TextAnnotationModel.FK_TextTag_0" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

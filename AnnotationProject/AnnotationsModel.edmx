@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TextAnnotationModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="TextAnnotationModelStoreContainer">
+          <EntitySet Name="Annotation" EntityType="TextAnnotationModel.Store.Annotation" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Tags" EntityType="TextAnnotationModel.Store.Tags" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Text" EntityType="TextAnnotationModel.Store.Text" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TextTag" EntityType="TextAnnotationModel.Store.TextTag" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Annotation_0" Association="TextAnnotationModel.Store.FK_Annotation_0">
+            <End Role="Text" EntitySet="Text" />
+            <End Role="Annotation" EntitySet="Annotation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Annotation_1" Association="TextAnnotationModel.Store.FK_Annotation_1">
+            <End Role="Text" EntitySet="Text" />
+            <End Role="Annotation" EntitySet="Annotation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TextTag_0" Association="TextAnnotationModel.Store.FK_TextTag_0">
+            <End Role="Text" EntitySet="Text" />
+            <End Role="TextTag" EntitySet="TextTag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TextTag_1" Association="TextAnnotationModel.Store.FK_TextTag_1">
+            <End Role="Tags" EntitySet="Tags" />
+            <End Role="TextTag" EntitySet="TextTag" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Annotation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="BaseTextID" Type="int" Nullable="false" />
+          <Property Name="AnnotationTextID" Type="int" Nullable="false" />
+          <Property Name="TextAnchor" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tags">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Tag" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Text">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Source" Type="nvarchar" MaxLength="200" />
+          <Property Name="Author" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsBaseText" Type="bit" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserID" Type="uniqueidentifier" />
+          <Property Name="UserName" Type="int" />
+        </EntityType>
+        <EntityType Name="TextTag">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TextID" Type="int" Nullable="false" />
+          <Property Name="TagID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Annotation_0">
+          <End Role="Text" Type="TextAnnotationModel.Store.Text" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Annotation" Type="TextAnnotationModel.Store.Annotation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Text">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Annotation">
+              <PropertyRef Name="BaseTextID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Annotation_1">
+          <End Role="Text" Type="TextAnnotationModel.Store.Text" Multiplicity="1" />
+          <End Role="Annotation" Type="TextAnnotationModel.Store.Annotation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Text">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Annotation">
+              <PropertyRef Name="AnnotationTextID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TextTag_0">
+          <End Role="Text" Type="TextAnnotationModel.Store.Text" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TextTag" Type="TextAnnotationModel.Store.TextTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Text">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TextTag">
+              <PropertyRef Name="TextID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TextTag_1">
+          <End Role="Tags" Type="TextAnnotationModel.Store.Tags" Multiplicity="1" />
+          <End Role="TextTag" Type="TextAnnotationModel.Store.TextTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tags">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TextTag">
+              <PropertyRef Name="TagID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TextAnnotationModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TextAnnotationEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Annotations" EntityType="TextAnnotationModel.Annotation" />
+          <EntitySet Name="Tags" EntityType="TextAnnotationModel.Tag" />
+          <EntitySet Name="TextTags" EntityType="TextAnnotationModel.TextTag" />
+          <AssociationSet Name="FK_TextTag_1" Association="TextAnnotationModel.FK_TextTag_1">
+            <End Role="Tags" EntitySet="Tags" />
+            <End Role="TextTag" EntitySet="TextTags" />
+          </AssociationSet>
+          <EntitySet Name="Texts" EntityType="TextAnnotationModel.Text" />
+          <AssociationSet Name="FK_Annotation_0" Association="TextAnnotationModel.FK_Annotation_0">
+            <End Role="Text" EntitySet="Texts" />
+            <End Role="Annotation" EntitySet="Annotations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Annotation_1" Association="TextAnnotationModel.FK_Annotation_1">
+            <End Role="Text" EntitySet="Texts" />
+            <End Role="Annotation" EntitySet="Annotations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TextTag_0" Association="TextAnnotationModel.FK_TextTag_0">
+            <End Role="Text" EntitySet="Texts" />
+            <End Role="TextTag" EntitySet="TextTags" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Annotation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="BaseTextID" Type="Int32" Nullable="false" />
+          <Property Name="AnnotationTextID" Type="Int32" Nullable="false" />
+          <Property Name="TextAnchor" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Text" Relationship="TextAnnotationModel.FK_Annotation_0" FromRole="Annotation" ToRole="Text" />
+          <NavigationProperty Name="Text1" Relationship="TextAnnotationModel.FK_Annotation_1" FromRole="Annotation" ToRole="Text" />
+          </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Tag1" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="TextTags" Relationship="TextAnnotationModel.FK_TextTag_1" FromRole="Tags" ToRole="TextTag" />
+        </EntityType>
+        <EntityType Name="TextTag">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="TextID" Type="Int32" Nullable="false" />
+          <Property Name="TagID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Tag" Relationship="TextAnnotationModel.FK_TextTag_1" FromRole="TextTag" ToRole="Tags" />
+          <NavigationProperty Name="Text" Relationship="TextAnnotationModel.FK_TextTag_0" FromRole="TextTag" ToRole="Text" />
+        </EntityType>
+        <Association Name="FK_TextTag_1">
+          <End Role="Tags" Type="TextAnnotationModel.Tag" Multiplicity="1" />
+          <End Role="TextTag" Type="TextAnnotationModel.TextTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tags">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TextTag">
+              <PropertyRef Name="TagID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Text">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="Timestamp" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Content" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Description" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Source" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Author" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsBaseText" Nullable="false" />
+          <Property Type="String" Name="Title" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Guid" Name="UserID" />
+          <Property Type="Int32" Name="UserName" />
+          <NavigationProperty Name="Annotations" Relationship="TextAnnotationModel.FK_Annotation_0" FromRole="Text" ToRole="Annotation" />
+          <NavigationProperty Name="Annotations1" Relationship="TextAnnotationModel.FK_Annotation_1" FromRole="Text" ToRole="Annotation" />
+          <NavigationProperty Name="TextTags" Relationship="TextAnnotationModel.FK_TextTag_0" FromRole="Text" ToRole="TextTag" />
+        </EntityType>
+        <Association Name="FK_Annotation_0">
+          <End Type="TextAnnotationModel.Text" Role="Text" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TextAnnotationModel.Annotation" Role="Annotation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Text">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Annotation">
+              <PropertyRef Name="BaseTextID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Annotation_1">
+          <End Type="TextAnnotationModel.Text" Role="Text" Multiplicity="1" />
+          <End Type="TextAnnotationModel.Annotation" Role="Annotation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Text">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Annotation">
+              <PropertyRef Name="AnnotationTextID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TextTag_0">
+          <End Type="TextAnnotationModel.Text" Role="Text" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="TextAnnotationModel.TextTag" Role="TextTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Text">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TextTag">
+              <PropertyRef Name="TextID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TextAnnotationModelStoreContainer" CdmEntityContainer="TextAnnotationEntities">
+          <EntitySetMapping Name="Annotations">
+            <EntityTypeMapping TypeName="TextAnnotationModel.Annotation">
+              <MappingFragment StoreEntitySet="Annotation">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BaseTextID" ColumnName="BaseTextID" />
+                <ScalarProperty Name="AnnotationTextID" ColumnName="AnnotationTextID" />
+                <ScalarProperty Name="TextAnchor" ColumnName="TextAnchor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="TextAnnotationModel.Tag">
+              <MappingFragment StoreEntitySet="Tags">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Tag1" ColumnName="Tag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TextTags">
+            <EntityTypeMapping TypeName="TextAnnotationModel.TextTag">
+              <MappingFragment StoreEntitySet="TextTag">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TextID" ColumnName="TextID" />
+                <ScalarProperty Name="TagID" ColumnName="TagID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Texts">
+            <EntityTypeMapping TypeName="TextAnnotationModel.Text">
+              <MappingFragment StoreEntitySet="Text">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="IsBaseText" ColumnName="IsBaseText" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
