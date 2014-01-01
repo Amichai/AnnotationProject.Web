@@ -41,6 +41,9 @@
 <html ng-app>
 <body>
     <div ng-controller="TextViewCtrl">
+        <div style="float: left">
+            <a href="{{urlRoot}}">Home</a>
+        </div>
         <div style="text-align: center">
             <h1 class="georgia">{{title}}</h1>
             <h3 class="georgia">{{author}}</h3>
@@ -92,9 +95,7 @@
                     <span ng-if="ann.PreviewText.length != ann.Content.length">...
                     </span>
                     </div>
-                    <div ng-if="ann.Expanded" style="white-space:pre-wrap">
-                        {{ann.Content}}
-                    </div>
+                    <div ng-if="ann.Expanded" style="white-space:pre-wrap">{{ann.Content}}</div>
                 </div>
             </div>
         </div>

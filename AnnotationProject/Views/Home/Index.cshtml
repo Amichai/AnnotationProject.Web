@@ -3,7 +3,7 @@
 <html ng-app>
 <body>
     <div ng-controller="UploadTextCtrl">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <h1>Search</h1>
             <div>
                 <input type="text" ng-model="searchQuery" />
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <h1>Upload</h1>
             <table>
                 <tr>
@@ -34,17 +34,21 @@
                         <input type="text" ng-model="description" />
                     </td>
                 </tr>
+                <tr>
+                    <td>Content:</td>
+                    <td>
+                        <textarea ng-model="text"></textarea>
+
+                    </td>
+                </tr>
             </table>
-            <div>
-                <textarea ng-model="text"></textarea>
-            </div>
             <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="upload()">
                 Upload
             </button>
         </div>
 
         <div class="col-md-12">
-            <h1>Search Results</h1>
+            <h1>Results</h1>
             <table>
                 <tr ng-show="results.length > 0">
                     <th>Title</th>

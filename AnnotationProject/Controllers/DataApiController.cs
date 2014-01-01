@@ -24,6 +24,17 @@ namespace AnnotationProject.Controllers
             }).ToList();
         }
 
+        [HttpGet]
+        public List<TextResult> GetAll() {
+            var db = new TextAnnotationEntities();
+            return db.Texts.Where(i => i.IsBaseText).Take(50).Select(i => new TextResult() {
+                Content = i.Content,
+                Title = i.Title,
+                Author = i.Author,
+                Description = i.Description,
+                ID = i.ID
+            }).ToList();
+        }
 
         [HttpGet]
         public TextResult GetText(int id) {

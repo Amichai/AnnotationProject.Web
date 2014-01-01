@@ -9,6 +9,7 @@
 
     $scope.isAddAnnotationVisible = false;
 
+    $scope.urlRoot = urlRoot;
     $scope.hover = function (idx) {
         highlight($scope.annotations[idx].TextAnchor);
         //$('.contentBody').scrollTop(100)

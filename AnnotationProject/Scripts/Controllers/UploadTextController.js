@@ -4,7 +4,7 @@
     $scope.description = "";
     $scope.searchQuery = "";
     $scope.title = "";
-
+    
     $scope.results = new Object();
 
     $scope.search = function () {
@@ -12,6 +12,10 @@
             $scope.results = result;
         });
     }
+
+    $http.get(urlRoot + 'api/DataApi/getAll').success(function (result) {
+        $scope.results = result;
+    });
 
     function clearForm(){ 
         $scope.text = "";
