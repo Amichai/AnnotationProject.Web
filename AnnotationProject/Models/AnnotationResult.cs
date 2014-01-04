@@ -17,6 +17,12 @@ namespace AnnotationProject.Models {
                 return string.Concat(Content.Take(200));
             }
         }
+        public string DateString {
+            get {
+                return this.Timestamp.ToShortDateString();
+            }
+        }
+
         public bool Expanded {
             get {
                 return false;

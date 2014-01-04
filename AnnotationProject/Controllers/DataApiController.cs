@@ -53,7 +53,7 @@ namespace AnnotationProject.Controllers
         public List<AnnotationResult> RecentAnnotations() {
             var db = new TextAnnotationEntities();
             var annotationTexts = db.Texts.Where(i => !i.IsBaseText)
-                .OrderBy(i => i.Timestamp).Take(10)
+                .OrderByDescending(i => i.Timestamp).Take(10)
                 .ToList();
             var annotationIDs = annotationTexts.Select( i=> i.ID);
             var annotations = db.Annotations.Where(i => annotationIDs.Contains(i.AnnotationTextID));
@@ -77,7 +77,7 @@ namespace AnnotationProject.Controllers
                 return new List<AnnotationResult>();
             }
             return toReturn.Select(i => new AnnotationResult() {
-                Content = i.Content, 
+                Content = i.Content,
                 Timestamp = i.Timestamp,
                 BaseTextID = textID,
                 TextAnchor = annotationIds.Where(j => j.AnnotationTextID == i.ID).FirstOrDefault().TextAnchor,

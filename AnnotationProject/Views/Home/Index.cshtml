@@ -109,7 +109,7 @@
                     </tr>
                     <tr ng-repeat="ann in recentAnnotations">
                         <td>
-                            {{ann.Timestamp}}
+                            {{ann.DateString}}
                         </td>
                         <td>
                             <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
@@ -119,6 +119,7 @@
                         </td>
                         <td>
                             {{ann.PreviewText}}
+                            <span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
                         </td>
                     </tr>
                 </table>
