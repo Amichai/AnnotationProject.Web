@@ -110,8 +110,7 @@
     }
 
     $http.get(urlRoot + 'api/DataApi/getText?id=' + $scope.textID).success(function (result) {
-        $scope.text = result.Content;
-        
+        $scope.text = result.Content;       
         $scope.title = result.Title;
         $scope.author = result.Author;
         $scope.description = result.Description;

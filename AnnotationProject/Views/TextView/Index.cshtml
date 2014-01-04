@@ -41,16 +41,14 @@
 <html ng-app>
 <body>
     <div ng-controller="TextViewCtrl">
-        @*<div style="float: left">
-            <a href="{{urlRoot}}" style="color:#428bca">Home</a>
-        </div>*@
         <div style="text-align: center">
             <h1 class="georgia">{{title}}</h1>
             <h3 class="georgia">{{author}}</h3>
             <h3 class="georgia">{{description}}</h3>
         </div>
         <div class="annotationPane">
-            <div>
+            @if (Request.IsAuthenticated) { 
+                <div>
                 <div ng-click="toggleAddAnnotation()">
                     <span class="glyphicon glyphicon-plus" ng-show="!isAddAnnotationVisible"></span>
                     <span class="glyphicon glyphicon-minus" ng-show="isAddAnnotationVisible"></span>
@@ -83,8 +81,11 @@
                     </table>
                 </div>
             </div>
+            } else { 
+                @Html.ActionLink("Log in to add an annotation", "Login", "Account", routeValues: new { returnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })
+            }
             <hr style="border-top: 1px solid black" />
-            <div ng-repeat="ann in annotations">
+            <div ng-repeat="ann in annotations" style="padding:2px">
                 <div ng-mouseover="hover($index)" ng-click="expand($index)"
                     ng-mouseenter="isMouseOver = true"
                     ng-mouseleave="isMouseOver = false"
