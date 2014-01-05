@@ -30,7 +30,8 @@ namespace AnnotationProject
         public bool IsBaseText { get; set; }
         public string Title { get; set; }
         public Nullable<System.Guid> UserID { get; set; }
-        public Nullable<int> UserName { get; set; }
+        public Nullable<bool> Archived { get; set; }
+        public string Username { get; set; }
     
         public virtual ICollection<Annotation> Annotations { get; set; }
         public virtual ICollection<Annotation> Annotations1 { get; set; }

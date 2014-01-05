@@ -72,7 +72,8 @@ namespace AnnotationProject.Controllers
             var annotationIds = db.Annotations.Where(i => i.BaseTextID == textID)
                 .Select(i => new { i.AnnotationTextID, i.TextAnchor });
             
-            var toReturn = db.Texts.Where(i => annotationIds.Select(j => j.AnnotationTextID).Contains(i.ID));
+            var toReturn = db.Texts.Where(i => annotationIds.Select(j => j.AnnotationTextID).Contains(i.ID) && 
+                (!i.Archived.HasValue || !i.Archived.Value));
             if (annotationIds.Count() == 0) {
                 return new List<AnnotationResult>();
             }
@@ -81,6 +82,8 @@ namespace AnnotationProject.Controllers
                 Timestamp = i.Timestamp,
                 BaseTextID = textID,
                 TextAnchor = annotationIds.Where(j => j.AnnotationTextID == i.ID).FirstOrDefault().TextAnchor,
+                TextID = i.ID,
+                Username = i.Username
             }).ToList();
         }
 
@@ -91,6 +94,7 @@ namespace AnnotationProject.Controllers
                 Content = annotation.Content,
                 Timestamp = DateTime.Now,
                 IsBaseText = false,
+                Username = annotation.Username
             };
             db.Texts.Add(newText);
             db.SaveChanges();
@@ -116,6 +120,77 @@ namespace AnnotationProject.Controllers
             });
             //UserID = (Guid)Membership.GetUser().ProviderUserKey,
             db.SaveChanges();
+        }
+
+        [HttpGet]
+        public List<UserAdminModel> GetUsers() {
+            var db = new UsersContext();
+            List<UserAdminModel> users = new List<UserAdminModel>();
+            foreach (var u in db.UserProfiles) {
+                users.Add(new UserAdminModel() {
+                    ID = u.UserId,
+                    Username = u.UserName,
+                    Roles = Roles.GetRolesForUser(u.UserName).ToList(),
+                    IsLockedOut = false
+                });
+            }
+            return users;
+        }
+
+        [HttpGet]
+        public string MembershipTest() {
+            try {
+                var allUsers = Membership.GetAllUsers();
+                //var db = new UsersContext();
+                //List<UserAdminModel> users = new List<UserAdminModel>();
+                //foreach (var u in db.UserProfiles) {
+                //    users.Add(new UserAdminModel() {
+                //        ID = u.UserId,
+                //        Username = u.UserName,
+                //        Roles = Roles.GetRolesForUser(u.UserName).ToList(),
+                //        IsLockedOut = false
+                //    });
+                //}
+                return "success " + allUsers.Count;
+            } catch (Exception ex) {
+                return string.Format("Failed. Ex: {0}, inner: {1}", ex.Message, ex.InnerException);
+            }
+        }
+
+        [HttpPost]
+        public List<UserAdminModel> AddRole(string user, string role) {
+            if (!Roles.RoleExists(role)) {
+                Roles.CreateRole(role);
+            }
+            Roles.AddUserToRole(user, role);
+            return GetUsers();
+        }
+
+
+        [HttpPost]
+        public List<UserAdminModel> RemoveRole(string user, string role) {
+            if (!Roles.RoleExists(role)) {
+                return GetUsers();
+            }
+            Roles.RemoveUserFromRole(user, role);
+            return GetUsers();
+        }
+
+        [HttpPost]
+        public List<AnnotationResult> ArchiveAnnotation(int annotationID, int textID) {
+            var db = new TextAnnotationEntities();
+            db.Texts.Where(i => i.ID == annotationID).Single().Archived = true;
+            db.SaveChanges();
+            return GetAnnotations(textID);
+        }
+
+        [HttpPost]
+        public List<AnnotationResult> UpdateAnnotation(AnnotationResult ann) {
+            var db = new TextAnnotationEntities();
+            var toEdit = db.Texts.Where(i => i.ID == ann.TextID).Single();
+            toEdit.Content = ann.Content;
+            db.SaveChanges();
+            return GetAnnotations(ann.BaseTextID);
         }
     }
 }

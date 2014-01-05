@@ -48,11 +48,13 @@
         }
     }
 
-    $scope.addAnnotation = function () {
+    $scope.addAnnotation = function (name) {
         var newAnnotation = new Object();
         newAnnotation.Content = $scope.annotation;
         newAnnotation.TextAnchor = $scope.anchor;
         newAnnotation.BaseTextID = $scope.textID;
+        newAnnotation.Username = name;
+        debugger;
         $http.post(urlRoot + 'api/DataApi/PostAnnotation', newAnnotation).success(function (annotations) {
             $scope.annotation = "";
             $scope.anchor = "";
@@ -107,6 +109,33 @@
         }
         $('#content').html(innerHTML);
         highlightedText = text;
+    }
+
+    $scope.editAnnotation = function (p) {
+        $scope.annotations[p.idx].EditMode = !$scope.annotations[p.idx].EditMode;
+        p.ev.stopPropagation();
+    }
+
+    $scope.deleteAnnotation = function (p) {
+        var annotID = $scope.annotations[p.idx].TextID;
+        var baseTextID = $scope.annotations[p.idx].BaseTextID;
+        var username = $scope.annotations[p.idx].Username;
+        debugger;
+        $http.post(urlRoot + 'api/DataApi/ArchiveAnnotation?annotationID=' + annotID + '&textID=' + baseTextID).success(function (result) {
+            $scope.annotations = result;
+        });
+        p.ev.stopPropagation();
+    }
+
+    $scope.editModeTextBoxClick = function (evt) {
+        evt.stopPropagation();
+    }
+
+    $scope.saveAnnotationEdit = function (p) {
+        var ann = $scope.annotations[p.idx];
+        $http.post(urlRoot + 'api/DataApi/updateAnnotation', ann).success(function (result) {
+            $scope.annotations = result;
+        });
     }
 
     $http.get(urlRoot + 'api/DataApi/getText?id=' + $scope.textID).success(function (result) {

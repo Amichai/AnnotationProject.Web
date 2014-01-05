@@ -1,0 +1,37 @@
+﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+
+@{
+    ViewBag.Title = "Manage Users";
+}
+
+<h2>Index</h2>
+
+<html ng-app>
+<body>
+    <div ng-controller="AdminCtrl">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Roles</th>
+            </tr>
+            <tr ng-repeat="user in users track by $index">
+                <td>{{user.ID}}</td>
+                <td>{{user.Username}}</td>
+                <td>{{user.Roles}}</td>
+                <td><input type="text" style="width:150px" ng-model="users[$index].RoleToAdd"/></td>
+                <td><button type="btn" class="btn btn-primary btn-xs" ng-click="addRole($index)">Add</button></td>
+                <td><button type="btn" class="btn btn-danger btn-xs" ng-click="removeRole($index)">Remove</button></td>
+
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/jquery.highlight-4.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/AdminController.js"></script>

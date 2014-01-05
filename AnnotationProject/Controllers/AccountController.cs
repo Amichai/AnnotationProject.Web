@@ -30,8 +30,9 @@ namespace AnnotationProject.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model, string returnUrl) {
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe)) {
+        public ActionResult Login(RegisterLoginModel model, string returnUrl) {
+            if (ModelState.IsValid && WebSecurity.Login(model.LoginModel.UserName, model.LoginModel.Password, 
+                persistCookie: model.LoginModel.RememberMe)) {
                 return RedirectToLocal(returnUrl);
             }
 
@@ -65,12 +66,12 @@ namespace AnnotationProject.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterModel model) {
+        public ActionResult Register(RegisterLoginModel model) {
             if (ModelState.IsValid) {
                 // Attempt to register the user
                 try {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
-                    WebSecurity.Login(model.UserName, model.Password);
+                    WebSecurity.CreateUserAndAccount(model.RegisterModel.UserName, model.RegisterModel.Password);
+                    WebSecurity.Login(model.RegisterModel.UserName, model.RegisterModel.Password);
                     return RedirectToAction("Index", "Home");
                 } catch (MembershipCreateUserException e) {
                     ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));

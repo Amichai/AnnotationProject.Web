@@ -80,6 +80,11 @@ namespace AnnotationProject.Models {
         public string ConfirmPassword { get; set; }
     }
 
+    public class RegisterLoginModel {
+        public RegisterModel RegisterModel { get; set; }
+        public LoginModel LoginModel { get; set; }
+    }
+
     public class ExternalLogin {
         public string Provider { get; set; }
         public string ProviderDisplayName { get; set; }

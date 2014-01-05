@@ -56,7 +56,8 @@
           <Property Name="IsBaseText" Type="bit" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="200" />
           <Property Name="UserID" Type="uniqueidentifier" />
-          <Property Name="UserName" Type="int" />
+          <Property Name="Archived" Type="bit" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="TextTag">
           <Key>
@@ -198,7 +199,8 @@
           <Property Type="Boolean" Name="IsBaseText" Nullable="false" />
           <Property Type="String" Name="Title" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="Guid" Name="UserID" />
-          <Property Type="Int32" Name="UserName" />
+          <Property Type="Boolean" Name="Archived" />
+          <Property Type="String" Name="Username" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Annotations" Relationship="TextAnnotationModel.FK_Annotation_0" FromRole="Text" ToRole="Annotation" />
           <NavigationProperty Name="Annotations1" Relationship="TextAnnotationModel.FK_Annotation_1" FromRole="Text" ToRole="Annotation" />
           <NavigationProperty Name="TextTags" Relationship="TextAnnotationModel.FK_TextTag_0" FromRole="Text" ToRole="TextTag" />
@@ -279,7 +281,8 @@
           <EntitySetMapping Name="Texts">
             <EntityTypeMapping TypeName="TextAnnotationModel.Text">
               <MappingFragment StoreEntitySet="Text">
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="IsBaseText" ColumnName="IsBaseText" />

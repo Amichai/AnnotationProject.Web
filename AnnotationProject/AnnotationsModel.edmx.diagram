@@ -9,7 +9,7 @@
         <EntityTypeShape EntityType="TextAnnotationModel.Tag" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="TextAnnotationModel.TextTag" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="TextAnnotationModel.FK_TextTag_1" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="TextAnnotationModel.Text" Width="1.5" PointX="2.9155517792867274" PointY="4.1028875429662355" />
+        <EntityTypeShape EntityType="TextAnnotationModel.Text" Width="1.5" PointX="10" PointY="3.625" />
         <AssociationConnector Association="TextAnnotationModel.FK_Annotation_0" />
         <AssociationConnector Association="TextAnnotationModel.FK_Annotation_1" />
         <AssociationConnector Association="TextAnnotationModel.FK_TextTag_0" />
