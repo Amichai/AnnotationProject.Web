@@ -11,6 +11,7 @@
         padding: 10px;
         background-color: #efeeef;
         font-family: Georgia;
+        font-size:22px;
     }
 
     .annotationPane {
@@ -23,6 +24,7 @@
         padding: 10px;
         background-color: #efeeef;
         font-family: Georgia;
+        font-size:16px;
     }
 
     .border {
@@ -99,6 +101,9 @@
                     </div>
                     <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap">{{ann.Content}}</div>
                     <input type="text" ng-model="ann.Content" ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
+                    <div ng-if="ann.Expanded">
+                        <p>{{ann.DateString}} - {{ann.Username}}</p>
+                    </div>
                     <div ng-if="ann.Expanded">
                         <div ng-if="ann.Username != undefined
                             && ann.Username == '@User.Identity.Name'">

@@ -52,14 +52,19 @@ namespace AnnotationProject.Controllers
         [HttpGet]
         public List<AnnotationResult> RecentAnnotations() {
             var db = new TextAnnotationEntities();
-            var annotationTexts = db.Texts.Where(i => !i.IsBaseText)
+            
+            var annotationTexts = db.Texts.Where(i => !i.IsBaseText &&
+
+                (!i.Archived.HasValue || !i.Archived.Value))
                 .OrderByDescending(i => i.Timestamp).Take(10)
                 .ToList();
             var annotationIDs = annotationTexts.Select( i=> i.ID);
-            var annotations = db.Annotations.Where(i => annotationIDs.Contains(i.AnnotationTextID));
+            
+            var annotations = db.Annotations.Where(i => annotationIDs.Contains(i.AnnotationTextID)
+                );
             return annotations.Select(i => new AnnotationResult() {
                 Content = i.Text1.Content,
-                Timestamp = i.Text.Timestamp,
+                Timestamp = i.Text1.Timestamp,
                 BaseTextID = i.BaseTextID,
                 TextAnchor = i.TextAnchor,
                 BaseTextTitle = i.Text.Title
