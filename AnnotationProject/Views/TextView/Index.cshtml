@@ -4,20 +4,20 @@
     .contentBody {
         overflow: auto;
         position: absolute;
-        top: 200px;
+        top: 150px;
         left: 42%;
         right: 5%;
         bottom: 50px;
         padding: 10px;
         background-color: #efeeef;
         font-family: Georgia;
-        font-size:22px;
+        font-size:18px;
     }
 
     .annotationPane {
         overflow: auto;
         position: absolute;
-        top: 200px;
+        top: 150px;
         left: 10%;
         right: 60%;
         bottom: 50px;
@@ -43,10 +43,8 @@
 <html ng-app>
 <body>
     <div ng-controller="TextViewCtrl">
-        <div style="text-align: center">
-            <h1 class="georgia">{{title}}</h1>
-            <h3 class="georgia">{{author}}</h3>
-            <h3 class="georgia">{{description}}</h3>
+        <div style="text-align: center; ">
+            <p class="georgia" style="font-size:25px"><i>{{title}}</i>, {{author}} - {{description}}</p>
         </div>
         <div class="annotationPane">
             @if (Request.IsAuthenticated) {
