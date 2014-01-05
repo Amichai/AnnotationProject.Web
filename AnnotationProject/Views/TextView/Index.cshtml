@@ -65,6 +65,10 @@
                         <div>
                             <textarea ng-model="annotation" style="width: 300px; max-width: 300px"></textarea>
                         </div>
+                        <div><b>Tags:</b></div>
+                        <div>
+                            <input type="text" ng-model="tags"/>
+                        </div>
                         <table>
                             <tr>
                                 <td>
@@ -97,15 +101,18 @@
                     <span ng-if="ann.PreviewText.length != ann.Content.length">...
                     </span>
                     </div>
-                    <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap">{{ann.Content}}</div>
+                    <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p>{{ann.Content}}</p></div>
                     <input type="text" ng-model="ann.Content" ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
                     <div ng-if="ann.Expanded">
-                        <p>{{ann.DateString}} - {{ann.Username}}</p>
+                        <p>{{ann.DateString}}, by {{ann.Username}}</p>
+                        <p ng-if="!ann.EditMode">Tags: {{ann.Tags}}</p>
+                        <input type="text" ng-model="ann.Tags" ng-if="ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
                     </div>
                     <div ng-if="ann.Expanded">
                         <div ng-if="ann.Username != undefined
                             && ann.Username == '@User.Identity.Name'">
                             @if (Request.IsAuthenticated) { 
+                                
                                 <button type="button" ng-if="!ann.EditMode"
                                      ng-click="editAnnotation({ev: $event, idx: $index})"
                                     class="btn btn-default btn-xs">

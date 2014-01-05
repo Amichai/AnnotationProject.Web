@@ -82,14 +82,22 @@ namespace AnnotationProject.Controllers
             if (annotationIds.Count() == 0) {
                 return new List<AnnotationResult>();
             }
-            return toReturn.Select(i => new AnnotationResult() {
-                Content = i.Content,
-                Timestamp = i.Timestamp,
-                BaseTextID = textID,
-                TextAnchor = annotationIds.Where(j => j.AnnotationTextID == i.ID).FirstOrDefault().TextAnchor,
-                TextID = i.ID,
-                Username = i.Username
-            }).ToList();
+
+            List<AnnotationResult> results = new List<AnnotationResult>();
+            foreach (var t in toReturn) {
+                string tags = string.Concat(db.TextTags.Where(i => i.TextID == t.ID).Select(i => i.Tag.Tag1 + ", "));
+                results.Add(new AnnotationResult() {
+                    Content = t.Content,
+                    Timestamp = t.Timestamp,
+                    BaseTextID = textID,
+                    TextAnchor = annotationIds.Where(j => j.AnnotationTextID == t.ID).FirstOrDefault().TextAnchor,
+                    TextID = t.ID,
+                    Username = t.Username,
+                    Tags = tags
+                });
+            }
+            
+            return results;
         }
 
         [HttpPost]
@@ -109,20 +117,72 @@ namespace AnnotationProject.Controllers
                 TextAnchor = annotation.TextAnchor
             });
             db.SaveChanges();
+
+            updateTags(annotation.Tags, annotation.TextID, db, newText);
             return GetAnnotations(annotation.BaseTextID);
+        }
+
+        private static void updateTags(string tagString, int annotationID, TextAnnotationEntities db, Text newText) {
+            ///Delete any preexisting tags if necessary
+            var toDelete = db.TextTags.Where(i => i.TextID == annotationID);
+            foreach (var t in toDelete) {
+                db.TextTags.Remove(t);
+            }
+            var tagList = tagString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var t in tagList) {
+                var tag = t.Trim().ToLower();
+                Tag inspectionTag;
+                var matches = db.Tags.Where(i => i.Tag1 == tag);
+                if (matches.Count() == 0) {
+                    inspectionTag = new Tag() {
+                        Tag1 = tag,
+                    };
+                    db.Tags.Add(inspectionTag);
+                    db.SaveChanges();
+                } else {
+                    inspectionTag = matches.Single();
+                }
+                db.TextTags.Add(new TextTag() {
+                    TextID = newText.ID,
+                    TagID = inspectionTag.ID
+                });
+            }
+            db.SaveChanges();
         }
 
         [HttpPost]
         public void PostText(TextResult text) {
             var db = new TextAnnotationEntities();
-            db.Texts.Add(new Text() {
+            var newText = new Text() {
                 Title = text.Title,
                 Content = text.Content,
                 Timestamp = DateTime.Now,
                 Author = text.Author,
                 Description = text.Description,
                 IsBaseText = true,
-            });
+                Username = User.Identity.Name
+            };
+            db.Texts.Add(newText);
+            var tagList = text.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var t in tagList) {
+                var tag = t.Trim().ToLower();
+                Tag inspectionTag;
+                var matches = db.Tags.Where(i => i.Tag1 == tag);
+                if (matches.Count() == 0) {
+                    inspectionTag = new Tag() {
+                        Tag1 = tag,
+                    };
+                    db.Tags.Add(inspectionTag);
+                    db.SaveChanges();
+                } else {
+                    inspectionTag = matches.Single();
+                }
+                db.TextTags.Add(new TextTag() {
+                    TextID = newText.ID,
+                    TagID = inspectionTag.ID
+                });
+            }
+
             //UserID = (Guid)Membership.GetUser().ProviderUserKey,
             db.SaveChanges();
         }
@@ -194,6 +254,7 @@ namespace AnnotationProject.Controllers
             var db = new TextAnnotationEntities();
             var toEdit = db.Texts.Where(i => i.ID == ann.TextID).Single();
             toEdit.Content = ann.Content;
+            updateTags(ann.Tags, ann.TextID, db, toEdit);
             db.SaveChanges();
             return GetAnnotations(ann.BaseTextID);
         }

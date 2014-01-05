@@ -4,6 +4,8 @@
     $scope.description = "";
     $scope.searchQuery = "";
     $scope.title = "";
+    $scope.tags = "";
+
     
     $scope.results = new Object();
 
@@ -27,6 +29,7 @@
         $scope.description = "";
         $scope.searchQuery = "";
         $scope.title = "";
+        $scope.tags = "";
     }
 
     $scope.upload = function () {
@@ -35,6 +38,7 @@
         textResult.Title = $scope.title;
         textResult.Author = $scope.author;
         textResult.Description = $scope.description;
+        textResult.Tags = $scope.tags;
         $http.post(urlRoot + 'api/DataApi/PostText', textResult).success(function () {
             clearForm();
         });
