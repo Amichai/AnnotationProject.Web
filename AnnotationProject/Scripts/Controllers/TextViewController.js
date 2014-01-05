@@ -54,7 +54,6 @@
         newAnnotation.TextAnchor = $scope.anchor;
         newAnnotation.BaseTextID = $scope.textID;
         newAnnotation.Username = name;
-        debugger;
         $http.post(urlRoot + 'api/DataApi/PostAnnotation', newAnnotation).success(function (annotations) {
             $scope.annotation = "";
             $scope.anchor = "";
@@ -95,6 +94,7 @@
         var innerHTML = $scope.text;
         var index = 0;
         var prefix = "<span class='highlight'>";
+        var loopCounter = 0;
         while (index != -1) {
             index = innerHTML.indexOf(text, index);
             if (index == -1) {
@@ -102,8 +102,11 @@
             }
             innerHTML = innerHTML.substring(0, index) + prefix + text + "</span>" + innerHTML.substring(index + text.length);
             if (index != -1) {
-                index += prefix.length + 1;
+                index += prefix.length + 7;
             } else {
+                break;
+            }
+            if (loopCounter++ > 50) {
                 break;
             }
         }
@@ -120,8 +123,8 @@
         var annotID = $scope.annotations[p.idx].TextID;
         var baseTextID = $scope.annotations[p.idx].BaseTextID;
         var username = $scope.annotations[p.idx].Username;
-        debugger;
         $http.post(urlRoot + 'api/DataApi/ArchiveAnnotation?annotationID=' + annotID + '&textID=' + baseTextID).success(function (result) {
+            expandedIdx = -1;
             $scope.annotations = result;
         });
         p.ev.stopPropagation();
