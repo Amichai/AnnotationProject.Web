@@ -22,9 +22,19 @@
         </div>*@
         <div class="row">
             <div class="col-md-6">
-                <h3>Search</h3>
+                <h3>Text Search</h3>
                 <div>
-                    <input type="text" ng-model="searchQuery" />
+                    <table>
+                        <tr>
+                            <td>Title:</td>
+                            <td><input type="text" ng-model="searchQuery" /></td>
+                        </tr>
+                        <tr>
+                            <td>Tags:</td>
+                            <td><input type="text" ng-model="tagQuery" /></td>
+                        </tr>
+                    </table>
+                    
                     <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="search()">
                         Search
                     </button>
@@ -44,12 +54,6 @@
                         <td>Title:</td>
                         <td>
                             <input type="text" ng-model="title" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Description:</td>
-                        <td>
-                            <input type="text" ng-model="description" />
                         </td>
                     </tr>
                     <tr>
@@ -81,13 +85,13 @@
                     <tr ng-show="results.length > 0">
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Description</th>
+                        <th>Tags</th>
                         <th></th>
                     </tr>
                     <tr ng-repeat="result in results">
                         <td style="width: 25%" dir="auto"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
                         <td style="width: 20%">{{result.Author}}</td>
-                        <td style="width: 20%">{{result.Description}}</td>
+                        <td style="width: 20%">{{result.Tags}}</td>
                         <td style="width: 35%" dir="auto">{{result.Snippet}}...</td>
                     </tr>
                 </table>

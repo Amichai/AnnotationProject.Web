@@ -12,16 +12,41 @@ namespace AnnotationProject.Controllers
     public class DataApiController : ApiController
     {
         [HttpGet]
-        public List<TextResult> GetText(string query) {
+        public List<TextResult> GetText(string query, string tags) {
+
             var db = new TextAnnotationEntities();
-            var toReturn = db.Texts.Where(i => i.Title.ToLower().Contains(query.ToLower()));
-            return toReturn.Select(i => new TextResult() { 
-                Content = i.Content, 
-                Title = i.Title, 
+            if (tags != null) {
+                List<Tag> inspectionTags = new List<Tag>();
+                foreach (var tag in tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) {
+                    inspectionTags.AddRange(db.Tags.Where(i => i.Tag1.ToLower().Contains(tag.ToLower().Trim())));
+                }
+                var tagQueryResult = inspectionTags.SelectMany(i => i.TextTags).Select(i => i.Text).Where(i => i.IsBaseText).ToList();
+
+                if (query == null) {
+                    return toTextResult(tagQueryResult);
+                } else {
+                    List<int> tagTextIds = tagQueryResult.Select(i => i.ID).ToList();
+                    var queryResults = db.Texts.Where(i => i.Title.ToLower().Contains(query.ToLower()));
+                    queryResults = queryResults.Where(i => tagTextIds.Contains(i.ID));
+                    var result = toTextResult(queryResults.ToList());
+                    return result;
+                }
+            } else {
+                var queryResults = db.Texts.Where(i => i.Title.ToLower().Contains(query.ToLower()));
+                return toTextResult(queryResults.ToList());
+            }
+        }
+
+        private static List<TextResult> toTextResult(List<Text> queryResults) {
+            var result = queryResults.Select(i => new TextResult() {
+                Content = i.Content,
+                Title = i.Title,
                 Author = i.Author,
                 Description = i.Description,
-                ID = i.ID
+                ID = i.ID,
+                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
             }).ToList();
+            return result;
         }
 
         [HttpGet]
@@ -39,13 +64,15 @@ namespace AnnotationProject.Controllers
         [HttpGet]
         public TextResult GetText(int id) {
             var db = new TextAnnotationEntities();
-            var toReturn = db.Texts.Where(i => i.ID == id);
+            var toReturn = db.Texts.Where(i => i.ID == id).ToList();
             return toReturn.Select(i => new TextResult() {
                 Content = i.Content,
                 Title = i.Title,
                 Author = i.Author,
                 Description = i.Description,
                 ID = i.ID,
+                Uploader = i.Username,
+                Tags =  string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
             }).Single();
         }
 
@@ -257,6 +284,18 @@ namespace AnnotationProject.Controllers
             updateTags(ann.Tags, ann.TextID, db, toEdit);
             db.SaveChanges();
             return GetAnnotations(ann.BaseTextID);
+        }
+
+        [HttpPost]
+        public void UpdateTextDetails(TextResult text) {
+            var db = new TextAnnotationEntities();
+            var toEdit = db.Texts.Where(i => i.ID == text.ID).Single();
+            toEdit.Content = text.Content;
+            toEdit.Author = text.Author;
+            toEdit.Description = text.Description;
+            toEdit.Title = text.Title;
+            updateTags(text.Tags, text.ID, db, toEdit);
+            db.SaveChanges();
         }
     }
 }

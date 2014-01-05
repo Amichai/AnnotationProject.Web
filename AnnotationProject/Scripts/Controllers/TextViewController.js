@@ -7,6 +7,7 @@
     $scope.author = "";
     $scope.description = "";
     $scope.tags = "";
+    $scope.uploader = "";
 
     $scope.isAddAnnotationVisible = false;
 
@@ -149,8 +150,22 @@
         $scope.title = result.Title;
         $scope.author = result.Author;
         $scope.description = result.Description;
+        $scope.uploader = result.Uploader;
+        $scope.tags = result.Tags;
         $http.get(urlRoot + 'api/DataApi/getAnnotations?textID=' + $scope.textID).success(function (result) {
             $scope.annotations = result;
         });
     });
+
+    $scope.updateTextDetails = function () {
+        var updatedText = new Object();
+        updatedText.Content = $scope.text;
+        updatedText.Title = $scope.title;
+        updatedText.Author = $scope.author;
+        updatedText.Tags = $scope.tags;
+        updatedText.ID = $scope.textID;
+        $http.post(urlRoot + 'api/DataApi/updateTextDetails', updatedText).success(function (result) {
+            
+        });
+    }
 }

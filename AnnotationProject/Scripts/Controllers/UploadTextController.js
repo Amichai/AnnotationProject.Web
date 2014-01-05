@@ -3,6 +3,7 @@
     $scope.author = "";
     $scope.description = "";
     $scope.searchQuery = "";
+    $scope.tagQuery = "";
     $scope.title = "";
     $scope.tags = "";
 
@@ -10,7 +11,7 @@
     $scope.results = new Object();
 
     $scope.search = function () {
-        $http.get(urlRoot + 'api/DataApi/getText?query=' + $scope.searchQuery).success(function (result) {
+        $http.get(urlRoot + 'api/DataApi/getText?query=' + $scope.searchQuery + '&tags=' + $scope.tagQuery).success(function (result) {
             $scope.results = result;
         });
     }
@@ -28,6 +29,7 @@
         $scope.author = "";
         $scope.description = "";
         $scope.searchQuery = "";
+        $scope.tagQuery = "";
         $scope.title = "";
         $scope.tags = "";
     }

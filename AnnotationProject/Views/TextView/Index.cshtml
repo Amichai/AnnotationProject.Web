@@ -11,7 +11,7 @@
         padding: 10px;
         background-color: #efeeef;
         font-family: Georgia;
-        font-size:18px;
+        font-size: 18px;
     }
 
     .annotationPane {
@@ -24,7 +24,7 @@
         padding: 10px;
         background-color: #efeeef;
         font-family: Georgia;
-        font-size:16px;
+        font-size: 16px;
     }
 
     .border {
@@ -43,8 +43,8 @@
 <html ng-app>
 <body>
     <div ng-controller="TextViewCtrl">
-        <div style="text-align: center; ">
-            <p class="georgia" style="font-size:25px"><i>{{title}}</i>, {{author}} - {{description}}</p>
+        <div style="text-align: center;">
+            <p class="georgia" style="font-size: 25px"><i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" ng-show="uploader == '@User.Identity.Name'" style="font-size:12px">edit</a></p>
         </div>
         <div class="annotationPane">
             @if (Request.IsAuthenticated) {
@@ -67,7 +67,7 @@
                         </div>
                         <div><b>Tags:</b></div>
                         <div>
-                            <input type="text" ng-model="tags"/>
+                            <input type="text" ng-model="tags" />
                         </div>
                         <table>
                             <tr>
@@ -101,7 +101,9 @@
                     <span ng-if="ann.PreviewText.length != ann.Content.length">...
                     </span>
                     </div>
-                    <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p>{{ann.Content}}</p></div>
+                    <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap">
+                        <p>{{ann.Content}}</p>
+                    </div>
                     <input type="text" ng-model="ann.Content" ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
                     <div ng-if="ann.Expanded">
                         <p>{{ann.DateString}}, by {{ann.Username}}</p>
@@ -114,11 +116,11 @@
                             @if (Request.IsAuthenticated) { 
                                 
                                 <button type="button" ng-if="!ann.EditMode"
-                                     ng-click="editAnnotation({ev: $event, idx: $index})"
+                                    ng-click="editAnnotation({ev: $event, idx: $index})"
                                     class="btn btn-default btn-xs">
                                     Edit</button>
                                 <button type="button" ng-if="ann.EditMode"
-                                     ng-click="saveAnnotationEdit({ev: $event, idx: $index})"
+                                    ng-click="saveAnnotationEdit({ev: $event, idx: $index})"
                                     class="btn btn-default btn-xs">
                                     Save</button>
                             }
@@ -135,6 +137,47 @@
         <div class="contentBody">
             <p id="content" style="white-space: pre-wrap;" dir="auto">{{text}}</p>
         </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Edit</h4>
+                    </div>
+                <table style="margin:25px">
+                    <tr>
+                        <td>Author:</td>
+                        <td>
+                            <input type="text" ng-model="author" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Title:</td>
+                        <td>
+                            <input type="text" ng-model="title" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Content:</td>
+                        <td>
+                            <textarea ng-model="text" style="width: 100%"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tags:</td>
+                        <td>
+                            <input type="text" ng-model="tags" />
+                        </td>
+                    </tr>
+                </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="updateTextDetails()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
     </div>
 </body>
 </html>
