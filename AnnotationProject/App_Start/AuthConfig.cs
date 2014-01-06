@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
 using AnnotationProject.Models;
+using WebMatrix.WebData;
 
 namespace AnnotationProject {
     public static class AuthConfig {
@@ -23,7 +24,9 @@ namespace AnnotationProject {
             //    appId: "",
             //    appSecret: "");
 
+            WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
             OAuthWebSecurity.RegisterGoogleClient();
+
         }
     }
 }

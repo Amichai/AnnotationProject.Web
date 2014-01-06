@@ -44,7 +44,7 @@
 <body>
     <div ng-controller="TextViewCtrl">
         <div style="text-align: center;">
-            <p class="georgia" style="font-size: 25px"><i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" ng-show="uploader == '@User.Identity.Name' || '@User.Identity.Name' == 'amichai4'" style="font-size:12px">edit</a></p>
+            <p class="georgia" style="font-size: 25px"><i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" ng-show="uploader == '@User.Identity.Name' || || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px">edit</a></p>
         </div>
         <div class="annotationPane">
             @if (Request.IsAuthenticated) {
@@ -109,11 +109,8 @@
                         <input type="text" ng-model="ann.Tags" ng-if="ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
                     </div>
                     <div ng-if="ann.Expanded">
-                        <div ng-if="(ann.Username != undefined
-                            && ann.Username == '@User.Identity.Name') 
-                            || '@User.Identity.Name' == 'amichai4'">
+                        <div ng-if="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >
                             @if (Request.IsAuthenticated) { 
-                                
                                 <button type="button" ng-if="!ann.EditMode"
                                     ng-click="editAnnotation({ev: $event, idx: $index})"
                                     class="btn btn-default btn-xs">

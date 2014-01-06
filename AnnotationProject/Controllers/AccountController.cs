@@ -13,7 +13,7 @@ using AnnotationProject.Models;
 
 namespace AnnotationProject.Controllers {
     [Authorize]
-    [InitializeSimpleMembership]
+    //[InitializeSimpleMembership]
     public class AccountController : Controller {
         //
         // GET: /Account/Login

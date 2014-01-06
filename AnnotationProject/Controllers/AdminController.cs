@@ -11,7 +11,7 @@ namespace AnnotationProject.Controllers
         //
         // GET: /Admin/
 
-        //[Authorize(Roles="IsAdmin")]
+        [Authorize(Roles="IsAdmin")]
         public ActionResult Index()
         {
             return View();
