@@ -18,8 +18,8 @@
 
     $http.get(urlRoot + 'api/DataApi/getAll').success(function (result) {
         $scope.results = result;
-    });
-
+        });
+        
     $http.get(urlRoot + 'api/DataApi/recentAnnotations').success(function (result) {
         $scope.recentAnnotations = result;
     });

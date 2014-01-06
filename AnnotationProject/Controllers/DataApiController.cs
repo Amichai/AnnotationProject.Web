@@ -7,17 +7,15 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
 
-namespace AnnotationProject.Controllers
-{
-    public class DataApiController : ApiController
-    {
+namespace AnnotationProject.Controllers {
+    public class DataApiController : ApiController {
         [HttpGet]
         public List<TextResult> GetText(string query, string tags) {
 
             var db = new TextAnnotationEntities();
             if (tags != null) {
                 List<Tag> inspectionTags = new List<Tag>();
-                foreach (var tag in tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) {
+                foreach (var tag in parseTagString(tags)) {
                     inspectionTags.AddRange(db.Tags.Where(i => i.Tag1.ToLower().Contains(tag.ToLower().Trim())));
                 }
                 var tagQueryResult = inspectionTags.SelectMany(i => i.TextTags).Select(i => i.Text).Where(i => i.IsBaseText).ToList();
@@ -52,12 +50,13 @@ namespace AnnotationProject.Controllers
         [HttpGet]
         public List<TextResult> GetAll() {
             var db = new TextAnnotationEntities();
-            return db.Texts.Where(i => i.IsBaseText).Take(50).Select(i => new TextResult() {
+            return db.Texts.Where(i => i.IsBaseText).Take(50).ToList().Select(i => new TextResult() {
                 Content = i.Content,
                 Title = i.Title,
                 Author = i.Author,
                 Description = i.Description,
-                ID = i.ID
+                ID = i.ID,
+                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
             }).ToList();
         }
 
@@ -72,21 +71,21 @@ namespace AnnotationProject.Controllers
                 Description = i.Description,
                 ID = i.ID,
                 Uploader = i.Username,
-                Tags =  string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
+                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
             }).Single();
         }
 
         [HttpGet]
         public List<AnnotationResult> RecentAnnotations() {
             var db = new TextAnnotationEntities();
-            
+
             var annotationTexts = db.Texts.Where(i => !i.IsBaseText &&
 
                 (!i.Archived.HasValue || !i.Archived.Value))
                 .OrderByDescending(i => i.Timestamp).Take(10)
                 .ToList();
-            var annotationIDs = annotationTexts.Select( i=> i.ID);
-            
+            var annotationIDs = annotationTexts.Select(i => i.ID);
+
             var annotations = db.Annotations.Where(i => annotationIDs.Contains(i.AnnotationTextID)
                 );
             return annotations.Select(i => new AnnotationResult() {
@@ -103,8 +102,8 @@ namespace AnnotationProject.Controllers
             var db = new TextAnnotationEntities();
             var annotationIds = db.Annotations.Where(i => i.BaseTextID == textID)
                 .Select(i => new { i.AnnotationTextID, i.TextAnchor });
-            
-            var toReturn = db.Texts.Where(i => annotationIds.Select(j => j.AnnotationTextID).Contains(i.ID) && 
+
+            var toReturn = db.Texts.Where(i => annotationIds.Select(j => j.AnnotationTextID).Contains(i.ID) &&
                 (!i.Archived.HasValue || !i.Archived.Value));
             if (annotationIds.Count() == 0) {
                 return new List<AnnotationResult>();
@@ -123,7 +122,7 @@ namespace AnnotationProject.Controllers
                     Tags = tags
                 });
             }
-            
+
             return results;
         }
 
@@ -155,7 +154,7 @@ namespace AnnotationProject.Controllers
             foreach (var t in toDelete) {
                 db.TextTags.Remove(t);
             }
-            var tagList = tagString.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var tagList = parseTagString(tagString);
             foreach (var t in tagList) {
                 var tag = t.Trim().ToLower();
                 Tag inspectionTag;
@@ -177,6 +176,11 @@ namespace AnnotationProject.Controllers
             db.SaveChanges();
         }
 
+        private static string[] parseTagString(string tagString) {
+            var tagList = tagString.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            return tagList;
+        }
+
         [HttpPost]
         public void PostText(TextResult text) {
             var db = new TextAnnotationEntities();
@@ -190,7 +194,7 @@ namespace AnnotationProject.Controllers
                 Username = User.Identity.Name
             };
             db.Texts.Add(newText);
-            var tagList = text.Tags.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var tagList = parseTagString(text.Tags);
             foreach (var t in tagList) {
                 var tag = t.Trim().ToLower();
                 Tag inspectionTag;
@@ -299,3 +303,16 @@ namespace AnnotationProject.Controllers
         }
     }
 }
+/*
+
+Todo:
+order annotation results
+add User pages
+add User management (roles)
+archived texts view (with delete and restore)
+Filter and search annotations on tags/users
+recently uploaded?
+reload upload texts when we add a new one
+Tag pages
+Author pages
+*/

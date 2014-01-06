@@ -44,7 +44,7 @@
 <body>
     <div ng-controller="TextViewCtrl">
         <div style="text-align: center;">
-            <p class="georgia" style="font-size: 25px"><i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" ng-show="uploader == '@User.Identity.Name'" style="font-size:12px">edit</a></p>
+            <p class="georgia" style="font-size: 25px"><i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" ng-show="uploader == '@User.Identity.Name' || '@User.Identity.Name' == 'amichai4'" style="font-size:12px">edit</a></p>
         </div>
         <div class="annotationPane">
             @if (Request.IsAuthenticated) {
@@ -67,7 +67,7 @@
                         </div>
                         <div><b>Tags:</b></div>
                         <div>
-                            <input type="text" ng-model="tags" />
+                            <input type="text" ng-model="annotationTags" />
                         </div>
                         <table>
                             <tr>
@@ -101,9 +101,7 @@
                     <span ng-if="ann.PreviewText.length != ann.Content.length">...
                     </span>
                     </div>
-                    <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap">
-                        <p>{{ann.Content}}</p>
-                    </div>
+                    <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p>{{ann.Content}}</p></div>
                     <input type="text" ng-model="ann.Content" ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
                     <div ng-if="ann.Expanded">
                         <p>{{ann.DateString}}, by {{ann.Username}}</p>
@@ -111,8 +109,9 @@
                         <input type="text" ng-model="ann.Tags" ng-if="ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
                     </div>
                     <div ng-if="ann.Expanded">
-                        <div ng-if="ann.Username != undefined
-                            && ann.Username == '@User.Identity.Name'">
+                        <div ng-if="(ann.Username != undefined
+                            && ann.Username == '@User.Identity.Name') 
+                            || '@User.Identity.Name' == 'amichai4'">
                             @if (Request.IsAuthenticated) { 
                                 
                                 <button type="button" ng-if="!ann.EditMode"
@@ -172,7 +171,7 @@
                 </table>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" ng-click="updateTextDetails()">Save changes</button>
+                        <button type="button" class="btn btn-primary" ng-click="updateTextDetails()" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>
             </div>

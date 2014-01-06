@@ -7,6 +7,7 @@
     $scope.author = "";
     $scope.description = "";
     $scope.tags = "";
+    $scope.annotationTags = "";
     $scope.uploader = "";
 
     $scope.isAddAnnotationVisible = false;
@@ -56,11 +57,11 @@
         newAnnotation.TextAnchor = $scope.anchor;
         newAnnotation.BaseTextID = $scope.textID;
         newAnnotation.Username = name;
-        newAnnotation.Tags = $scope.tags;
+        newAnnotation.Tags = $scope.annotationTags;
         $http.post(urlRoot + 'api/DataApi/PostAnnotation', newAnnotation).success(function (annotations) {
             $scope.annotation = "";
             $scope.anchor = "";
-            $scope.tags = "";
+            $scope.annotationTags = "";
             $scope.annotations = annotations;
         });
     }
