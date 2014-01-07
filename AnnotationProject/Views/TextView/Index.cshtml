@@ -14,10 +14,23 @@
         font-size: 18px;
     }
 
-    .annotationPane {
+    .searchBox {
         overflow: auto;
         position: absolute;
         top: 150px;
+        left: 10%;
+        right: 60%;
+        bottom: 50px;
+        padding: 10px;
+        background-color: #efeeef;
+        font-family: Georgia;
+        font-size: 16px;
+    }
+
+    .annotationPane {
+        overflow: auto;
+        position: absolute;
+        top: 200px;
         left: 10%;
         right: 60%;
         bottom: 50px;
@@ -44,7 +57,13 @@
 <body>
     <div ng-controller="TextViewCtrl">
         <div style="text-align: center;">
-            <p class="georgia" style="font-size: 25px"><i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" ng-show="uploader == '@User.Identity.Name' || || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px">edit</a></p>
+            <p class="georgia" style="font-size: 25px"><i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" 
+                ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px">edit</a></p>
+        </div>
+        <div class="searchBox">
+            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()"/>
+            <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()" ></span>
+
         </div>
         <div class="annotationPane">
             @if (Request.IsAuthenticated) {
@@ -111,18 +130,19 @@
                     <div ng-if="ann.Expanded">
                         <div ng-if="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >
                             @if (Request.IsAuthenticated) { 
+                                <button type="button" class="btn btn-warning btn-xs">Report
+
+                                </button>
                                 <button type="button" ng-if="!ann.EditMode"
                                     ng-click="editAnnotation({ev: $event, idx: $index})"
-                                    class="btn btn-default btn-xs">
+                                    class="btn btn-primary btn-xs">
                                     Edit</button>
                                 <button type="button" ng-if="ann.EditMode"
                                     ng-click="saveAnnotationEdit({ev: $event, idx: $index})"
-                                    class="btn btn-default btn-xs">
+                                    class="btn btn-primary btn-xs">
                                     Save</button>
-                            }
-                            @if (Request.IsAuthenticated) { 
                                 <button type="button" ng-click="deleteAnnotation({ev: $event, idx: $index})"
-                                    class="btn btn-default btn-xs">
+                                    class="btn btn-danger btn-xs">
                                     Delete</button>
                             }
                         </div>
@@ -181,4 +201,6 @@
 <script src="~/Scripts/jquery.highlight-4.js"></script>
 <script src="~/Scripts/bootstrap.js"></script>
 <script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/linq.js_ver2.2.0.2/jquery.linq.js"></script>
+<script src="~/Scripts/linq.js_ver2.2.0.2/linq.js"></script>
 <script src="~/Scripts/Controllers/TextViewController.js"></script>

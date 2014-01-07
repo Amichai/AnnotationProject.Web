@@ -1,4 +1,5 @@
-﻿function TextViewCtrl($scope, $http) {
+﻿/// <reference path="../linq.js_ver2.2.0.2/linq.js" />
+function TextViewCtrl($scope, $http) {
     $scope.annotation = "";
     $scope.anchor = "";
     $scope.matches = 0;
@@ -9,6 +10,8 @@
     $scope.tags = "";
     $scope.annotationTags = "";
     $scope.uploader = "";
+
+    $scope.annotationSearch = "";
 
     $scope.isAddAnnotationVisible = false;
 
@@ -130,6 +133,7 @@
         var username = $scope.annotations[p.idx].Username;
         $http.post(urlRoot + 'api/DataApi/ArchiveAnnotation?annotationID=' + annotID + '&textID=' + baseTextID).success(function (result) {
             expandedIdx = -1;
+            $scope.allAnnotations = result;
             $scope.annotations = result;
         });
         p.ev.stopPropagation();
@@ -142,18 +146,20 @@
     $scope.saveAnnotationEdit = function (p) {
         var ann = $scope.annotations[p.idx];
         $http.post(urlRoot + 'api/DataApi/updateAnnotation', ann).success(function (result) {
+            $scope.allAnnotations = result;
             $scope.annotations = result;
         });
     }
 
     $http.get(urlRoot + 'api/DataApi/getText?id=' + $scope.textID).success(function (result) {
-        $scope.text = result.Content;       
+        $scope.text = result.Content;
         $scope.title = result.Title;
         $scope.author = result.Author;
         $scope.description = result.Description;
         $scope.uploader = result.Uploader;
         $scope.tags = result.Tags;
         $http.get(urlRoot + 'api/DataApi/getAnnotations?textID=' + $scope.textID).success(function (result) {
+            $scope.allAnnotations = result;
             $scope.annotations = result;
         });
     });
@@ -166,7 +172,22 @@
         updatedText.Tags = $scope.tags;
         updatedText.ID = $scope.textID;
         $http.post(urlRoot + 'api/DataApi/updateTextDetails', updatedText).success(function (result) {
-            
+
         });
+    }
+
+    $scope.annotationSearchUpdate = function () {
+        ///TODO: split on spaces, commas and treat each token independently
+        $scope.annotations = Enumerable.From($scope.allAnnotations).Where(function (x) {
+            var result = x.Content.toLowerCase().indexOf($scope.annotationSearch.toLowerCase()) != -1 ||
+                 x.TextAnchor.toLowerCase().indexOf($scope.annotationSearch.toLowerCase()) != -1 ||
+                 x.Tags.indexOf($scope.annotationSearch) != -1;
+            return result;
+        }).ToArray();
+    }
+
+    $scope.clearAnnotationSearch = function () {
+        $scope.annotationSearch = "";
+        $scope.annotations = $scope.allAnnotations;
     }
 }
