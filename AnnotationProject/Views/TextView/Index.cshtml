@@ -30,7 +30,7 @@
     .annotationPane {
         overflow: auto;
         position: absolute;
-        top: 200px;
+        top: 220px;
         left: 10%;
         right: 60%;
         bottom: 50px;
@@ -61,7 +61,8 @@
                 ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px">edit</a></p>
         </div>
         <div class="searchBox">
-            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()"/>
+            <span style="white-space:nowrap">Filter annotations and tags:</span>
+            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="width:80%"/>
             <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()" ></span>
 
         </div>
