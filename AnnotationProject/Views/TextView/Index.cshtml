@@ -128,7 +128,9 @@
                          ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap;width:100%" 
                         ng-click="editModeTextBoxClick($event)" />
                     <div ng-if="ann.Expanded">
-                        <p>{{ann.DateString}}, by {{ann.Username}}</p>
+                        <p>{{ann.DateString}}, by <a href="~/User/Index?user={{ann.Username}}"
+                            style="color: #428bca;"
+                            >{{ann.Username}}</a></p>
                         <p ng-if="!ann.EditMode">Tags: {{ann.Tags}}</p>
                         <input type="text" 
                             style="width:100%"
