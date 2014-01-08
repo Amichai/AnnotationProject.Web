@@ -1,0 +1,33 @@
+﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<html ng-app>
+<body>
+    <div ng-controller="TagsCtrl">
+        <table>
+            <tr ng-show="inspectionTags.length > 0">
+                <th>Title</th>
+                <th>Author</th>
+                <th>Tags</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="result in inspectionTags" >
+                <td style="width: 25%" dir="auto"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
+                <td style="width: 20%">{{result.Author}}</td>
+                <td style="width: 20%">{{result.Tags}}</td>
+                <td style="width: 35%" dir="auto">{{result.Snippet}}...</td>
+            </tr>
+            </table>
+    </div>
+</body>
+</html>
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/jquery.highlight-4.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/TagsController.js"></script>

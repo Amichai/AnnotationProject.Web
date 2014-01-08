@@ -1,0 +1,70 @@
+﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<html ng-app>
+<body>
+    <div ng-controller="UserCtrl">
+        <h4>{{Username}}</h4>
+        <hr style="border-top: 1px solid black" />
+        <h3>Text Uploads:</h3>
+        <table>
+            <tr ng-show="texts.length > 0">
+                <th>Title</th>
+                <th>Author</th>
+                <th>Tags</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="result in texts">
+                <td style="width: 25%" dir="auto"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
+                <td style="width: 20%">{{result.Author}}</td>
+                <td style="width: 20%">{{result.Tags}}</td>
+                <td style="width: 35%" dir="auto">{{result.Snippet}}...</td>
+            </tr>
+        </table>
+
+        <h3>Annotations:</h3>
+                <table>
+                    <tr>
+                        <th style="width:15%">
+                            Time
+                        </th>
+                        <th style="width:15%">
+                            Base Text
+                        </th>
+                        <th style="width:25%">
+                            Anchor
+                        </th>
+                        <th>
+                            Annotation
+                        </th>
+
+                    </tr>
+                    <tr ng-repeat="ann in annotations">
+                        <td>
+                            {{ann.DateString}}
+                        </td>
+                        <td>
+                            <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
+                        </td>
+                        <td>
+                            {{ann.TextAnchor}}
+                        </td>
+                        <td>
+                            {{ann.PreviewText}}
+                            <span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
+                        </td>
+                    </tr>
+                </table>
+    </div>
+</body>
+</html>
+
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/UserController.js"></script>

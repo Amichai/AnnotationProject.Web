@@ -301,6 +301,41 @@ namespace AnnotationProject.Controllers {
             updateTags(text.Tags, text.ID, db, toEdit);
             db.SaveChanges();
         }
+
+        [HttpGet]
+        public List<AnnotationResult> GetUserAnnotations(string username) {
+            var db = new TextAnnotationEntities();
+
+            var annotationTexts = db.Texts.Where(i => !i.IsBaseText && 
+                i.Username == username &&
+                (!i.Archived.HasValue || !i.Archived.Value))
+                .OrderByDescending(i => i.Timestamp)
+                .ToList();
+            var annotationIDs = annotationTexts.Select(i => i.ID);
+
+            var annotations = db.Annotations.Where(i => annotationIDs.Contains(i.AnnotationTextID)
+                );
+            return annotations.Select(i => new AnnotationResult() {
+                Content = i.Text1.Content,
+                Timestamp = i.Text1.Timestamp,
+                BaseTextID = i.BaseTextID,
+                TextAnchor = i.TextAnchor,
+                BaseTextTitle = i.Text.Title
+            }).OrderByDescending(i => i.Timestamp).ToList();
+        }
+
+        [HttpGet]
+        public List<TextResult> GetUserTexts(string username) {
+            var db = new TextAnnotationEntities();
+            return db.Texts.Where(i => i.IsBaseText).ToList().Select(i => new TextResult() {
+                Content = i.Content,
+                Title = i.Title,
+                Author = i.Author,
+                Description = i.Description,
+                ID = i.ID,
+                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
+            }).ToList();
+        }
     }
 }
 /*

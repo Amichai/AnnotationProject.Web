@@ -37,7 +37,7 @@
         padding: 10px;
         background-color: #efeeef;
         font-family: Georgia;
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .border {
@@ -57,13 +57,15 @@
 <body>
     <div ng-controller="TextViewCtrl">
         <div style="text-align: center;">
-            <p class="georgia" style="font-size: 25px"><i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" 
-                ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px">edit</a></p>
+            <p class="georgia" style="font-size: 25px;white-space:nowrap">
+                <i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" 
+                ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px">edit</a>
+            </p>
         </div>
         <div class="searchBox">
-            <span style="white-space:nowrap">Filter annotations and tags:</span>
-            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="width:80%"/>
-            <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()" ></span>
+            <span style="white-space: nowrap">Filter annotations and tags:</span>
+            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="width: 80%" />
+            <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()"></span>
 
         </div>
         <div class="annotationPane">
@@ -77,17 +79,17 @@
                     <div ng-show="isAddAnnotationVisible">
                         <div><b>Anchor:</b></div>
                         <div>
-                            <input type="text" ng-model="anchor" ng-change="anchorUpdate()" />
+                            <input type="text" ng-model="anchor" ng-change="anchorUpdate()" style="width:100%" />
                         </div>
                         <div>
                             <b>Annotation:</b>
                         </div>
                         <div>
-                            <textarea ng-model="annotation" style="width: 300px; max-width: 300px"></textarea>
+                            <textarea ng-model="annotation" style="width:100%;max-width:100%"></textarea>
                         </div>
                         <div><b>Tags:</b></div>
                         <div>
-                            <input type="text" ng-model="annotationTags" />
+                            <input type="text" ng-model="annotationTags" style="width:100%"/>
                         </div>
                         <table>
                             <tr>
@@ -122,29 +124,28 @@
                     </span>
                     </div>
                     <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p>{{ann.Content}}</p></div>
-                    <input type="text" ng-model="ann.Content" ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
+                    <input type="text" ng-model="ann.Content"
+                         ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap;width:100%" 
+                        ng-click="editModeTextBoxClick($event)" />
                     <div ng-if="ann.Expanded">
                         <p>{{ann.DateString}}, by {{ann.Username}}</p>
                         <p ng-if="!ann.EditMode">Tags: {{ann.Tags}}</p>
-                        <input type="text" ng-model="ann.Tags" ng-if="ann.EditMode" style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
+                        <input type="text" 
+                            style="width:100%"
+                            ng-model="ann.Tags" 
+                            ng-if="ann.EditMode" 
+                            style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
+                        
                     </div>
                     <div ng-if="ann.Expanded">
                         <div ng-if="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >
-                            @if (Request.IsAuthenticated) { 
-                                <button type="button" class="btn btn-warning btn-xs">Report
-
-                                </button>
-                                <button type="button" ng-if="!ann.EditMode"
-                                    ng-click="editAnnotation({ev: $event, idx: $index})"
-                                    class="btn btn-primary btn-xs">
-                                    Edit</button>
-                                <button type="button" ng-if="ann.EditMode"
-                                    ng-click="saveAnnotationEdit({ev: $event, idx: $index})"
-                                    class="btn btn-primary btn-xs">
-                                    Save</button>
-                                <button type="button" ng-click="deleteAnnotation({ev: $event, idx: $index})"
-                                    class="btn btn-danger btn-xs">
-                                    Delete</button>
+                            @if (Request.IsAuthenticated) {     
+                                <a>Report</a>
+                                <a ng-if="!ann.EditMode"
+                                    ng-click="editAnnotation({ev: $event, idx: $index})">Edit</a>
+                                <a ng-if="ann.EditMode"
+                                    ng-click="saveAnnotationEdit({ev: $event, idx: $index})">Save</a>
+                                <a ng-click="deleteAnnotation({ev: $event, idx: $index})">Delete</a>
                             }
                         </div>
                     </div>
@@ -161,32 +162,32 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title" id="myModalLabel">Edit</h4>
                     </div>
-                <table style="margin:25px">
-                    <tr>
-                        <td>Author:</td>
-                        <td>
-                            <input type="text" ng-model="author" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Title:</td>
-                        <td>
-                            <input type="text" ng-model="title" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Content:</td>
-                        <td>
-                            <textarea ng-model="text" style="width: 100%"></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tags:</td>
-                        <td>
-                            <input type="text" ng-model="tags" />
-                        </td>
-                    </tr>
-                </table>
+                    <table style="margin: 25px">
+                        <tr>
+                            <td>Author:</td>
+                            <td>
+                                <input type="text" ng-model="author" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Title:</td>
+                            <td>
+                                <input type="text" ng-model="title" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Content:</td>
+                            <td>
+                                <textarea ng-model="text" style="width: 100%"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tags:</td>
+                            <td>
+                                <input type="text" ng-model="tags" />
+                            </td>
+                        </tr>
+                    </table>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" ng-click="updateTextDetails()" data-dismiss="modal">Save changes</button>
