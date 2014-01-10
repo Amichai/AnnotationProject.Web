@@ -100,11 +100,12 @@ namespace AnnotationProject.Controllers {
         [HttpGet]
         public List<AnnotationResult> GetAnnotations(int textID) {
             var db = new TextAnnotationEntities();
-            var annotationIds = db.Annotations.Where(i => i.BaseTextID == textID)
-                .Select(i => new { i.AnnotationTextID, i.TextAnchor });
+            var annotationIds = db.Annotations.Where(i => i.BaseTextID == textID).ToDictionary(
+                i => i.AnnotationTextID, i => new { i.TextAnchor, i.ID});
 
-            var toReturn = db.Texts.Where(i => annotationIds.Select(j => j.AnnotationTextID).Contains(i.ID) &&
-                (!i.Archived.HasValue || !i.Archived.Value));
+            var annotationTextIds = annotationIds.Keys.ToList();
+            var toReturn = db.Texts.Where(i => annotationTextIds.Contains(i.ID) &&
+                (!i.Archived.HasValue || !i.Archived.Value)).ToList();
             if (annotationIds.Count() == 0) {
                 return new List<AnnotationResult>();
             }
@@ -112,14 +113,19 @@ namespace AnnotationProject.Controllers {
             List<AnnotationResult> results = new List<AnnotationResult>();
             foreach (var t in toReturn) {
                 string tags = string.Concat(db.TextTags.Where(i => i.TextID == t.ID).Select(i => i.Tag.Tag1 + ", "));
+                var userID = (int)Membership.GetUser().ProviderUserKey;
+                var annID = annotationIds[t.ID].ID;
+                bool userFavorited = db.UserLikes.Any(i => i.AnnotationID == annID && i.UserID == userID);
                 results.Add(new AnnotationResult() {
                     Content = t.Content,
                     Timestamp = t.Timestamp,
                     BaseTextID = textID,
-                    TextAnchor = annotationIds.Where(j => j.AnnotationTextID == t.ID).FirstOrDefault().TextAnchor,
+                    TextAnchor = annotationIds[t.ID].TextAnchor,
                     TextID = t.ID,
                     Username = t.Username,
-                    Tags = tags
+                    Tags = tags,
+                    UserFavorited = userFavorited,
+                    AnnotationID = annotationIds[t.ID].ID,
                 });
             }
 
@@ -336,6 +342,49 @@ namespace AnnotationProject.Controllers {
                 Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
             }).ToList();
         }
+
+        [HttpPost]
+        public void FavoriteAnnotation(int annotationID) {
+            var db = new TextAnnotationEntities();
+            var userID = (int)Membership.GetUser().ProviderUserKey;
+            var existing = db.UserLikes.Where(i => i.UserID == userID && i.AnnotationID == annotationID);
+            if (existing.Count() > 0) {
+                foreach (var e in existing) {
+                    db.UserLikes.Remove(e);
+                }
+            } else {
+                db.UserLikes.Add(new UserLike() {
+                    UserID = userID,
+                    AnnotationID = annotationID
+                });
+            }
+            db.SaveChanges();
+        }
+
+        [HttpGet]
+        public List<AnnotationResult> GetFavoriteAnnotations(string username) {
+            var userID = (int)Membership.GetUser(username).ProviderUserKey;
+
+
+            var db = new TextAnnotationEntities();
+            var annotationTexts = db.Texts.Where(i => i.Username == username && !i.IsBaseText);
+            var results = db.UserLikes.Where(i => i.UserID == userID).Select(i => 
+                new AnnotationResult() {
+                    Content = i.Annotation.Text1.Content,
+                    Timestamp = i.Annotation.Text1.Timestamp,
+                    BaseTextID = i.Annotation.Text.ID,
+                    TextAnchor = i.Annotation.TextAnchor,
+                    TextID = i.Annotation.Text1.ID,
+                    Username = i.Annotation.Text1.Username,
+                    //Tags = string.Concat(db.TextTags.Where(j => j.TextID == i.Annotation.Text1.ID).Select(j => j.Tag.Tag1 + ", ")),
+                    AnnotationID = i.Annotation.ID,
+                    BaseTextTitle = i.Annotation.Text.Title
+
+
+            }).ToList();
+
+            return results;
+        }
     }
 }
 /*
@@ -350,4 +399,7 @@ recently uploaded?
 reload upload texts when we add a new one
 Tag pages
 Author pages
+ * Left align hebrew text titles
+ * Consider changing the position of annation and text
+ * Remove tags from the UI
 */

@@ -29,5 +29,6 @@ namespace AnnotationProject
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TextTag> TextTags { get; set; }
         public DbSet<Text> Texts { get; set; }
+        public DbSet<UserLike> UserLikes { get; set; }
     }
 }

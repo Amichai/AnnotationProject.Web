@@ -32,4 +32,8 @@
     $http.get(urlRoot + 'api/DataApi/getUserTexts?username=' + QueryString.user).success(function (activity) {
         $scope.texts = activity;
     });
+
+    $http.get(urlRoot + 'api/DataApi/getFavoriteAnnotations?username=' + QueryString.user).success(function (results) {
+        $scope.favorites = results;
+    });
 }

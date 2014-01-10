@@ -10,6 +10,7 @@
           <EntitySet Name="Tags" EntityType="TextAnnotationModel.Store.Tags" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Text" EntityType="TextAnnotationModel.Store.Text" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TextTag" EntityType="TextAnnotationModel.Store.TextTag" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserLikes" EntityType="TextAnnotationModel.Store.UserLikes" store:Type="Tables" Schema="dbo" />
           <AssociationSet Name="FK_Annotation_0" Association="TextAnnotationModel.Store.FK_Annotation_0">
             <End Role="Text" EntitySet="Text" />
             <End Role="Annotation" EntitySet="Annotation" />
@@ -25,6 +26,10 @@
           <AssociationSet Name="FK_TextTag_1" Association="TextAnnotationModel.Store.FK_TextTag_1">
             <End Role="Tags" EntitySet="Tags" />
             <End Role="TextTag" EntitySet="TextTag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLikes_1" Association="TextAnnotationModel.Store.FK_UserLikes_1">
+            <End Role="Annotation" EntitySet="Annotation" />
+            <End Role="UserLikes" EntitySet="UserLikes" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Annotation">
@@ -66,6 +71,14 @@
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="TextID" Type="int" Nullable="false" />
           <Property Name="TagID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserLikes">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="AnnotationID" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Annotation_0">
           <End Role="Text" Type="TextAnnotationModel.Store.Text" Multiplicity="1">
@@ -119,6 +132,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_UserLikes_1">
+          <End Role="Annotation" Type="TextAnnotationModel.Store.Annotation" Multiplicity="1" />
+          <End Role="UserLikes" Type="TextAnnotationModel.Store.UserLikes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Annotation">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserLikes">
+              <PropertyRef Name="AnnotationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -144,6 +169,11 @@
             <End Role="Text" EntitySet="Texts" />
             <End Role="TextTag" EntitySet="TextTags" />
           </AssociationSet>
+          <EntitySet Name="UserLikes" EntityType="TextAnnotationModel.UserLike" />
+          <AssociationSet Name="FK_UserLikes_1" Association="TextAnnotationModel.FK_UserLikes_1">
+            <End Role="Annotation" EntitySet="Annotations" />
+            <End Role="UserLike" EntitySet="UserLikes" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Annotation">
           <Key>
@@ -155,6 +185,7 @@
           <Property Name="TextAnchor" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Text" Relationship="TextAnnotationModel.FK_Annotation_0" FromRole="Annotation" ToRole="Text" />
           <NavigationProperty Name="Text1" Relationship="TextAnnotationModel.FK_Annotation_1" FromRole="Annotation" ToRole="Text" />
+          <NavigationProperty Name="UserLikes" Relationship="TextAnnotationModel.FK_UserLikes_1" FromRole="Annotation" ToRole="UserLike" />
           </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -245,6 +276,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="UserLike">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="AnnotationID" Nullable="false" />
+          <NavigationProperty Name="Annotation" Relationship="TextAnnotationModel.FK_UserLikes_1" FromRole="UserLike" ToRole="Annotation" />
+        </EntityType>
+        <Association Name="FK_UserLikes_1">
+          <End Type="TextAnnotationModel.Annotation" Role="Annotation" Multiplicity="1" />
+          <End Type="TextAnnotationModel.UserLike" Role="UserLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Annotation">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserLike">
+              <PropertyRef Name="AnnotationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -291,6 +343,15 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLikes">
+            <EntityTypeMapping TypeName="TextAnnotationModel.UserLike">
+              <MappingFragment StoreEntitySet="UserLikes">
+                <ScalarProperty Name="AnnotationID" ColumnName="AnnotationID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

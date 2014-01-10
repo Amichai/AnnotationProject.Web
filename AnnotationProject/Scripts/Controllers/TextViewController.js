@@ -151,6 +151,14 @@ function TextViewCtrl($scope, $http) {
         });
     }
 
+    $scope.favorite = function (p) {
+        var ann = $scope.annotations[p.idx];
+        $http.post(urlRoot + 'api/DataApi/FavoriteAnnotation?annotationID=' + ann.AnnotationID ).success(function () {
+            ann.UserFavorited = !ann.UserFavorited;
+        });
+        p.ev.stopPropagation();
+    }
+
     $http.get(urlRoot + 'api/DataApi/getText?id=' + $scope.textID).success(function (result) {
         $scope.text = result.Content;
         $scope.title = result.Title;

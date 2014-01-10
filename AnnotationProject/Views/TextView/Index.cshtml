@@ -14,6 +14,12 @@
         font-size: 18px;
     }
 
+    .clicked {
+        background:yellow;
+        color:black;
+        border-radius:3px;
+    }
+
     .searchBox {
         overflow: auto;
         position: absolute;
@@ -28,7 +34,9 @@
     }
 
     .annotationPane {
-        overflow: auto;
+        /*overflow: hidden;*/
+        overflow-x:hidden;
+        overflow-y:auto;
         position: absolute;
         top: 220px;
         left: 10%;
@@ -141,7 +149,15 @@
                     </div>
                     <div ng-if="ann.Expanded">
                         <div ng-if="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >
-                            @if (Request.IsAuthenticated) {     
+                            @if (Request.IsAuthenticated) {
+                                <a ng-click="favorite({ev: $event, idx: $index})" 
+                                    ng-if="ann.UserFavorited"
+                                    class="clicked">
+                                    Favorited
+                                </a>
+                                <a ng-click="favorite({ev: $event, idx: $index})" ng-if="!ann.UserFavorited">
+                                    Favorite
+                                </a>                                
                                 <a>Report</a>
                                 <a ng-if="!ann.EditMode"
                                     ng-click="editAnnotation({ev: $event, idx: $index})">Edit</a>

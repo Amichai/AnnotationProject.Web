@@ -5,6 +5,7 @@ using System.Web;
 
 namespace AnnotationProject.Models {
     public class AnnotationResult {
+        public int AnnotationID { get; set; }
         public int TextID { get; set; }
         public string Username { get; set; }
         public string Content { get; set; }
@@ -28,6 +29,8 @@ namespace AnnotationProject.Models {
                 return this.Timestamp.ToShortDateString();
             }
         }
+
+        public bool UserFavorited { get; set; }
 
         public bool Expanded {
             get {

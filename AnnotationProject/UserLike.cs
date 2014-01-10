@@ -12,20 +12,12 @@ namespace AnnotationProject
     using System;
     using System.Collections.Generic;
     
-    public partial class Annotation
+    public partial class UserLike
     {
-        public Annotation()
-        {
-            this.UserLikes = new HashSet<UserLike>();
-        }
-    
         public int ID { get; set; }
-        public int BaseTextID { get; set; }
-        public int AnnotationTextID { get; set; }
-        public string TextAnchor { get; set; }
+        public int UserID { get; set; }
+        public int AnnotationID { get; set; }
     
-        public virtual Text Text { get; set; }
-        public virtual Text Text1 { get; set; }
-        public virtual ICollection<UserLike> UserLikes { get; set; }
+        public virtual Annotation Annotation { get; set; }
     }
 }

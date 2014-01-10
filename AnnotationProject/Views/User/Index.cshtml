@@ -27,38 +27,60 @@
         </table>
 
         <h3>Annotations:</h3>
-                <table>
-                    <tr>
-                        <th style="width:15%">
-                            Time
-                        </th>
-                        <th style="width:15%">
-                            Base Text
-                        </th>
-                        <th style="width:25%">
-                            Anchor
-                        </th>
-                        <th>
-                            Annotation
-                        </th>
+        <table>
+            <tr>
+                <th style="width: 15%; min-width: 15%">Time
+                </th>
+                <th style="width: 15%; min-width: 150px;">Base Text
+                </th>
+                <th style="width: 25%; min-width: 200px">Anchor
+                </th>
+                <th>Annotation
+                </th>
 
-                    </tr>
-                    <tr ng-repeat="ann in annotations">
-                        <td>
-                            {{ann.DateString}}
-                        </td>
-                        <td>
-                            <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
-                        </td>
-                        <td>
-                            {{ann.TextAnchor}}
-                        </td>
-                        <td>
-                            {{ann.PreviewText}}
-                            <span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
-                        </td>
-                    </tr>
-                </table>
+            </tr>
+            <tr ng-repeat="ann in annotations">
+                <td>{{ann.DateString}}
+                </td>
+                <td>
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
+                </td>
+                <td>{{ann.TextAnchor}}
+                </td>
+                <td>{{ann.PreviewText}}
+            <span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
+                </td>
+            </tr>
+        </table>
+
+
+        <h3>Favorites:</h3>
+        <table>
+            <tr>
+                <th style="width: 15%; min-width: 15%">Time
+                </th>
+                <th style="width: 15%; min-width: 150px;">Base Text
+                </th>
+                <th style="width: 25%; min-width: 200px">Anchor
+                </th>
+                <th>Annotation
+                </th>
+
+            </tr>
+            <tr ng-repeat="ann in favorites">
+                <td>{{ann.DateString}}
+                </td>
+                <td>
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
+                </td>
+                <td>{{ann.TextAnchor}}
+                </td>
+                <td>{{ann.PreviewText}}
+            <span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
+                </td>
+            </tr>
+        </table>
+
     </div>
 </body>
 </html>

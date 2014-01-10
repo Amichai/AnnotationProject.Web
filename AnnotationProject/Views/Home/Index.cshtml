@@ -1,25 +1,8 @@
 ﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
 
-<style>
-    h3 {
-        font-family: Georgia;
-        font-weight: bold;
-    }
-
-    h1 {
-        font-family: Georgia;
-    }
-
-    th {
-        font-family: Georgia;
-    }
-</style>
 <html ng-app>
 <body>
-    <div ng-controller="UploadTextCtrl">
-        @*<div class="row">
-            <h1 style="text-align: center;">Text Annotation Project</h1>
-        </div>*@
+    <div ng-controller="HomePageCtrl">
         <div class="row">
             <div class="col-md-6">
                 <h3>Text Search</h3>
@@ -41,38 +24,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <h3>Upload</h3>
-                <table>
-                    <tr>
-                        <td>Author:</td>
-                        <td>
-                            <input type="text" ng-model="author" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Title:</td>
-                        <td>
-                            <input type="text" ng-model="title" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Content:</td>
-                        <td>
-                            <textarea ng-model="text" style="width: 100%"></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tags:</td>
-                        <td>
-                            <input type="text" ng-model="tags" />
-                        </td>
-                    </tr>
-                </table>
-                <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="upload()">
-                    Upload
-                </button>
-            </div>
+
         </div>
         @*<div class="row">
             <hr style="border-top: 1px solid black" />
@@ -102,16 +54,16 @@
                 <h3>Recent Annotations:</h3>
                 <table>
                     <tr>
-                        <th style="width:15%">
+                        <th style="width:15%;min-width:15%">
                             Time
                         </th>
-                        <th style="width:15%">
+                        <th style="width:15%;min-width:150px;">
                             Base Text
                         </th>
-                        <th style="width:25%">
+                        <th style="width:25%;min-width:200px">
                             Anchor
                         </th>
-                        <th>
+                        <th >
                             Annotation
                         </th>
 
@@ -142,4 +94,4 @@
 <script src="~/Scripts/jquery-1.9.1.js"></script>
 <script src="~/Scripts/bootstrap.js"></script>
 <script src="~/Scripts/angular.js"></script>
-<script src="~/Scripts/Controllers/UploadTextController.js"></script>
+<script src="~/Scripts/Controllers/HomePageController.js"></script>

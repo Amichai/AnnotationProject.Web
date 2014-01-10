@@ -205,7 +205,10 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TextViewController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -222,6 +225,9 @@
       <DependentUpon>AnnotationsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TextTag.cs">
+      <DependentUpon>AnnotationsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserLike.cs">
       <DependentUpon>AnnotationsModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -327,8 +333,11 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Controllers\AdminController.js" />
+    <Content Include="Scripts\Controllers\TagsController.js" />
     <Content Include="Scripts\Controllers\TextViewController.js" />
+    <Content Include="Scripts\Controllers\HomePageController.js" />
     <Content Include="Scripts\Controllers\UploadTextController.js" />
+    <Content Include="Scripts\Controllers\UserController.js" />
     <Content Include="Scripts\errors.json" />
     <Content Include="Scripts\angular-touch.min.js.map" />
     <Content Include="Scripts\angular-sanitize.min.js.map" />
@@ -602,6 +611,14 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
+    <None Include="Scripts\linq.js_ver2.2.0.2\jquery.linq-vsdoc.js" />
+    <Content Include="Scripts\linq.js_ver2.2.0.2\jquery.linq.js" />
+    <Content Include="Scripts\linq.js_ver2.2.0.2\jquery.linq.min.js" />
+    <None Include="Scripts\linq.js_ver2.2.0.2\linq-vsdoc.js" />
+    <Content Include="Scripts\linq.js_ver2.2.0.2\linq.js" />
+    <Content Include="Scripts\linq.js_ver2.2.0.2\linq.min.js" />
+    <Content Include="Scripts\linq.js_ver2.2.0.2\ReadMe.txt" />
+    <Content Include="Scripts\linq.js_ver2.2.0.2\reference.htm" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -644,6 +661,9 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\TextView\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Tag\Index.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Upload\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
