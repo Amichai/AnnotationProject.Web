@@ -29,9 +29,9 @@ namespace AnnotationProject
         public string Author { get; set; }
         public bool IsBaseText { get; set; }
         public string Title { get; set; }
-        public Nullable<System.Guid> UserID { get; set; }
-        public Nullable<bool> Archived { get; set; }
-        public string Username { get; set; }
+        public bool IsArchived { get; set; }
+        public int UserID { get; set; }
+        public int AnnotationCount { get; set; }
     
         public virtual ICollection<Annotation> Annotations { get; set; }
         public virtual ICollection<Annotation> Annotations1 { get; set; }

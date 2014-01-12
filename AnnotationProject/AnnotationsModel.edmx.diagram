@@ -9,12 +9,12 @@
         <EntityTypeShape EntityType="TextAnnotationModel.Tag" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="TextAnnotationModel.TextTag" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="TextAnnotationModel.FK_TextTag_1" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="TextAnnotationModel.Text" Width="1.5" PointX="10" PointY="3.625" />
+        <EntityTypeShape EntityType="TextAnnotationModel.UserLike" Width="1.5" PointX="6.5140767369950545" PointY="25.674800780450365" />
+        <AssociationConnector Association="TextAnnotationModel.FK_UserLikes_1" />
+        <EntityTypeShape EntityType="TextAnnotationModel.Text" Width="1.5" PointX="9.05093941700223" PointY="2.3336399804491736" />
         <AssociationConnector Association="TextAnnotationModel.FK_Annotation_0" />
         <AssociationConnector Association="TextAnnotationModel.FK_Annotation_1" />
         <AssociationConnector Association="TextAnnotationModel.FK_TextTag_0" />
-        <EntityTypeShape EntityType="TextAnnotationModel.UserLike" Width="1.5" PointX="6.5140767369950545" PointY="25.674800780450365" />
-        <AssociationConnector Association="TextAnnotationModel.FK_UserLikes_1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

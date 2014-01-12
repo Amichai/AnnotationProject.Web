@@ -95,6 +95,10 @@
                         <div>
                             <textarea ng-model="annotation" style="width:100%;max-width:100%"></textarea>
                         </div>
+                        <div><b>Source:</b></div>
+                        <div>
+                            <input type="text" ng-model="annotationSource" style="width:100%"/>
+                        </div>
                         <div><b>Tags:</b></div>
                         <div>
                             <input type="text" ng-model="annotationTags" style="width:100%"/>
@@ -140,6 +144,7 @@
                             style="color: #428bca;"
                             >{{ann.Username}}</a></p>
                         <p ng-if="!ann.EditMode">Tags: {{ann.Tags}}</p>
+                        <p ng-if="!ann.EditMode">Source: {{ann.Source}}</p>
                         <input type="text" 
                             style="width:100%"
                             ng-model="ann.Tags" 
@@ -197,6 +202,12 @@
                             <td>Content:</td>
                             <td>
                                 <textarea ng-model="text" style="width: 100%"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Source:</td>
+                            <td>
+                                <input type="text" ng-model="source" />
                             </td>
                         </tr>
                         <tr>

@@ -7,7 +7,7 @@
 
 <html ng-app>
 <body>
-    <div ng-controller="HomePageCtrl" ng-cloak>
+    <div ng-controller="UploadTextCtrl" ng-cloak>
         <h3>Upload</h3>
 
         <div class="col-md-6">
@@ -31,15 +31,24 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>Source:</td>
+                    <td>
+                        <input ng-model="source" />
+                    </td>
+                </tr>
+                <tr>
                     <td>Tags:</td>
                     <td>
                         <input type="text" ng-model="tags" />
                     </td>
+                    <td>
+                        <button type="button" data-loading-text="Loading..." class="btn btn-primary"  ng-click="upload()">
+                            Upload
+                        </button>
+                    </td>
                 </tr>
             </table>
-            <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="upload()">
-                Upload
-            </button>
+
         </div>
     </div>
 </body>

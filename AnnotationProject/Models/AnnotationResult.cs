@@ -14,6 +14,7 @@ namespace AnnotationProject.Models {
         public int BaseTextID { get; set; }
         public string BaseTextTitle { get; set; }
         public string TextAnchor { get; set; }
+        public string Source { get; set; }
         public bool EditMode {
             get {
                 return false;

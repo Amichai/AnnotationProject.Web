@@ -4,9 +4,7 @@
     <div ng-controller="HomePageCtrl" ng-cloak>
         <div class="row">
             <h3 class="col-md-2">Text Search</h3>
-            <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="search()">
-                Search
-            </button>
+            
         </div>
         <div class="row">
             <div class="col-md-6">
@@ -26,6 +24,11 @@
                             <td>Author:</td>
                             <td>
                                 <input type="text" ng-model="authorQuery" /></td>
+                            <td>
+                                <button type="button" data-loading-text="Loading..." class="btn btn-primary"  ng-click="search()">
+                                    Search
+                                </button>
+                            </td>
                         </tr>
                     </table>
 
@@ -35,12 +38,9 @@
 
 
         </div>
-        @*<div class="row">
-            <hr style="border-top: 1px solid black" />
-        </div>*@
+
         <div class="row">
             <div class="col-md-12">
-                (click the title)
                 <h3>Results:</h3>
                 <table>
                     <tr ng-show="results.length > 0">

@@ -24,8 +24,8 @@ namespace AnnotationProject
         public int AnnotationTextID { get; set; }
         public string TextAnchor { get; set; }
     
+        public virtual ICollection<UserLike> UserLikes { get; set; }
         public virtual Text Text { get; set; }
         public virtual Text Text1 { get; set; }
-        public virtual ICollection<UserLike> UserLikes { get; set; }
     }
 }

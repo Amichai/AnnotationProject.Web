@@ -60,9 +60,9 @@
           <Property Name="Author" Type="nvarchar" MaxLength="200" />
           <Property Name="IsBaseText" Type="bit" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="200" />
-          <Property Name="UserID" Type="uniqueidentifier" />
-          <Property Name="Archived" Type="bit" />
-          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsArchived" Type="bit" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="AnnotationCount" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="TextTag">
           <Key>
@@ -156,6 +156,11 @@
             <End Role="Tags" EntitySet="Tags" />
             <End Role="TextTag" EntitySet="TextTags" />
           </AssociationSet>
+          <EntitySet Name="UserLikes" EntityType="TextAnnotationModel.UserLike" />
+          <AssociationSet Name="FK_UserLikes_1" Association="TextAnnotationModel.FK_UserLikes_1">
+            <End Role="Annotation" EntitySet="Annotations" />
+            <End Role="UserLike" EntitySet="UserLikes" />
+          </AssociationSet>
           <EntitySet Name="Texts" EntityType="TextAnnotationModel.Text" />
           <AssociationSet Name="FK_Annotation_0" Association="TextAnnotationModel.FK_Annotation_0">
             <End Role="Text" EntitySet="Texts" />
@@ -169,11 +174,6 @@
             <End Role="Text" EntitySet="Texts" />
             <End Role="TextTag" EntitySet="TextTags" />
           </AssociationSet>
-          <EntitySet Name="UserLikes" EntityType="TextAnnotationModel.UserLike" />
-          <AssociationSet Name="FK_UserLikes_1" Association="TextAnnotationModel.FK_UserLikes_1">
-            <End Role="Annotation" EntitySet="Annotations" />
-            <End Role="UserLike" EntitySet="UserLikes" />
-          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Annotation">
           <Key>
@@ -183,9 +183,9 @@
           <Property Name="BaseTextID" Type="Int32" Nullable="false" />
           <Property Name="AnnotationTextID" Type="Int32" Nullable="false" />
           <Property Name="TextAnchor" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="UserLikes" Relationship="TextAnnotationModel.FK_UserLikes_1" FromRole="Annotation" ToRole="UserLike" />
           <NavigationProperty Name="Text" Relationship="TextAnnotationModel.FK_Annotation_0" FromRole="Annotation" ToRole="Text" />
           <NavigationProperty Name="Text1" Relationship="TextAnnotationModel.FK_Annotation_1" FromRole="Annotation" ToRole="Text" />
-          <NavigationProperty Name="UserLikes" Relationship="TextAnnotationModel.FK_UserLikes_1" FromRole="Annotation" ToRole="UserLike" />
           </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -217,6 +217,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="UserLike">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="AnnotationID" Nullable="false" />
+          <NavigationProperty Name="Annotation" Relationship="TextAnnotationModel.FK_UserLikes_1" FromRole="UserLike" ToRole="Annotation" />
+        </EntityType>
+        <Association Name="FK_UserLikes_1">
+          <End Type="TextAnnotationModel.Annotation" Role="Annotation" Multiplicity="1" />
+          <End Type="TextAnnotationModel.UserLike" Role="UserLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Annotation">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserLike">
+              <PropertyRef Name="AnnotationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="Text">
           <Key>
             <PropertyRef Name="ID" />
@@ -229,9 +250,9 @@
           <Property Type="String" Name="Author" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsBaseText" Nullable="false" />
           <Property Type="String" Name="Title" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="UserID" />
-          <Property Type="Boolean" Name="Archived" />
-          <Property Type="String" Name="Username" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsArchived" Nullable="false" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="AnnotationCount" Nullable="false" />
           <NavigationProperty Name="Annotations" Relationship="TextAnnotationModel.FK_Annotation_0" FromRole="Text" ToRole="Annotation" />
           <NavigationProperty Name="Annotations1" Relationship="TextAnnotationModel.FK_Annotation_1" FromRole="Text" ToRole="Annotation" />
           <NavigationProperty Name="TextTags" Relationship="TextAnnotationModel.FK_TextTag_0" FromRole="Text" ToRole="TextTag" />
@@ -276,27 +297,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="UserLike">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="UserID" Nullable="false" />
-          <Property Type="Int32" Name="AnnotationID" Nullable="false" />
-          <NavigationProperty Name="Annotation" Relationship="TextAnnotationModel.FK_UserLikes_1" FromRole="UserLike" ToRole="Annotation" />
-        </EntityType>
-        <Association Name="FK_UserLikes_1">
-          <End Type="TextAnnotationModel.Annotation" Role="Annotation" Multiplicity="1" />
-          <End Type="TextAnnotationModel.UserLike" Role="UserLike" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Annotation">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserLike">
-              <PropertyRef Name="AnnotationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -330,12 +330,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserLikes">
+            <EntityTypeMapping TypeName="TextAnnotationModel.UserLike">
+              <MappingFragment StoreEntitySet="UserLikes">
+                <ScalarProperty Name="AnnotationID" ColumnName="AnnotationID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Texts">
             <EntityTypeMapping TypeName="TextAnnotationModel.Text">
               <MappingFragment StoreEntitySet="Text">
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Archived" ColumnName="Archived" />
+                <ScalarProperty Name="AnnotationCount" ColumnName="AnnotationCount" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="IsArchived" ColumnName="IsArchived" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="IsBaseText" ColumnName="IsBaseText" />
                 <ScalarProperty Name="Author" ColumnName="Author" />
@@ -343,15 +352,6 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserLikes">
-            <EntityTypeMapping TypeName="TextAnnotationModel.UserLike">
-              <MappingFragment StoreEntitySet="UserLikes">
-                <ScalarProperty Name="AnnotationID" ColumnName="AnnotationID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
