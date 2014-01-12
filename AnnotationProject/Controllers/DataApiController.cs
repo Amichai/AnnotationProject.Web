@@ -135,7 +135,8 @@ namespace AnnotationProject.Controllers {
                 TextAnchor = i.TextAnchor,
                 BaseTextTitle = i.Text.Title,
                 Username = getUsername(i.Text1.UserID),
-                Source = i.Text1.Source
+                Source = i.Text1.Source,
+                AnnotationID = i.ID,
             }).OrderByDescending(i => i.Timestamp).ToList();
         }
 

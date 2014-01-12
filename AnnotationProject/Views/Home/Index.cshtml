@@ -4,7 +4,7 @@
     <div ng-controller="HomePageCtrl" ng-cloak>
         <div class="row">
             <h3 class="col-md-2">Text Search</h3>
-            
+
         </div>
         <div class="row">
             <div class="col-md-6">
@@ -25,7 +25,7 @@
                             <td>
                                 <input type="text" ng-model="authorQuery" /></td>
                             <td>
-                                <button type="button" data-loading-text="Loading..." class="btn btn-primary"  ng-click="search()">
+                                <button type="button" data-loading-text="Loading..." class="btn btn-primary" ng-click="search()">
                                     Search
                                 </button>
                             </td>
@@ -66,7 +66,10 @@
                         <div class="col-md-2 col-xs-2">
                             <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
                         </div>
-                        <div class="col-md-3 col-xs-3">{{ann.TextAnchor}}</div>
+                        <div class="col-md-3 col-xs-3">
+                             <a style="color:black" href="~/TextView/Index?textID={{ann.BaseTextID}}&annotationID={{ann.AnnotationID}}">"{{ann.TextAnchor}}"</a>
+                        </div>
+
                         <div class="col-md-7 col-xs-7">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
                     </div>
                     <div class="row">

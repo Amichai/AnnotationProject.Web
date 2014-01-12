@@ -11,7 +11,8 @@ html {
 body {
     background-color: #fff;
     border-top: solid 10px #000;
-    color: #333;
+    /*color: #333;*/
+    color:black;
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     margin: 0;

@@ -97,8 +97,22 @@ function TextViewCtrl($scope, $http) {
             }
         }
         $scope.textID = query_string["textID"];
+        $scope.annotationIDQuery = query_string["annotationID"];
+        
+        if ($scope.annotationIDQuery != undefined) {
+            $scope.annotationSearch = "id:" + $scope.annotationIDQuery;
+        }
+        ///TODO: start checking the annotationID parameter
+        ///If this is set, query the annotations by that annotation id
         return query_string;
     }();
+
+    function filterById(id) {
+        return Enumerable.From($scope.allAnnotations).Where(function (x) {
+            var result = x.AnnotationID == id;
+            return result;
+        }).ToArray();
+    }
 
     var highlightedText = "";
 
@@ -147,10 +161,9 @@ function TextViewCtrl($scope, $http) {
     }
 
     $scope.seeComments = function (p) {
-        debugger;
+        //debugger;
         var id = $scope.annotations[p.idx].TextID;
         p.ev.stopPropagation();
-        debugger;
         window.location = urlRoot + 'textView/Index?textID=' + id;
     }
 
@@ -192,6 +205,9 @@ function TextViewCtrl($scope, $http) {
         $http.get(urlRoot + 'api/DataApi/getAnnotations?textID=' + $scope.textID).success(function (result) {
             $scope.allAnnotations = result;
             $scope.annotations = result;
+            if (QueryString.annotationID != undefined) {
+                $scope.annotations = filterById(QueryString.annotationID);
+            }
         });
     });
 
@@ -210,14 +226,60 @@ function TextViewCtrl($scope, $http) {
         });
     }
 
-    $scope.annotationSearchUpdate = function () {
-        ///TODO: split on spaces, commas and treat each token independently
-        $scope.annotations = Enumerable.From($scope.allAnnotations).Where(function (x) {
-            var result = x.Content.toLowerCase().indexOf($scope.annotationSearch.toLowerCase()) != -1 ||
-                 x.TextAnchor.toLowerCase().indexOf($scope.annotationSearch.toLowerCase()) != -1 ||
-                 x.Tags.indexOf($scope.annotationSearch) != -1;
+    function filterByUser(user) {
+        return Enumerable.From($scope.allAnnotations).Where(function (x) {
+            var result = x.Username == user;
             return result;
         }).ToArray();
+    }
+
+    function intersect(a, b) {
+        var t;
+        if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+        return a.filter(function (e) {
+            if (b.indexOf(e) !== -1) return true;
+        });
+    }
+
+    $scope.annotationSearchUpdate = function () {
+        if ($scope.annotationSearch == "") {
+            $scope.annotations = $scope.allAnnotations;
+            return;
+        }
+
+        var split = $scope.annotationSearch.split(' ');
+        var toShow = $scope.allAnnotations;
+        for (var i = 0; i < split.length; i++) {
+            var term = split[i];
+            if (term == "") {
+                continue;
+            }
+            var qualifier = split[i].split(':');
+            if (qualifier.length == 1) {
+                var a = Enumerable.From($scope.allAnnotations).Where(function (x) {
+                    var result = x.Content.toLowerCase().indexOf(term.toLowerCase()) != -1 ||
+                         x.TextAnchor.toLowerCase().indexOf(term.toLowerCase()) != -1 ||
+                         x.Tags.indexOf(term.toLowerCase()) != -1;
+                    return result;
+                }).ToArray();
+                toShow = intersect(a, toShow);
+            } else {
+                if (qualifier[0] == "id") {
+                    a = filterById(qualifier[1]);
+                    toShow = intersect(a, toShow);
+
+                } else if (qualifier[0] == "user") {
+                    a = filterByUser(qualifier[1]);
+                    toShow = intersect(a, toShow);
+
+                }
+            }
+        }
+        $scope.annotations = toShow;
+
+        //debugger;
+        ///TODO: split on spaces, commas and treat each token independently
+
     }
 
     $scope.clearAnnotationSearch = function () {
