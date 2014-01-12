@@ -75,7 +75,9 @@ namespace AnnotationProject.Controllers {
                 ID = i.ID,
                 Source = i.Source,
                 Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", ")),
-                AnnotationCount = i.AnnotationCount
+                AnnotationCount = i.AnnotationCount,
+                NextText = i.NextTextID,
+                PrevText = i.PrevTextID
             }).ToList();
             return result;
         }
@@ -108,7 +110,9 @@ namespace AnnotationProject.Controllers {
                 Source = i.Source,
                 ID = i.ID,
                 Uploader = getUsername(i.UserID),
-                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
+                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", ")),
+                NextText = i.NextTextID,
+                PrevText = i.PrevTextID
             }).Single();
         }
 
@@ -354,6 +358,8 @@ namespace AnnotationProject.Controllers {
             toEdit.Description = text.Description;
             toEdit.Title = text.Title;
             toEdit.Source = text.Source;
+            toEdit.NextTextID = text.NextText;
+            toEdit.PrevTextID = text.PrevText;
             updateTags(text.Tags, text.ID, db, toEdit);
             db.SaveChanges();
         }

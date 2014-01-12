@@ -11,7 +11,7 @@
         <AssociationConnector Association="TextAnnotationModel.FK_TextTag_1" ManuallyRouted="false" />
         <EntityTypeShape EntityType="TextAnnotationModel.UserLike" Width="1.5" PointX="6.5140767369950545" PointY="25.674800780450365" />
         <AssociationConnector Association="TextAnnotationModel.FK_UserLikes_1" />
-        <EntityTypeShape EntityType="TextAnnotationModel.Text" Width="1.5" PointX="9.05093941700223" PointY="2.3336399804491736" />
+        <EntityTypeShape EntityType="TextAnnotationModel.Text" Width="1.5" PointX="7.25" PointY="5.125" />
         <AssociationConnector Association="TextAnnotationModel.FK_Annotation_0" />
         <AssociationConnector Association="TextAnnotationModel.FK_Annotation_1" />
         <AssociationConnector Association="TextAnnotationModel.FK_TextTag_0" />

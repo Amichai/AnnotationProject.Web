@@ -12,6 +12,9 @@ function TextViewCtrl($scope, $http) {
     $scope.annotationTags = "";
     $scope.annotationSource = "";
     $scope.uploader = "";
+    $scope.nextText = "";
+    $scope.prevText = "";
+
 
     $scope.annotationSearch = "";
 
@@ -171,6 +174,8 @@ function TextViewCtrl($scope, $http) {
         $scope.uploader = result.Uploader;
         $scope.source = result.Source;
         $scope.tags = result.Tags;
+        $scope.nextText = result.NextText;
+        $scope.prevText = result.PrevText;
         $http.get(urlRoot + 'api/DataApi/getAnnotations?textID=' + $scope.textID).success(function (result) {
             $scope.allAnnotations = result;
             $scope.annotations = result;
@@ -185,6 +190,8 @@ function TextViewCtrl($scope, $http) {
         updatedText.Tags = $scope.tags;
         updatedText.Source = $scope.source;
         updatedText.ID = $scope.textID;
+        updatedText.PrevText = $scope.prevText;
+        updatedText.NextText = $scope.nextText;
         $http.post(urlRoot + 'api/DataApi/updateTextDetails', updatedText).success(function (result) {
 
         });
@@ -204,4 +211,13 @@ function TextViewCtrl($scope, $http) {
         $scope.annotationSearch = "";
         $scope.annotations = $scope.allAnnotations;
     }
+
+    $scope.navigatePrevious = function () {
+        window.location = urlRoot + 'textView/Index?textID=' + $scope.prevText;
+    }
+
+    $scope.navigateNext = function () {
+        window.location = urlRoot + 'textView/Index?textID=' + $scope.nextText;
+    }
+    
 }

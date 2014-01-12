@@ -32,6 +32,8 @@ namespace AnnotationProject
         public bool IsArchived { get; set; }
         public int UserID { get; set; }
         public int AnnotationCount { get; set; }
+        public Nullable<int> NextTextID { get; set; }
+        public Nullable<int> PrevTextID { get; set; }
     
         public virtual ICollection<Annotation> Annotations { get; set; }
         public virtual ICollection<Annotation> Annotations1 { get; set; }

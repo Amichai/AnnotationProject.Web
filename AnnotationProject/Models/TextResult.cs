@@ -19,5 +19,8 @@ namespace AnnotationProject.Models {
                 return string.Concat(this.Content.Take(100));
             }
         }
+
+        public int? PrevText { get; set; }
+        public int? NextText { get; set; }
     }
 }

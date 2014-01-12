@@ -63,6 +63,8 @@
           <Property Name="IsArchived" Type="bit" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="AnnotationCount" Type="int" Nullable="false" />
+          <Property Name="NextTextID" Type="int" />
+          <Property Name="PrevTextID" Type="int" />
         </EntityType>
         <EntityType Name="TextTag">
           <Key>
@@ -253,6 +255,8 @@
           <Property Type="Boolean" Name="IsArchived" Nullable="false" />
           <Property Type="Int32" Name="UserID" Nullable="false" />
           <Property Type="Int32" Name="AnnotationCount" Nullable="false" />
+          <Property Type="Int32" Name="NextTextID" />
+          <Property Type="Int32" Name="PrevTextID" />
           <NavigationProperty Name="Annotations" Relationship="TextAnnotationModel.FK_Annotation_0" FromRole="Text" ToRole="Annotation" />
           <NavigationProperty Name="Annotations1" Relationship="TextAnnotationModel.FK_Annotation_1" FromRole="Text" ToRole="Annotation" />
           <NavigationProperty Name="TextTags" Relationship="TextAnnotationModel.FK_TextTag_0" FromRole="Text" ToRole="TextTag" />
@@ -342,6 +346,8 @@
           <EntitySetMapping Name="Texts">
             <EntityTypeMapping TypeName="TextAnnotationModel.Text">
               <MappingFragment StoreEntitySet="Text">
+                <ScalarProperty Name="PrevTextID" ColumnName="PrevTextID" />
+                <ScalarProperty Name="NextTextID" ColumnName="NextTextID" />
                 <ScalarProperty Name="AnnotationCount" ColumnName="AnnotationCount" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="IsArchived" ColumnName="IsArchived" />

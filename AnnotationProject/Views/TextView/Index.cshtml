@@ -59,6 +59,14 @@
     .highlight {
         background-color: darkgray;
     }
+
+    .navLink {
+        margin-top:-3px;
+        margin-right:10px;
+        margin-left:10px;
+        color:#428bca;
+        cursor:pointer;
+    }
 </style>
 
 <html ng-app>
@@ -67,8 +75,17 @@
         <div style="text-align: center;">
             <p class="georgia" style="font-size: 25px;white-space:nowrap">
                 <i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" 
-                ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px">edit</a>
+                ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px;cursor:pointer">edit</a>
             </p>
+        </div>
+        <div ng-if="prevText != undefined" ng-click="navigatePrevious()">
+            <div style="float: left" class="glyphicon glyphicon-arrow-left"></div>
+            <div style="float: left" class="navLink">Previous</div>
+        </div>
+
+        <div ng-if="nextText != undefined" ng-click="navigateNext()">
+            <div style="float: right" class="glyphicon glyphicon-arrow-right"></div>
+            <div style="float: right" class="navLink">Next</div>
         </div>
         <div class="searchBox">
             <span style="white-space: nowrap">Filter annotations and tags:</span>
@@ -214,6 +231,20 @@
                             <td>Tags:</td>
                             <td>
                                 <input type="text" ng-model="tags" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Next text id:</td>
+                            <td>
+                                <input type="text" ng-model="nextText" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Previous text id:</td>
+                            <td>
+                                <input type="text" ng-model="prevText" />
                             </td>
                         </tr>
                     </table>
