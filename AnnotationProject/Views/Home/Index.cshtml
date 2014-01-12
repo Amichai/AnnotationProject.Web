@@ -1,26 +1,35 @@
 ﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
-
 <html ng-app>
 <body>
-    <div ng-controller="HomePageCtrl">
+    <div ng-controller="HomePageCtrl" ng-cloak>
+        <div class="row">
+            <h3 class="col-md-2">Text Search</h3>
+            <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="search()">
+                Search
+            </button>
+        </div>
         <div class="row">
             <div class="col-md-6">
-                <h3>Text Search</h3>
                 <div>
                     <table>
                         <tr>
                             <td>Title:</td>
-                            <td><input type="text" ng-model="searchQuery" /></td>
+                            <td>
+                                <input type="text" ng-model="searchQuery" /></td>
                         </tr>
                         <tr>
                             <td>Tags:</td>
-                            <td><input type="text" ng-model="tagQuery" /></td>
+                            <td>
+                                <input type="text" ng-model="tagQuery" /></td>
+                        </tr>
+                        <tr>
+                            <td>Author:</td>
+                            <td>
+                                <input type="text" ng-model="authorQuery" /></td>
                         </tr>
                     </table>
-                    
-                    <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 20px" ng-click="search()">
-                        Search
-                    </button>
+
+
                 </div>
             </div>
 
@@ -32,18 +41,18 @@
         <div class="row">
             <div class="col-md-12">
                 (click the title)
-                <h3>Results</h3>
+                <h3>Results:</h3>
                 <table>
                     <tr ng-show="results.length > 0">
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Tags</th>
+                        <th>Annotations</th>
                         <th></th>
                     </tr>
                     <tr ng-repeat="result in results">
-                        <td style="width: 25%" dir="auto"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
+                        <td style="width: 25%"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
                         <td style="width: 20%">{{result.Author}}</td>
-                        <td style="width: 20%">{{result.Tags}}</td>
+                        <td style="width: 20%">{{result.AnnotationCount}}</td>
                         <td style="width: 35%" dir="auto">{{result.Snippet}}...</td>
                     </tr>
                 </table>
@@ -52,38 +61,25 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Recent Annotations:</h3>
-                <table>
-                    <tr>
-                        <th style="width:15%;min-width:15%">
-                            Time
-                        </th>
-                        <th style="width:15%;min-width:150px;">
-                            Base Text
-                        </th>
-                        <th style="width:25%;min-width:200px">
-                            Anchor
-                        </th>
-                        <th >
-                            Annotation
-                        </th>
-
-                    </tr>
-                    <tr ng-repeat="ann in recentAnnotations">
-                        <td>
-                            {{ann.DateString}}
-                        </td>
-                        <td>
+                <div ng-repeat="ann in recentAnnotations">
+                    <div class="row">
+                        <div class="col-md-2 ">
                             <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
-                        </td>
-                        <td>
-                            {{ann.TextAnchor}}
-                        </td>
-                        <td>
-                            {{ann.PreviewText}}
-                            <span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                        <div class="col-md-3">{{ann.TextAnchor}}</div>
+                        <div class="col-md-7">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <p>{{ann.DateString}}</p>
+                        </div>
+                        <div class="col-md-4" style="font-size: 15px">
+                            <a href="~/User/Index?user={{ann.Username}}"
+                                style="color: #428bca;">{{ann.Username}}</a>
+                        </div>
+                    </div>
+                    <hr style="border-top: 1px solid black" />
+                </div>
             </div>
         </div>
     </div>

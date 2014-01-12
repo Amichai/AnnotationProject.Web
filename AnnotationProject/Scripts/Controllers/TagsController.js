@@ -23,7 +23,7 @@
         return query_string;
     }();
 
-    $http.get(urlRoot + 'api/DataApi/getText?query&tags=' + QueryString.tags).success(function (result) {
+    $http.get(urlRoot + 'api/DataApi/getText?title&tags=' + QueryString.tags + '&author').success(function (result) {
         $scope.inspectionTags = result;
     });
 }

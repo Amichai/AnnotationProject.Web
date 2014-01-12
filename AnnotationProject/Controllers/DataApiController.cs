@@ -10,7 +10,10 @@ using System.Web.Security;
 namespace AnnotationProject.Controllers {
     public class DataApiController : ApiController {
         [HttpGet]
-        public List<TextResult> GetText(string query, string tags) {
+        public List<TextResult> GetText(string title, string tags, string author) {
+            if (title == null && tags == null && author == null) {
+                return GetAll();
+            }
 
             var db = new TextAnnotationEntities();
             if (tags != null) {
@@ -20,17 +23,17 @@ namespace AnnotationProject.Controllers {
                 }
                 var tagQueryResult = inspectionTags.SelectMany(i => i.TextTags).Select(i => i.Text).Where(i => i.IsBaseText).ToList();
 
-                if (query == null) {
+                if (title == null) {
                     return toTextResult(tagQueryResult);
                 } else {
                     List<int> tagTextIds = tagQueryResult.Select(i => i.ID).ToList();
-                    var queryResults = db.Texts.Where(i => i.Title.ToLower().Contains(query.ToLower()));
+                    var queryResults = db.Texts.Where(i => i.Title.ToLower().Contains(title.ToLower()));
                     queryResults = queryResults.Where(i => tagTextIds.Contains(i.ID));
                     var result = toTextResult(queryResults.ToList());
                     return result;
                 }
             } else {
-                var queryResults = db.Texts.Where(i => i.Title.ToLower().Contains(query.ToLower()));
+                var queryResults = db.Texts.Where(i => i.Title.ToLower().Contains(title.ToLower()));
                 return toTextResult(queryResults.ToList());
             }
         }
@@ -42,7 +45,8 @@ namespace AnnotationProject.Controllers {
                 Author = i.Author,
                 Description = i.Description,
                 ID = i.ID,
-                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
+                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", ")),
+                AnnotationCount = i.Annotations.Count()
             }).ToList();
             return result;
         }
@@ -56,7 +60,8 @@ namespace AnnotationProject.Controllers {
                 Author = i.Author,
                 Description = i.Description,
                 ID = i.ID,
-                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", "))
+                Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", ")),
+                AnnotationCount = i.Annotations.Count()
             }).ToList();
         }
 
@@ -93,7 +98,8 @@ namespace AnnotationProject.Controllers {
                 Timestamp = i.Text1.Timestamp,
                 BaseTextID = i.BaseTextID,
                 TextAnchor = i.TextAnchor,
-                BaseTextTitle = i.Text.Title
+                BaseTextTitle = i.Text.Title,
+                Username = i.Text1.Username
             }).OrderByDescending(i => i.Timestamp).ToList();
         }
 
@@ -113,9 +119,13 @@ namespace AnnotationProject.Controllers {
             List<AnnotationResult> results = new List<AnnotationResult>();
             foreach (var t in toReturn) {
                 string tags = string.Concat(db.TextTags.Where(i => i.TextID == t.ID).Select(i => i.Tag.Tag1 + ", "));
-                var userID = (int)Membership.GetUser().ProviderUserKey;
-                var annID = annotationIds[t.ID].ID;
-                bool userFavorited = db.UserLikes.Any(i => i.AnnotationID == annID && i.UserID == userID);
+                var user = Membership.GetUser();
+                bool userFavorited = false;
+                if (user != null) {
+                    var userID = (int)user.ProviderUserKey;
+                    var annID = annotationIds[t.ID].ID;
+                    userFavorited = db.UserLikes.Any(i => i.AnnotationID == annID && i.UserID == userID);
+                }
                 results.Add(new AnnotationResult() {
                     Content = t.Content,
                     Timestamp = t.Timestamp,
@@ -326,7 +336,8 @@ namespace AnnotationProject.Controllers {
                 Timestamp = i.Text1.Timestamp,
                 BaseTextID = i.BaseTextID,
                 TextAnchor = i.TextAnchor,
-                BaseTextTitle = i.Text.Title
+                BaseTextTitle = i.Text.Title,
+                Username = username
             }).OrderByDescending(i => i.Timestamp).ToList();
         }
 
@@ -396,10 +407,12 @@ add User management (roles)
 archived texts view (with delete and restore)
 Filter and search annotations on tags/users
 recently uploaded?
-reload upload texts when we add a new one
 Tag pages
 Author pages
  * Left align hebrew text titles
  * Consider changing the position of annation and text
  * Remove tags from the UI
+ * Complex search features: 
+ * favorited by, anchor text, written by
+ * allow comment responses to annotations
 */

@@ -7,8 +7,8 @@
 
 <html ng-app>
 <body>
-    <div ng-controller="UserCtrl">
-        <h4>{{Username}}</h4>
+    <div ng-controller="UserCtrl" ng-cloak>
+        <h4><b>User: {{Username}}</b></h4>
         <hr style="border-top: 1px solid black" />
         <h3>Text Uploads:</h3>
         <table>
@@ -19,7 +19,7 @@
                 <th></th>
             </tr>
             <tr ng-repeat="result in texts">
-                <td style="width: 25%" dir="auto"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
+                <td style="width: 25%"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
                 <td style="width: 20%">{{result.Author}}</td>
                 <td style="width: 20%">{{result.Tags}}</td>
                 <td style="width: 35%" dir="auto">{{result.Snippet}}...</td>
@@ -27,60 +27,46 @@
         </table>
 
         <h3>Annotations:</h3>
-        <table>
-            <tr>
-                <th style="width: 15%; min-width: 15%">Time
-                </th>
-                <th style="width: 15%; min-width: 150px;">Base Text
-                </th>
-                <th style="width: 25%; min-width: 200px">Anchor
-                </th>
-                <th>Annotation
-                </th>
-
-            </tr>
-            <tr ng-repeat="ann in annotations">
-                <td>{{ann.DateString}}
-                </td>
-                <td>
+        <div ng-repeat="ann in annotations">
+            <div class="row">
+                <div class="col-md-2 ">
                     <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
-                </td>
-                <td>{{ann.TextAnchor}}
-                </td>
-                <td>{{ann.PreviewText}}
-            <span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
-                </td>
-            </tr>
-        </table>
-
+                </div>
+                <div class="col-md-3">{{ann.TextAnchor}}</div>
+                <div class="col-md-7">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <p>{{ann.DateString}}</p>
+                </div>
+                <div class="col-md-4" style="font-size: 15px">
+                    <a href="~/User/Index?user={{ann.Username}}"
+                        style="color: #428bca;">{{ann.Username}}</a>
+                </div>
+            </div>
+            <hr style="border-top: 1px solid black" />
+        </div>
 
         <h3>Favorites:</h3>
-        <table>
-            <tr>
-                <th style="width: 15%; min-width: 15%">Time
-                </th>
-                <th style="width: 15%; min-width: 150px;">Base Text
-                </th>
-                <th style="width: 25%; min-width: 200px">Anchor
-                </th>
-                <th>Annotation
-                </th>
-
-            </tr>
-            <tr ng-repeat="ann in favorites">
-                <td>{{ann.DateString}}
-                </td>
-                <td>
+        <div ng-repeat="ann in favorites">
+            <div class="row">
+                <div class="col-md-2 ">
                     <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
-                </td>
-                <td>{{ann.TextAnchor}}
-                </td>
-                <td>{{ann.PreviewText}}
-            <span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
-                </td>
-            </tr>
-        </table>
-
+                </div>
+                <div class="col-md-3">{{ann.TextAnchor}}</div>
+                <div class="col-md-7">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <p>{{ann.DateString}}</p>
+                </div>
+                <div class="col-md-4" style="font-size: 15px">
+                    <a href="~/User/Index?user={{ann.Username}}"
+                        style="color: #428bca;">{{ann.Username}}</a>
+                </div>
+            </div>
+            <hr style="border-top: 1px solid black" />
+        </div>
     </div>
 </body>
 </html>

@@ -4,6 +4,7 @@
     $scope.description = "";
     $scope.searchQuery = "";
     $scope.tagQuery = "";
+    $scope.authorQuery = "";
     $scope.title = "";
     $scope.tags = "";
 
@@ -11,7 +12,7 @@
     $scope.results = new Object();
 
     $scope.search = function () {
-        $http.get(urlRoot + 'api/DataApi/getText?query=' + $scope.searchQuery + '&tags=' + $scope.tagQuery).success(function (result) {
+        $http.get(urlRoot + 'api/DataApi/getText?title=' + $scope.searchQuery + '&tags=' + $scope.tagQuery + '&author=' + $scope.authorQuery).success(function (result) {
             $scope.results = result;
         });
     }

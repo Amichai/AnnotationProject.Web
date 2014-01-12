@@ -1,4 +1,8 @@
-﻿html {
+﻿   [ng\:cloak], [ng-cloak], .ng-cloak {
+        display: none !important;
+    }
+
+html {
     background-color: #efeeef;
     margin: 0;
     padding: 0;
@@ -436,6 +440,7 @@ input, textarea {
     margin: 5px 0 6px 0;
     padding: 5px;
     width: 300px;
+    border-radius:5px;
 }
 
 textarea {
@@ -760,3 +765,4 @@ tr.pager td {
             margin: 0;
         }
 }
+
