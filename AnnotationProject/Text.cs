@@ -34,6 +34,7 @@ namespace AnnotationProject
         public int AnnotationCount { get; set; }
         public Nullable<int> NextTextID { get; set; }
         public Nullable<int> PrevTextID { get; set; }
+        public int FavoritedCount { get; set; }
     
         public virtual ICollection<Annotation> Annotations { get; set; }
         public virtual ICollection<Annotation> Annotations1 { get; set; }

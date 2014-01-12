@@ -23,7 +23,7 @@
     .searchBox {
         overflow: auto;
         position: absolute;
-        top: 150px;
+        top:148px;
         left: 10%;
         right: 60%;
         bottom: 50px;
@@ -33,12 +33,48 @@
         font-size: 16px;
     }
 
+    #addAnnotationButton {
+        background-color: #efeeef;
+
+    }
+
+    #addAnnotationDropDown {
+        background-color: #efeeef;
+        padding:10px;
+        max-width:800px;
+        min-width:250px;
+        /*width:300px;
+        max-width:1000px;*/
+        /*width:250%;*/
+        /*overflow-x:hidden;
+        overflow-y:auto;
+        position: absolute;
+        padding: 10px;
+        background-color: #efeeef;
+        font-family: Georgia;
+        font-size: 15px;*/
+    }
+
+        #addAnnotationPane {
+        /*width:250%;*/
+        position: absolute;
+        background-color:transparent;
+        padding: 10px;
+        /*background-color: #efeeef;*/
+        font-family: Georgia;
+        font-size: 15px;
+        left:10%;
+        top:210px;
+        z-index:3;
+    }
+
     .annotationPane {
-        /*overflow: hidden;*/
+     
+           /*overflow: hidden;*/
         overflow-x:hidden;
         overflow-y:auto;
         position: absolute;
-        top: 220px;
+        top: 246px;
         left: 10%;
         right: 60%;
         bottom: 50px;
@@ -87,111 +123,113 @@
             <div style="float: right" class="glyphicon glyphicon-arrow-right"></div>
             <div style="float: right" class="navLink">Next</div>
         </div>
+
         <div class="searchBox">
             <span style="white-space: nowrap">Filter annotations and tags:</span>
             <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="width: 80%" />
             <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()"></span>
 
         </div>
-        <div class="annotationPane">
-            @if (Request.IsAuthenticated) {
-                <div>
-                    <div ng-click="toggleAddAnnotation()">
-                        <span class="glyphicon glyphicon-plus" ng-show="!isAddAnnotationVisible"></span>
-                        <span class="glyphicon glyphicon-minus" ng-show="isAddAnnotationVisible"></span>
-                        <a>Add annotation</a>
+        <div>
+            <div class="annotationPane">
+                <div ng-repeat="ann in annotations" style="padding: 2px">
+                    <div ng-mouseover="hover($index)" ng-click="expand($index)"
+                        ng-mouseenter="isMouseOver = true"
+                        ng-mouseleave="isMouseOver = false"
+                        ng-class="{highlight: isMouseOver}"><b>{{ann.TextAnchor}}</b><br />
+                        <div ng-if="!ann.Expanded">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
+                        </div>
+                        <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p>{{ann.Content}}</p></div>
+                        <input type="text" ng-model="ann.Content"
+                            ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap; width: 100%"
+                            ng-click="editModeTextBoxClick($event)" />
+                        <div ng-if="ann.Expanded">
+                            <p>
+                                {{ann.DateString}}, by <a href="~/User/Index?user={{ann.Username}}"
+                                    ng-click="stopPropagation($event)"
+                                    style="color: #428bca;">{{ann.Username}}</a>
+                            </p>
+                            <p ng-if="!ann.EditMode">Tags: {{ann.Tags}}</p>
+                            <p ng-if="!ann.EditMode">Source: {{ann.Source}}</p>
+                            <input type="text"
+                                style="width: 100%"
+                                ng-model="ann.Tags"
+                                ng-if="ann.EditMode"
+                                style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
+
+                        </div>
+                        <div ng-if="ann.Expanded">
+                            <div ng-if="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >
+                                @if (Request.IsAuthenticated) {
+                                    <a ng-click="favorite({ev: $event, idx: $index})"
+                                        ng-if="ann.UserFavorited"
+                                        class="clicked">Favorited
+                                    </a>
+                                    <a ng-click="favorite({ev: $event, idx: $index})" ng-if="!ann.UserFavorited">Favorite
+                                    </a><span>({{ann.FavoriteCount}})</span>
+                                    <a>Report</a>
+                                    <a ng-if="!ann.EditMode"
+                                        ng-click="editAnnotation({ev: $event, idx: $index})">Edit</a>
+                                    <a ng-if="ann.EditMode"
+                                        ng-click="saveAnnotationEdit({ev: $event, idx: $index})">Save</a>
+                                    <a ng-click="deleteAnnotation({ev: $event, idx: $index})">Delete</a>
+                                    <a ng-click="seeComments({ev: $event, idx: $index})">Comments</a><span>({{ann.CommentCount}})</span>
+                                }
+                            </div>
+                        </div>
                     </div>
-                    <div ng-show="isAddAnnotationVisible">
-                        <div><b>Anchor:</b></div>
-                        <div>
-                            <input type="text" ng-model="anchor" ng-change="anchorUpdate()" style="width:100%" />
-                        </div>
-                        <div>
-                            <b>Annotation:</b>
-                        </div>
-                        <div>
-                            <textarea ng-model="annotation" style="width:100%;max-width:100%"></textarea>
-                        </div>
-                        <div><b>Source:</b></div>
-                        <div>
-                            <input type="text" ng-model="annotationSource" style="width:100%"/>
-                        </div>
-                        <div><b>Tags:</b></div>
-                        <div>
-                            <input type="text" ng-model="annotationTags" style="width:100%"/>
-                        </div>
-                        <table>
-                            <tr>
-                                <td>
-                                    <div>
-                                        <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" 
+                </div>
+            </div>
+            <div id="addAnnotationPane">
+                @if (Request.IsAuthenticated) {
+                    <div class="btn-group" id="addAnnotationButton">
+                        <button style="background-color: #efeeef;"
+                             class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                            Add Annotation<span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu" id="addAnnotationDropDown">
+                            <div ng-click="stopPropagation($event)">
+                                <div><b>Anchor:</b></div>
+                                <div>
+                                    <input type="text" ng-model="anchor" ng-change="anchorUpdate()" style="width: 100%" />
+                                </div>
+                                <div>
+                                    <b>Annotation:</b>
+                                </div>
+                            </div>
+                            <div>
+                                <textarea ng-model="annotation" style="width: 100%; max-width: 100%" ng-click="stopPropagation($event)"></textarea>
+                            </div>
+                            <div ng-click="stopPropagation($event)">
+                                <div><b>Source:</b></div>
+                                <div>
+                                    <input type="text" ng-model="annotationSource" style="width: 100%" />
+                                </div>
+                                <div><b>Tags:</b></div>
+                                <div>
+                                    <input type="text" ng-model="annotationTags" style="width: 100%" />
+                                </div>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" 
                                         ng-click="addAnnotation('@User.Identity.Name')">
-                                            Add
-                                        </button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div><b>Matches:</b> {{matches}}</div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            } else { 
-                @Html.ActionLink("Log in to add an annotation", "Login", "Account", routeValues: new { returnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })
-            }
-            <hr style="border-top: 1px solid black" />
-            <div ng-repeat="ann in annotations" style="padding: 2px">
-                <div ng-mouseover="hover($index)" ng-click="expand($index)"
-                    ng-mouseenter="isMouseOver = true"
-                    ng-mouseleave="isMouseOver = false"
-                    ng-class="{highlight: isMouseOver}">
-                    <b>{{ann.TextAnchor}}</b><br />
-                    <div ng-if="!ann.Expanded">
-                        {{ann.PreviewText}}
-                    <span ng-if="ann.PreviewText.length != ann.Content.length">...
-                    </span>
-                    </div>
-                    <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p>{{ann.Content}}</p></div>
-                    <input type="text" ng-model="ann.Content"
-                         ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap;width:100%" 
-                        ng-click="editModeTextBoxClick($event)" />
-                    <div ng-if="ann.Expanded">
-                        <p>{{ann.DateString}}, by <a href="~/User/Index?user={{ann.Username}}"
-                            ng-click="stopPropagation($event)"
-                            style="color: #428bca;"
-                            >{{ann.Username}}</a></p>
-                        <p ng-if="!ann.EditMode">Tags: {{ann.Tags}}</p>
-                        <p ng-if="!ann.EditMode">Source: {{ann.Source}}</p>
-                        <input type="text" 
-                            style="width:100%"
-                            ng-model="ann.Tags" 
-                            ng-if="ann.EditMode" 
-                            style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
-                        
-                    </div>
-                    <div ng-if="ann.Expanded">
-                        <div ng-if="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >
-                            @if (Request.IsAuthenticated) {
-                                <a ng-click="favorite({ev: $event, idx: $index})" 
-                                    ng-if="ann.UserFavorited"
-                                    class="clicked">
-                                    Favorited
-                                </a>
-                                <a ng-click="favorite({ev: $event, idx: $index})" ng-if="!ann.UserFavorited">
-                                    Favorite
-                                </a>                                
-                                <a>Report</a>
-                                <a ng-if="!ann.EditMode"
-                                    ng-click="editAnnotation({ev: $event, idx: $index})">Edit</a>
-                                <a ng-if="ann.EditMode"
-                                    ng-click="saveAnnotationEdit({ev: $event, idx: $index})">Save</a>
-                                <a ng-click="deleteAnnotation({ev: $event, idx: $index})">Delete</a>
-                                <a ng-click="seeComments({ev: $event, idx: $index})">Comments</a><span>({{ann.CommentCount}})</span>
-                            }
+                                                Add
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div><b>Matches:</b> {{matches}}</div>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
-                </div>
+                } else { 
+                    @Html.ActionLink("Log in to add an annotation", "Login", "Account", routeValues: new { returnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })
+                }
             </div>
         </div>
         <div class="contentBody">
@@ -257,7 +295,6 @@
                 </div>
             </div>
         </div>
-        <!-- /.modal -->
     </div>
 </body>
 </html>

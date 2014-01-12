@@ -39,5 +39,7 @@ namespace AnnotationProject.Models {
                 return false;
             }
         }
+
+        public int FavoriteCount { get; set; }
     }
 }

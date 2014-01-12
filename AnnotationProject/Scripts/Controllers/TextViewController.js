@@ -179,7 +179,7 @@ function TextViewCtrl($scope, $http) {
         var ann = $scope.annotations[p.idx];
         $http.post(urlRoot + 'api/DataApi/updateAnnotation', ann).success(function (result) {
             $scope.allAnnotations = result;
-            $scope.annotations = result;
+            $scope.annotationSearchUpdate();
         });
     }
 
@@ -187,6 +187,11 @@ function TextViewCtrl($scope, $http) {
         var ann = $scope.annotations[p.idx];
         $http.post(urlRoot + 'api/DataApi/FavoriteAnnotation?annotationID=' + ann.AnnotationID ).success(function () {
             ann.UserFavorited = !ann.UserFavorited;
+            if (ann.UserFavorited) {
+                ann.FavoriteCount++;
+            } else {
+                ann.FavoriteCount--;
+            }
         });
         p.ev.stopPropagation();
     }
@@ -226,11 +231,21 @@ function TextViewCtrl($scope, $http) {
         });
     }
 
+    function filterByAnchor(anchor) {
+        return Enumerable.From($scope.allAnnotations).Where(function (x) {
+            return x.TextAnchor.toLowerCase().indexOf(anchor.toLowerCase()) != -1
+        }).ToArray();
+    }
+
     function filterByUser(user) {
         return Enumerable.From($scope.allAnnotations).Where(function (x) {
             var result = x.Username == user;
             return result;
         }).ToArray();
+    }
+
+    function filterByFavoritedBy(term) {
+        debugger;
     }
 
     function intersect(a, b) {
@@ -267,11 +282,15 @@ function TextViewCtrl($scope, $http) {
                 if (qualifier[0] == "id") {
                     a = filterById(qualifier[1]);
                     toShow = intersect(a, toShow);
-
                 } else if (qualifier[0] == "user") {
                     a = filterByUser(qualifier[1]);
                     toShow = intersect(a, toShow);
-
+                } else if (qualifier[0] == "anchor") {
+                    a = filterByAnchor(qualifier[1]);
+                    toShow = intersect(a, toShow);
+                } else if (qualifier[0] == "favoritedby") {
+                    a = filterByFavoritedBy(qualifier[1]);
+                    toShow = intersect(a, toShow);
                 }
             }
         }

@@ -174,7 +174,8 @@ namespace AnnotationProject.Controllers {
                     UserFavorited = userFavorited,
                     AnnotationID = annotationIds[t.ID].ID,
                     Source = t.Source,
-                    CommentCount = t.AnnotationCount
+                    CommentCount = t.AnnotationCount,
+                    FavoriteCount = t.FavoritedCount
                 });
             }
 
@@ -417,6 +418,7 @@ namespace AnnotationProject.Controllers {
             var existing = db.UserLikes.Where(i => i.UserID == userID && i.AnnotationID == annotationID);
             if (existing.Count() > 0) {
                 foreach (var e in existing) {
+                    e.Annotation.Text1.FavoritedCount--;
                     db.UserLikes.Remove(e);
                 }
             } else {
@@ -424,6 +426,8 @@ namespace AnnotationProject.Controllers {
                     UserID = userID,
                     AnnotationID = annotationID
                 });
+                var ann = db.Annotations.Where(i => i.ID == annotationID).Single();
+                ann.Text1.FavoritedCount++;
             }
             db.SaveChanges();
         }
