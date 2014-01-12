@@ -313,4 +313,20 @@ function TextViewCtrl($scope, $http) {
     $scope.navigateNext = function () {
         window.location = urlRoot + 'textView/Index?textID=' + $scope.nextText;
     }
+
+    $scope.sortingScheme = "";
+
+    $scope.sortByFavorited = function () {
+        $scope.annotations = Enumerable.From($scope.annotations).OrderByDescending(function (x) {
+            return x.FavoriteCount;
+        }).ToArray();
+        $scope.sortingScheme = "favorited";
+    }
+
+    $scope.sortByRecent = function () {
+        $scope.annotations = Enumerable.From($scope.annotations).OrderByDescending(function (x) {
+            return x.Timestamp;
+        }).ToArray();
+        $scope.sortingScheme = "recent";
+    }
 }

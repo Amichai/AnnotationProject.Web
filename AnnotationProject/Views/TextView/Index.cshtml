@@ -14,6 +14,12 @@
         font-size: 18px;
     }
 
+    .pillSelected {
+        background-color:darkgray;
+        border-radius:5px;
+        color:black;
+    }
+
     .clicked {
         background:yellow;
         color:black;
@@ -74,7 +80,7 @@
         overflow-x:hidden;
         overflow-y:auto;
         position: absolute;
-        top: 246px;
+        top: 260px;
         left: 10%;
         right: 60%;
         bottom: 50px;
@@ -126,7 +132,7 @@
 
         <div class="searchBox">
             <span style="white-space: nowrap">Filter annotations and tags:</span>
-            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="width: 80%" />
+            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="font-size:14px;width: 80%" />
             <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()"></span>
 
         </div>
@@ -230,6 +236,11 @@
                 } else { 
                     @Html.ActionLink("Log in to add an annotation", "Login", "Account", routeValues: new { returnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })
                 }
+                <div>
+                    Sort by:
+                        <a ng-click="sortByFavorited()" ng-class="{pillSelected : sortingScheme == 'favorited'}">Favorited</a>
+                        <a ng-click="sortByRecent()" ng-class="{pillSelected : sortingScheme == 'recent'}">Recent</a>
+                </div>
             </div>
         </div>
         <div class="contentBody">
