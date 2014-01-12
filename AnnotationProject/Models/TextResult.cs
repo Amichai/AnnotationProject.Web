@@ -22,5 +22,6 @@ namespace AnnotationProject.Models {
 
         public int? PrevText { get; set; }
         public int? NextText { get; set; }
+        public bool IsBaseText { get; set; }
     }
 }

@@ -72,7 +72,7 @@
 <html ng-app>
 <body>
     <div ng-controller="TextViewCtrl" ng-cloak>
-        <div style="text-align: center;">
+        <div style="text-align: center;" ng-show="isBaseText == true">
             <p class="georgia" style="font-size: 25px;white-space:nowrap">
                 <i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" 
                 ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px;cursor:pointer">edit</a>
@@ -158,6 +158,7 @@
                         ng-click="editModeTextBoxClick($event)" />
                     <div ng-if="ann.Expanded">
                         <p>{{ann.DateString}}, by <a href="~/User/Index?user={{ann.Username}}"
+                            ng-click="stopPropagation($event)"
                             style="color: #428bca;"
                             >{{ann.Username}}</a></p>
                         <p ng-if="!ann.EditMode">Tags: {{ann.Tags}}</p>
@@ -186,6 +187,7 @@
                                 <a ng-if="ann.EditMode"
                                     ng-click="saveAnnotationEdit({ev: $event, idx: $index})">Save</a>
                                 <a ng-click="deleteAnnotation({ev: $event, idx: $index})">Delete</a>
+                                <a ng-click="seeComments({ev: $event, idx: $index})">Comments</a><span>({{ann.CommentCount}})</span>
                             }
                         </div>
                     </div>

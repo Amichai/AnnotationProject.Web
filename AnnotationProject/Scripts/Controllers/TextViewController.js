@@ -14,7 +14,7 @@ function TextViewCtrl($scope, $http) {
     $scope.uploader = "";
     $scope.nextText = "";
     $scope.prevText = "";
-
+    $scope.isBaseText = true;
 
     $scope.annotationSearch = "";
 
@@ -146,7 +146,19 @@ function TextViewCtrl($scope, $http) {
         p.ev.stopPropagation();
     }
 
+    $scope.seeComments = function (p) {
+        debugger;
+        var id = $scope.annotations[p.idx].TextID;
+        p.ev.stopPropagation();
+        debugger;
+        window.location = urlRoot + 'textView/Index?textID=' + id;
+    }
+
     $scope.editModeTextBoxClick = function (evt) {
+        evt.stopPropagation();
+    }
+
+    $scope.stopPropagation = function (evt) {
         evt.stopPropagation();
     }
 
@@ -176,6 +188,7 @@ function TextViewCtrl($scope, $http) {
         $scope.tags = result.Tags;
         $scope.nextText = result.NextText;
         $scope.prevText = result.PrevText;
+        $scope.isBaseText = result.IsBaseText;
         $http.get(urlRoot + 'api/DataApi/getAnnotations?textID=' + $scope.textID).success(function (result) {
             $scope.allAnnotations = result;
             $scope.annotations = result;
@@ -219,5 +232,4 @@ function TextViewCtrl($scope, $http) {
     $scope.navigateNext = function () {
         window.location = urlRoot + 'textView/Index?textID=' + $scope.nextText;
     }
-    
 }

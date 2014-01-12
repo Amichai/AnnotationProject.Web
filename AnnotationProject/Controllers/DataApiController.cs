@@ -112,7 +112,8 @@ namespace AnnotationProject.Controllers {
                 Uploader = getUsername(i.UserID),
                 Tags = string.Concat(i.TextTags.Select(j => j.Tag.Tag1 + ", ")),
                 NextText = i.NextTextID,
-                PrevText = i.PrevTextID
+                PrevText = i.PrevTextID,
+                IsBaseText = i.IsBaseText
             }).Single();
         }
 
@@ -171,7 +172,8 @@ namespace AnnotationProject.Controllers {
                     Tags = tags,
                     UserFavorited = userFavorited,
                     AnnotationID = annotationIds[t.ID].ID,
-                    Source = t.Source
+                    Source = t.Source,
+                    CommentCount = t.AnnotationCount
                 });
             }
 
@@ -334,6 +336,11 @@ namespace AnnotationProject.Controllers {
         [HttpPost]
         public List<AnnotationResult> ArchiveAnnotation(int annotationID, int textID) {
             var db = new TextAnnotationEntities();
+            
+            var t = db.Texts.Where(i => i.ID == textID).Single();
+            t.AnnotationCount--;
+            db.SaveChanges();
+
             db.Texts.Where(i => i.ID == annotationID).Single().IsArchived = true;
             db.SaveChanges();
             return GetAnnotations(textID);
