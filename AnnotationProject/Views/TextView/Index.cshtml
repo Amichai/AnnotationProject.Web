@@ -1,6 +1,12 @@
 ﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
 
 <style>
+    .isAnnotation {
+        background-color:white;
+        font-size:15px;
+        padding:15px;
+    }
+
     .contentBody {
         overflow: auto;
         position: absolute;
@@ -9,6 +15,18 @@
         right: 5%;
         bottom: 50px;
         padding: 10px;
+        background-color: #efeeef;
+        font-family: Georgia;
+        font-size: 18px;
+    }
+
+    .contentLinear {
+        overflow: auto;
+        position: absolute;
+        top: 216px;
+        left: 5%;
+        right: 5%;
+        bottom: 50px;
         background-color: #efeeef;
         font-family: Georgia;
         font-size: 18px;
@@ -109,6 +127,12 @@
         color:#428bca;
         cursor:pointer;
     }
+
+    #layoutOptions {
+        position:absolute;
+        left:45%;
+        z-index:4;
+    }
 </style>
 
 <html ng-app>
@@ -120,191 +144,29 @@
                 ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px;cursor:pointer">edit</a>
             </p>
         </div>
-        <div ng-if="prevText != undefined" ng-click="navigatePrevious()">
+        <div ng-show="prevText != undefined" ng-click="navigatePrevious()">
             <div style="float: left" class="glyphicon glyphicon-arrow-left"></div>
             <div style="float: left" class="navLink">Previous</div>
         </div>
 
-        <div ng-if="nextText != undefined" ng-click="navigateNext()">
+        <div ng-show="nextText != undefined" ng-click="navigateNext()">
             <div style="float: right" class="glyphicon glyphicon-arrow-right"></div>
             <div style="float: right" class="navLink">Next</div>
         </div>
-
+        <div id="layoutOptions">
+            <a ng-class="{pillSelected : !linearLayout}" ng-click="setLayoutSideBySide()">Side by side</a>
+            <a ng-class="{pillSelected : linearLayout}" ng-click="setLayoutLinear()">Linear</a>
+        </div>
         <div class="searchBox">
             <span style="white-space: nowrap">Filter annotations and tags:</span>
-            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="font-size:14px;width: 80%" />
+            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="font-size: 14px; width: 80%" />
             <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()"></span>
-
         </div>
-        <div>
-            <div class="annotationPane">
-                <div ng-repeat="ann in annotations" style="padding: 2px">
-                    <div ng-mouseover="hover($index)" ng-click="expand($index)"
-                        ng-mouseenter="isMouseOver = true"
-                        ng-mouseleave="isMouseOver = false"
-                        ng-class="{highlight: isMouseOver}"><b>{{ann.TextAnchor}}</b><br />
-                        <div ng-if="!ann.Expanded">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
-                        </div>
-                        <div ng-if="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p>{{ann.Content}}</p></div>
-                        <input type="text" ng-model="ann.Content"
-                            ng-if="ann.Expanded && ann.EditMode" style="white-space: pre-wrap; width: 100%"
-                            ng-click="editModeTextBoxClick($event)" />
-                        <div ng-if="ann.Expanded">
-                            <p>
-                                {{ann.DateString}}, by <a href="~/User/Index?user={{ann.Username}}"
-                                    ng-click="stopPropagation($event)"
-                                    style="color: #428bca;">{{ann.Username}}</a>
-                            </p>
-                            <p ng-if="!ann.EditMode">Tags: {{ann.Tags}}</p>
-                            <p ng-if="!ann.EditMode">Source: {{ann.Source}}</p>
-                            <input type="text"
-                                style="width: 100%"
-                                ng-model="ann.Tags"
-                                ng-if="ann.EditMode"
-                                style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
-
-                        </div>
-                        <div ng-if="ann.Expanded">
-                            <div ng-if="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >
-                                @if (Request.IsAuthenticated) {
-                                    <a ng-click="favorite({ev: $event, idx: $index})"
-                                        ng-if="ann.UserFavorited"
-                                        class="clicked">Favorited
-                                    </a>
-                                    <a ng-click="favorite({ev: $event, idx: $index})" ng-if="!ann.UserFavorited">Favorite
-                                    </a><span>({{ann.FavoriteCount}})</span>
-                                    <a>Report</a>
-                                    <a ng-if="!ann.EditMode"
-                                        ng-click="editAnnotation({ev: $event, idx: $index})">Edit</a>
-                                    <a ng-if="ann.EditMode"
-                                        ng-click="saveAnnotationEdit({ev: $event, idx: $index})">Save</a>
-                                    <a ng-click="deleteAnnotation({ev: $event, idx: $index})">Delete</a>
-                                    <a ng-click="seeComments({ev: $event, idx: $index})">Comments</a><span>({{ann.CommentCount}})</span>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="addAnnotationPane">
-                @if (Request.IsAuthenticated) {
-                    <div class="btn-group" id="addAnnotationButton">
-                        <button style="background-color: #efeeef;"
-                             class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                            Add Annotation<span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu" id="addAnnotationDropDown">
-                            <div ng-click="stopPropagation($event)">
-                                <div><b>Anchor:</b></div>
-                                <div>
-                                    <input type="text" ng-model="anchor" ng-change="anchorUpdate()" style="width: 100%" />
-                                </div>
-                                <div>
-                                    <b>Annotation:</b>
-                                </div>
-                            </div>
-                            <div>
-                                <textarea ng-model="annotation" style="width: 100%; max-width: 100%" ng-click="stopPropagation($event)"></textarea>
-                            </div>
-                            <div ng-click="stopPropagation($event)">
-                                <div><b>Source:</b></div>
-                                <div>
-                                    <input type="text" ng-model="annotationSource" style="width: 100%" />
-                                </div>
-                                <div><b>Tags:</b></div>
-                                <div>
-                                    <input type="text" ng-model="annotationTags" style="width: 100%" />
-                                </div>
-                            </div>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" 
-                                        ng-click="addAnnotation('@User.Identity.Name')">
-                                                Add
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div><b>Matches:</b> {{matches}}</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                } else { 
-                    @Html.ActionLink("Log in to add an annotation", "Login", "Account", routeValues: new { returnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })
-                }
-                <div>
-                    Sort by:
-                        <a ng-click="sortByFavorited()" ng-class="{pillSelected : sortingScheme == 'favorited'}">Favorited</a>
-                        <a ng-click="sortByRecent()" ng-class="{pillSelected : sortingScheme == 'recent'}">Recent</a>
-                </div>
-            </div>
+        <div ng-if="!linearLayout">
+            @Html.Partial("_SideBySide")
         </div>
-        <div class="contentBody">
-            <p id="content" style="white-space: pre-wrap;" dir="auto">{{text}}</p>
-        </div>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Edit</h4>
-                    </div>
-                    <table style="margin: 25px">
-                        <tr>
-                            <td>Author:</td>
-                            <td>
-                                <input type="text" ng-model="author" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Title:</td>
-                            <td>
-                                <input type="text" ng-model="title" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Content:</td>
-                            <td>
-                                <textarea ng-model="text" style="width: 100%"></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Source:</td>
-                            <td>
-                                <input type="text" ng-model="source" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Tags:</td>
-                            <td>
-                                <input type="text" ng-model="tags" />
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Next text id:</td>
-                            <td>
-                                <input type="text" ng-model="nextText" />
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Previous text id:</td>
-                            <td>
-                                <input type="text" ng-model="prevText" />
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" ng-click="updateTextDetails()" data-dismiss="modal">Save changes</button>
-                    </div>
-                </div>
-            </div>
+        <div ng-if="linearLayout">
+            @Html.Partial("_Linear")
         </div>
     </div>
 </body>

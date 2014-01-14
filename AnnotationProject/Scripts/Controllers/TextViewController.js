@@ -40,6 +40,17 @@ function TextViewCtrl($scope, $http) {
         expandedIdx = idx;
     }
 
+    $scope.expandAnnotationInText = function (idx) {
+        if ($scope.annotationsAndText[idx].TextAnchor == undefined) {
+            return;
+        }
+        if (idx != expandedIdx && expandedIdx != -1) {
+            $scope.annotationsAndText[expandedIdx].Expanded = false;
+        }
+        $scope.annotationsAndText[idx].Expanded = !$scope.annotationsAndText[idx].Expanded;
+        expandedIdx = idx;
+    }
+
     $scope.anchorUpdate = function () {
         var re = new RegExp($scope.anchor, "g");
         if ($scope.anchor == "") {
@@ -213,6 +224,8 @@ function TextViewCtrl($scope, $http) {
             if (QueryString.annotationID != undefined) {
                 $scope.annotations = filterById(QueryString.annotationID);
             }
+            //$scope.linearLayout = true;
+            //setLayoutLinear();
         });
     });
 
@@ -296,6 +309,10 @@ function TextViewCtrl($scope, $http) {
         }
         $scope.annotations = toShow;
 
+
+        if ($scope.linearLayout) {
+            setLayoutLinear();
+        }
         //debugger;
         ///TODO: split on spaces, commas and treat each token independently
 
@@ -328,5 +345,46 @@ function TextViewCtrl($scope, $http) {
             return x.Timestamp;
         }).ToArray();
         $scope.sortingScheme = "recent";
+    }
+
+    $scope.setLayoutSideBySide = function(){
+        $scope.linearLayout = false;
+    }
+
+    function addTextAnnotation(startIdx, endIdx){
+        var clip = $scope.text.substring(startIdx, endIdx);
+        if (clip != undefined && clip.length > 0) {
+            var newAnnotation = new Object();
+            newAnnotation.Content = clip;
+            $scope.annotationsAndText.push(newAnnotation);
+        }
+    }
+
+    function setLayoutLinear (){
+        $scope.linearLayout = true;
+
+        for (var i = 0; i < $scope.annotations.length; i++) {
+            var a = $scope.annotations[i];
+            var index = $scope.text.indexOf(a.TextAnchor);
+            a.index = index;
+        }
+        var sorted = Enumerable.From($scope.annotations).OrderBy(function (x) {
+            return x.index;
+        }).ToArray();
+        var startVal = 0;
+        $scope.annotationsAndText = new Array();
+        for (var i = 0; i < sorted.length; i++) {
+            var ann = sorted[i];
+            var endVal = ann.index + ann.TextAnchor.length;
+            addTextAnnotation(startVal, endVal);
+            $scope.annotationsAndText.push(ann);
+            startVal = endVal;
+            console.log("Break");
+        }
+        addTextAnnotation(endVal, $scope.text.length);
+    }
+
+    $scope.setLayoutLinear = function () {
+        setLayoutLinear();
     }
 }

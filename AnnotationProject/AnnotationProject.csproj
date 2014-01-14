@@ -664,6 +664,8 @@
     <Content Include="Views\Tag\Index.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Upload\Index.cshtml" />
+    <Content Include="Views\TextView\_SideBySide.cshtml" />
+    <Content Include="Views\TextView\_Linear.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
