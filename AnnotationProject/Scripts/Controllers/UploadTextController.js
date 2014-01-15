@@ -1,6 +1,5 @@
 ﻿function UploadTextCtrl($scope, $http) {
 
-
     $scope.upload = function () {
         var textResult = new Object();
         textResult.Content = $scope.text;
@@ -9,8 +8,10 @@
         textResult.Description = $scope.description;
         textResult.Tags = $scope.tags;
         textResult.Source = $scope.source;
-        $http.post(urlRoot + 'api/DataApi/PostText', textResult).success(function () {
+        $http.post(urlRoot + 'api/DataApi/PostText', textResult).success(function (id) {
             clearForm();
+            window.location = urlRoot + 'TextView/Index?textID=' + id;
+
         });
     }
 

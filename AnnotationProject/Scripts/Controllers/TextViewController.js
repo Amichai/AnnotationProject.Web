@@ -87,6 +87,74 @@ function TextViewCtrl($scope, $http) {
         expandedIdx = idx;
     }
 
+    $scope.favoriteLinear = function (p) {
+        var idx = p.idx;
+        if ($scope.annotationsAndText[idx].TextAnchor == undefined) {
+            return;
+        }
+        var ann = $scope.annotationsAndText[idx];
+        $http.post(urlRoot + 'api/DataApi/FavoriteAnnotation?annotationID=' + ann.AnnotationID).success(function () {
+            ann.UserFavorited = !ann.UserFavorited;
+            if (ann.UserFavorited) {
+                ann.FavoriteCount++;
+            } else {
+                ann.FavoriteCount--;
+            }
+        });
+        p.ev.stopPropagation();
+    }
+
+    $scope.editAnnotationLinear = function (p) {
+        var idx = p.idx;
+        if ($scope.annotationsAndText[idx].TextAnchor == undefined) {
+            return;
+        }
+        $scope.annotationsAndText[p.idx].EditMode = !$scope.annotationsAndText[p.idx].EditMode;
+        p.ev.stopPropagation();
+    }
+
+    $scope.saveAnnotationEditLinear = function (p) {
+        var idx = p.idx;
+        if ($scope.annotationsAndText[idx].TextAnchor == undefined) {
+            return;
+        }
+        var ann = $scope.annotationsAndText[p.idx];
+        $http.post(urlRoot + 'api/DataApi/updateAnnotation', ann).success(function (result) {
+            $scope.allAnnotations = result;
+            $scope.annotationSearchUpdate();
+            setLayoutLinear();
+            $scope.annotationAndTexts[idx].Expanded = true;
+        });
+    }
+
+    $scope.seeCommentsLinear = function (p) {
+        var idx = p.idx;
+        if ($scope.annotationsAndText[idx].TextAnchor == undefined) {
+            return;
+        }
+        var id = $scope.annotationsAndText[idx].TextID;
+        p.ev.stopPropagation();
+        window.location = urlRoot + 'textView/Index?textID=' + id;
+    }
+
+    $scope.deleteAnnotationLinear = function (p) {
+        var idx = p.idx;
+        if ($scope.annotationsAndText[idx].TextAnchor == undefined) {
+            return;
+        }
+        var annotID = $scope.annotationsAndText[p.idx].TextID;
+        var baseTextID = $scope.annotationsAndText[p.idx].BaseTextID;
+        var username = $scope.annotationsAndText[p.idx].Username;
+        $http.post(urlRoot + 'api/DataApi/ArchiveAnnotation?annotationID=' + annotID + '&textID=' + baseTextID).success(function (result) {
+            expandedIdx = -1;
+            $scope.allAnnotations = result;
+            $scope.annotations = result;
+            setLayoutLinear();
+
+        });
+        p.ev.stopPropagation();
+    }
+
     $scope.anchorUpdate = function () {
         var re = new RegExp($scope.anchor, "g");
         if ($scope.anchor == "") {
@@ -195,8 +263,8 @@ function TextViewCtrl($scope, $http) {
         $http.post(urlRoot + 'api/DataApi/updateAnnotation', ann).success(function (result) {
             $scope.allAnnotations = result;
             $scope.annotationSearchUpdate();
+            $scope.annotations[p.idx].Expanded = true;
         });
-
     }
 
     $scope.favorite = function (p) {

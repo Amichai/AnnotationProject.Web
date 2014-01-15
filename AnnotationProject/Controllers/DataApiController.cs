@@ -255,8 +255,9 @@ namespace AnnotationProject.Controllers {
             return tagList;
         }
 
+        /// <returns>the textID of the newly uploaded text</returns>
         [HttpPost]
-        public void PostText(TextResult text) {
+        public int PostText(TextResult text) {
             var db = new TextAnnotationEntities();
             var newText = new Text() {
                 Title = text.Title,
@@ -290,6 +291,7 @@ namespace AnnotationProject.Controllers {
 
             //UserID = (Guid)Membership.GetUser().ProviderUserKey,
             db.SaveChanges();
+            return newText.ID;
         }
 
         [HttpGet]

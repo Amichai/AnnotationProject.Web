@@ -140,7 +140,7 @@
     <div ng-controller="TextViewCtrl" ng-cloak>
         <div style="text-align: center;" ng-show="isBaseText == true">
             <p class="georgia" style="font-size: 25px;white-space:nowrap">
-                <i>{{title}}</i>, {{author}} <a data-toggle="modal" data-target="#myModal" 
+                <a href="@Request.Url.PathAndQuery"><i>{{title}}</i>, {{author}}</a><a data-toggle="modal" data-target="#myModal" 
                 ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px;cursor:pointer">edit</a>
             </p>
         </div>

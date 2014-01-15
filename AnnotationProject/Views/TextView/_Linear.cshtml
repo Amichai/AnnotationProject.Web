@@ -2,10 +2,12 @@
     <div ng-repeat="ann in annotationsAndText" style="padding: 2px">
         <div ng-click="expandAnnotationInText($index)"  ng-class="{isAnnotation : ann.TextAnchor != undefined}">
             <b>{{ann.TextAnchor}}</b><br />
-            <div style="white-space: pre-wrap" ><p>{{ann.Content}}</p></div>
-            <input type="text" ng-model="ann.Content"
+            <div style="white-space: pre-wrap" ng-show="!ann.EditMode" ><p>{{ann.Content}}</p></div>
+
+            <textarea ng-model="ann.Content"
                 ng-show="ann.EditMode" style="white-space: pre-wrap; width: 100%"
-                ng-click="editModeTextBoxClick($event)" />
+                ng-click="editModeTextBoxClick($event)"></textarea>
+
             <div ng-show="ann.Expanded">
                 <p>{{ann.DateString}}, by <a href="~/User/Index?user={{ann.Username}}"
                         ng-click="stopPropagation($event)"
@@ -17,6 +19,7 @@
                     ng-model="ann.Tags"
                     ng-show="ann.EditMode"
                     style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
+                
             </div>
             <div ng-show="ann.Expanded">
                 <div ng-show="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >
@@ -25,15 +28,15 @@
                             ng-show="ann.UserFavorited"
                             class="clicked">Favorited
                         </a>
-                        <a ng-click="favorite({ev: $event, idx: $index})" ng-show="!ann.UserFavorited">Favorite
+                        <a ng-click="favoriteLinear({ev: $event, idx: $index})" ng-show="!ann.UserFavorited">Favorite
                         </a><span>({{ann.FavoriteCount}})</span>
                         <a>Report</a>
                         <a ng-show="!ann.EditMode"
-                            ng-click="editAnnotation({ev: $event, idx: $index})">Edit</a>
+                            ng-click="editAnnotationLinear({ev: $event, idx: $index})">Edit</a>
                         <a ng-show="ann.EditMode"
-                            ng-click="saveAnnotationEdit({ev: $event, idx: $index})">Save</a>
-                        <a ng-click="deleteAnnotation({ev: $event, idx: $index})">Delete</a>
-                        <a ng-click="seeComments({ev: $event, idx: $index})">Comments</a><span>({{ann.CommentCount}})</span>
+                            ng-click="saveAnnotationEditLinear({ev: $event, idx: $index})">Save</a>
+                        <a ng-click="deleteAnnotationLinear({ev: $event, idx: $index})">Delete</a>
+                        <a ng-click="seeCommentsLinear({ev: $event, idx: $index})">Comments</a><span>({{ann.CommentCount}})</span>
                     }
                 </div>
             </div>
