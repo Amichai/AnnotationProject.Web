@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<h2>Admin</h2>
+
+<html ng-app>
+<body>
+    <div ng-controller="ArchivedTextsCtrl" ng-cloak>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Roles</th>
+            </tr>
+            <tr ng-repeat="t in texts track by $index">
+                <td>{{t.ID}}</td>
+                <td>{{t.Timestamp}}</td>
+                <td>{{t.Content}}</td>
+                <td><button type="btn" class="btn btn-primary btn-xs" ng-click="restoreText($index)">Restore</button></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/jquery.highlight-4.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/ArchivedTextsController.js"></script>

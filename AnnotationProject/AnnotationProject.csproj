@@ -203,6 +203,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ArchivedTextsController.cs" />
     <Compile Include="Controllers\DataApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TagController.cs" />
@@ -333,6 +334,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Controllers\AdminController.js" />
+    <Content Include="Scripts\Controllers\ArchivedTextsController.js" />
     <Content Include="Scripts\Controllers\TagsController.js" />
     <Content Include="Scripts\Controllers\TextViewController.js" />
     <Content Include="Scripts\Controllers\HomePageController.js" />
@@ -666,6 +668,7 @@
     <Content Include="Views\Upload\Index.cshtml" />
     <Content Include="Views\TextView\_SideBySide.cshtml" />
     <Content Include="Views\TextView\_Linear.cshtml" />
+    <Content Include="Views\ArchivedTexts\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

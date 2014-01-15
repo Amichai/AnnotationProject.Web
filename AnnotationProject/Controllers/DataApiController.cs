@@ -349,7 +349,7 @@ namespace AnnotationProject.Controllers {
         [HttpPost]
         public List<AnnotationResult> ArchiveAnnotation(int annotationID, int textID) {
             var db = new TextAnnotationEntities();
-            
+
             var t = db.Texts.Where(i => i.ID == textID).Single();
             t.AnnotationCount--;
             db.SaveChanges();
@@ -467,6 +467,23 @@ namespace AnnotationProject.Controllers {
             }).ToList();
 
             return results;
+        }
+
+        [HttpGet]
+        public List<TextResult> GetArchivedTexts() {
+            TextAnnotationEntities db = new TextAnnotationEntities();
+            return toTextResult(db.Texts.Where(i => i.IsArchived).ToList());
+        }
+
+        [HttpPost]
+        public List<TextResult> RestoreText(int id) {
+            TextAnnotationEntities db = new TextAnnotationEntities();
+            var t = db.Texts.Where(i => i.ID == id).Single();
+            var ann = db.Annotations.Where(i => i.AnnotationTextID == id).FirstOrDefault();
+            db.Texts.Where(i => i.ID == ann.BaseTextID).Single().AnnotationCount++;
+            t.IsArchived = false;
+            db.SaveChanges();
+            return GetArchivedTexts();
         }
     }
 }

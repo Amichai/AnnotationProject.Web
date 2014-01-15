@@ -18,6 +18,42 @@ function TextViewCtrl($scope, $http) {
 
     $scope.annotationSearch = "";
 
+    var QueryString = function () {
+        // This function is anonymous, is executed immediately and 
+        // the return value is assigned to QueryString!
+        var query_string = {};
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            // If first entry with this name
+            if (typeof query_string[pair[0]] === "undefined") {
+                query_string[pair[0]] = pair[1];
+                // If second entry with this name
+            } else if (typeof query_string[pair[0]] === "string") {
+                var arr = [query_string[pair[0]], pair[1]];
+                query_string[pair[0]] = arr;
+                // If third or later entry with this name
+            } else {
+                query_string[pair[0]].push(pair[1]);
+            }
+        }
+        $scope.textID = query_string["textID"];
+        $scope.annotationIDQuery = query_string["annotationID"];
+
+        if ($scope.annotationIDQuery != undefined) {
+            $scope.annotationSearch = "id:" + $scope.annotationIDQuery;
+        }
+        if (query_string["linear"] == 'true') {
+            $scope.linearLayout = true;
+        }
+
+        ///TODO: start checking the annotationID parameter
+        ///If this is set, query the annotations by that annotation id
+        return query_string;
+    }();
+
+
     $scope.isAddAnnotationVisible = false;
 
     $scope.urlRoot = urlRoot;
@@ -87,37 +123,6 @@ function TextViewCtrl($scope, $http) {
         });
     }
 
-    var QueryString = function () {
-        // This function is anonymous, is executed immediately and 
-        // the return value is assigned to QueryString!
-        var query_string = {};
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        for (var i = 0; i < vars.length; i++) {
-            var pair = vars[i].split("=");
-            // If first entry with this name
-            if (typeof query_string[pair[0]] === "undefined") {
-                query_string[pair[0]] = pair[1];
-                // If second entry with this name
-            } else if (typeof query_string[pair[0]] === "string") {
-                var arr = [query_string[pair[0]], pair[1]];
-                query_string[pair[0]] = arr;
-                // If third or later entry with this name
-            } else {
-                query_string[pair[0]].push(pair[1]);
-            }
-        }
-        $scope.textID = query_string["textID"];
-        $scope.annotationIDQuery = query_string["annotationID"];
-        
-        if ($scope.annotationIDQuery != undefined) {
-            $scope.annotationSearch = "id:" + $scope.annotationIDQuery;
-        }
-        ///TODO: start checking the annotationID parameter
-        ///If this is set, query the annotations by that annotation id
-        return query_string;
-    }();
-
     function filterById(id) {
         return Enumerable.From($scope.allAnnotations).Where(function (x) {
             var result = x.AnnotationID == id;
@@ -172,7 +177,6 @@ function TextViewCtrl($scope, $http) {
     }
 
     $scope.seeComments = function (p) {
-        //debugger;
         var id = $scope.annotations[p.idx].TextID;
         p.ev.stopPropagation();
         window.location = urlRoot + 'textView/Index?textID=' + id;
@@ -192,6 +196,7 @@ function TextViewCtrl($scope, $http) {
             $scope.allAnnotations = result;
             $scope.annotationSearchUpdate();
         });
+
     }
 
     $scope.favorite = function (p) {
@@ -224,8 +229,9 @@ function TextViewCtrl($scope, $http) {
             if (QueryString.annotationID != undefined) {
                 $scope.annotations = filterById(QueryString.annotationID);
             }
-            //$scope.linearLayout = true;
-            //setLayoutLinear();
+            if ($scope.linearLayout) {
+                setLayoutLinear();
+            }
         });
     });
 
@@ -258,7 +264,6 @@ function TextViewCtrl($scope, $http) {
     }
 
     function filterByFavoritedBy(term) {
-        debugger;
     }
 
     function intersect(a, b) {
@@ -313,7 +318,6 @@ function TextViewCtrl($scope, $http) {
         if ($scope.linearLayout) {
             setLayoutLinear();
         }
-        //debugger;
         ///TODO: split on spaces, commas and treat each token independently
 
     }
@@ -379,7 +383,6 @@ function TextViewCtrl($scope, $http) {
             addTextAnnotation(startVal, endVal);
             $scope.annotationsAndText.push(ann);
             startVal = endVal;
-            console.log("Break");
         }
         addTextAnnotation(endVal, $scope.text.length);
     }

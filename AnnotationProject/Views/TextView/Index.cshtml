@@ -154,7 +154,7 @@
             <div style="float: right" class="navLink">Next</div>
         </div>
         <div id="layoutOptions">
-            <a ng-class="{pillSelected : !linearLayout}" ng-click="setLayoutSideBySide()">Side by side</a>
+            <a ng-class="{pillSelected : !linearLayout}" ng-click="setLayoutSideBySide()">Side-by-side</a>
             <a ng-class="{pillSelected : linearLayout}" ng-click="setLayoutLinear()">Linear</a>
         </div>
         <div class="searchBox">
@@ -162,12 +162,132 @@
             <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="font-size: 14px; width: 80%" />
             <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()"></span>
         </div>
+
+    <div id="addAnnotationPane" ng-show="!linearLayout">
+        @if (Request.IsAuthenticated) {
+            <div class="btn-group" id="addAnnotationButton">
+                <button style="background-color: #efeeef;"
+                    class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                    Add Annotation<span class="caret"></span>
+                </button>
+                <div class="dropdown-menu" id="addAnnotationDropDown">
+                    <div ng-click="stopPropagation($event)">
+                        <div><b>The word or words you want to annotate:</b></div>
+                        <div>
+                            <input type="text" ng-model="anchor" ng-change="anchorUpdate()" style="width: 100%" />
+                        </div>
+                        <div>
+                            <b>Annotation:</b>
+                        </div>
+                    </div>
+                    <div>
+                        <textarea ng-model="annotation" style="width: 100%; max-width: 100%" ng-click="stopPropagation($event)"></textarea>
+                    </div>
+                    <div ng-click="stopPropagation($event)">
+                        <div><b>Source:</b></div>
+                        <div>
+                            <input type="text" ng-model="annotationSource" style="width: 100%" />
+                        </div>
+                        <div><b>Tags:</b></div>
+                        <div>
+                            <input type="text" ng-model="annotationTags" style="width: 100%" />
+                        </div>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>
+                                    <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" 
+                                        ng-click="addAnnotation('@User.Identity.Name')">
+                                        Add
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                <div><b>Matches:</b> {{matches}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        } else { 
+            @Html.ActionLink("Log in to add an annotation", "Login", "Account", routeValues: new { returnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })
+        }
+        <div>
+            Sort by:
+                        <a ng-click="sortByFavorited()" ng-class="{pillSelected : sortingScheme == 'favorited'}">Favorited</a>
+            <a ng-click="sortByRecent()" ng-class="{pillSelected : sortingScheme == 'recent'}">Recent</a>
+        </div>
+    </div>
+
+
         <div ng-if="!linearLayout">
             @Html.Partial("_SideBySide")
         </div>
         <div ng-if="linearLayout">
             @Html.Partial("_Linear")
         </div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Edit</h4>
+            </div>
+            <table style="margin: 25px">
+                <tr>
+                    <td>Author:</td>
+                    <td>
+                        <input type="text" ng-model="author" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Title:</td>
+                    <td>
+                        <input type="text" ng-model="title" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Content:</td>
+                    <td>
+                        <textarea ng-model="text" style="width: 100%"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Source:</td>
+                    <td>
+                        <input type="text" ng-model="source" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tags:</td>
+                    <td>
+                        <input type="text" ng-model="tags" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Next text id:</td>
+                    <td>
+                        <input type="text" ng-model="nextText" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Previous text id:</td>
+                    <td>
+                        <input type="text" ng-model="prevText" />
+                    </td>
+                </tr>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="updateTextDetails()" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     </div>
 </body>
 </html>
