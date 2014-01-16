@@ -1,58 +1,86 @@
 ﻿<!DOCTYPE html>
 <style>
     .uploadBtn {
-        float:right;
-        padding-right:10px;
-        padding-left:10px;
-        background:lightgray;
-        padding-top:5px;
-        padding-bottom:5px;
-        margin-top:-7px;
-        margin-right:10px;
-        border-radius:5px;
-        border:1px solid black;
+        float: right;
+        padding-right: 10px;
+        padding-left: 10px;
+        background: #efeeef;
+        padding-top: 6px;
+        padding-bottom: 5px;
+        margin-top: -6px;
+        margin-right: 10px;
+        border-radius: 4px;
+        /*border: 1px solid black;*/
+    }
+
+    .notifications {
+        float: right;
+        padding-right: 10px;
+        padding-left: 10px;
+
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-top: -10px;
+        margin-right: 10px;
+        border-radius: 5px;
     }
 </style>
 <script>
     var urlRoot = '@Url.Content("~/")';
 </script>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-        <meta name="viewport" content="width=device-width" />
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-    </head>
-    <body>
-        <header >
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <nav>
-                        <ul id="menu">
-                            <li style="font-family:Georgia">@Html.ActionLink("ANNOTATION PROJECT", "Index", "Home"
+<head>
+    <meta charset="utf-8" />
+    <title>Annotation Project</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <nav>
+                    <ul id="menu">
+                        <li style="font-family: Georgia">@Html.ActionLink("ANNOTATION PROJECT", "Index", "Home"
                             )
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                </div>
-                    <div class="uploadBtn"><b><a style="color:black" href="~/Upload/Index">Upload</a></b></div>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-        </header>
-        <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
-            </section>
-        </div>
+            <div class="float-right">
+                <section id="login">
+                    @Html.Partial("_LoginPartial")
+                </section>
+            </div>
+            <div class="uploadBtn"><b><a style="color: black" href="~/Upload/Index">Upload a text</a></b></div>
+            <div ng-controller="NotificationCtrl" class="btn-group notifications">
+                <button style="background-color: #efeeef;"
+                    class="btn btn-default btn-sm dropdown-toggle" 
+                    ng-show="notifications.length > 0"
+                    type="button" data-toggle="dropdown">
+                    Most recent responses<span class="caret"></span>
+                </button>
+                <div class="dropdown-menu" style="width: 400px;">
+                    <div ng-repeat="n in notifications">
+                        <a href="~/TextView/Index?textID={{n.BaseTextID}}&annotationID={{n.AnnotationID}}"><b>{{n.BaseTextTitle}}</b> - {{n.PreviewText.substring(0, 30)}}...</a>
+                    </div>
+                </div>
+            </div>
 
-        @Scripts.Render("~/bundles/jquery")
-        @RenderSection("scripts", required: false)
-    </body>
+        </div>
+    </header>
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
 </html>
+
+<script src="~/Scripts/Controllers/NotificationController.js"></script>

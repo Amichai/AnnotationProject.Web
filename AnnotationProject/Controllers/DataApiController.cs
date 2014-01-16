@@ -388,6 +388,9 @@ namespace AnnotationProject.Controllers {
 
         [HttpGet]
         public List<AnnotationResult> GetUserAnnotations(string username) {
+            if (@User.Identity.Name == "") {
+                return new List<AnnotationResult>();
+            }
             var db = new TextAnnotationEntities();
             var userId = getUserID(username);
             var annotationTexts = db.Texts.Where(i => !i.IsBaseText && 
@@ -416,6 +419,9 @@ namespace AnnotationProject.Controllers {
 
         [HttpGet]
         public List<TextResult> GetUserTexts(string username) {
+            if (@User.Identity.Name == "") {
+                return new List<TextResult>();
+            }
             var db = new TextAnnotationEntities();
             var userId = getUserID(username);
             return db.Texts.Where(i => i.IsBaseText && i.UserID == userId).ToList().Select(i => new TextResult() {
@@ -450,24 +456,30 @@ namespace AnnotationProject.Controllers {
             db.SaveChanges();
         }
 
+        private List<AnnotationResult> toAnnotationResult(IEnumerable<Annotation> annotations) {
+            return annotations.ToList().Select(i =>
+                new AnnotationResult() {
+                    Content = i.Text1.Content,
+                    Timestamp = i.Text1.Timestamp,
+                    BaseTextID = i.Text.ID,
+                    TextAnchor = i.TextAnchor,
+                    TextID = i.Text1.ID,
+                    Username = getUsername(i.Text1.UserID),
+                    AnnotationID = i.ID,
+                    BaseTextTitle = i.Text.Title,
+                    Source = i.Text1.Source
+                }).ToList();
+        }
+
         [HttpGet]
         public List<AnnotationResult> GetFavoriteAnnotations(string username) {
             var db = new TextAnnotationEntities();
+            if (@User.Identity.Name == "") {
+                return new List<AnnotationResult>();
+            }
             var userId = getUserID(username);
             var annotationTexts = db.Texts.Where(i => i.UserID == userId && !i.IsBaseText);
-            var results = db.UserLikes.Where(i => i.UserID == userId).ToList().Select(i => 
-                new AnnotationResult() {
-                    Content = i.Annotation.Text1.Content,
-                    Timestamp = i.Annotation.Text1.Timestamp,
-                    BaseTextID = i.Annotation.Text.ID,
-                    TextAnchor = i.Annotation.TextAnchor,
-                    TextID = i.Annotation.Text1.ID,
-                    Username = getUsername(i.Annotation.Text1.UserID),
-                    AnnotationID = i.Annotation.ID,
-                    BaseTextTitle = i.Annotation.Text.Title,
-                    Source = i.Annotation.Text1.Source
-            }).ToList();
-
+            var results = toAnnotationResult(db.UserLikes.Where(i => i.UserID == userId).Select(i => i.Annotation));
             return results;
         }
 
@@ -486,6 +498,17 @@ namespace AnnotationProject.Controllers {
             t.IsArchived = false;
             db.SaveChanges();
             return GetArchivedTexts();
+        }
+
+        [HttpGet]
+        public List<AnnotationResult> GetNotifications() {
+            if (@User.Identity.Name == "") {
+                return new List<AnnotationResult>();
+            }
+            var db = new TextAnnotationEntities();
+            var id = getUserID(@User.Identity.Name);
+            var annotations = db.Annotations.Where(i => i.Text.UserID == id && !i.Text.IsArchived && !i.Text1.IsArchived).OrderByDescending(i => i.Text1.Timestamp).Take(10);
+            return toAnnotationResult(annotations);
         }
     }
 }

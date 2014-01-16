@@ -8,7 +8,8 @@
 <html ng-app>
 <body>
     <div ng-controller="UserCtrl" ng-cloak>
-        <h4><b>User: {{Username}}</b></h4>
+        <h4><b><a href="@Request.Url.PathAndQuery">User: {{Username}}</a></b></h4>
+
         <hr style="border-top: 1px solid black" />
         <h3>Text Uploads:</h3>
         <table>
@@ -67,6 +68,8 @@
             </div>
             <hr style="border-top: 1px solid black" />
         </div>
+        <a href="~/Account/Manage" style="color:#428bca;">Change your password</a>
+
     </div>
 </body>
 </html>
