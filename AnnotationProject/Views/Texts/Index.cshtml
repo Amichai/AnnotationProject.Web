@@ -1,0 +1,83 @@
+﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "Texts";
+}
+
+<html ng-app>
+<body>
+    <div ng-controller="TextsCtrl" ng-cloak>
+        <div class="row">
+            <h3 class="col-md-2">Search</h3>
+        </div>
+
+        <div>
+            <span>
+                <input type="text" ng-model="searchQuery" />
+            </span>
+            <span>
+                <span class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        {{searchBySelection}}
+      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a ng-click="searchBy('Title')">Title</a></li>
+                        <li><a ng-click="searchBy('Author')">Author</a></li>
+                        <li><a ng-click="searchBy('Tags')">Tags</a></li>
+
+                    </ul>
+                </span>
+            </span>
+            <span>
+                <button type="button" data-loading-text="Loading..." class="btn btn-default" ng-click="search()">
+                    Search
+                </button>
+                <button type="button" data-loading-text="Loading..." class="btn btn-default" ng-click="clear()">
+                    Clear
+                </button>
+            </span>
+        </div>
+
+        <h3>{{tableFunction}}</h3>
+        <div class="row">
+            <div class="col-md-4 col-xs-4">
+                <b>Title</b>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <b>Author</b>
+            </div>
+
+            <div class="col-md-1 col-xs-1">
+                <b>Annotations</b>
+            </div>
+        </div>
+        <hr style="border-top: 1px solid darkgray" />
+        <div ng-repeat="text in results">
+            <div class="row">
+                <div class="col-md-4 col-xs-4">
+                    <i><a href="~/TextView/Index?textID={{text.ID}}">{{text.Title}}</a></i>
+                </div>
+                <div class="col-md-2 col-xs-2">
+                    <p>{{text.Author}}</p>
+                </div>
+                <div class="col-md-1 col-xs-1">{{text.AnnotationCount}}</div>
+                <div class="col-md-5 col-xs-5">{{text.Snippet}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
+            </div>
+            <div class="row" style="margin: 8px">
+                <div class="col-md-offset-7 col-xs-offset-7">
+                    Uploaded {{text.Timestamp}}
+                <a ng-show="text.Uploader.length > 0" href="~/User/Index?user={{text.Uploader}}"
+                    style="color: #428bca;">{{text.Uploader}}</a>
+                </div>
+            </div>
+            <hr style="border-top: 1px solid darkgray" />
+        </div>
+    </div>
+</body>
+</html>
+
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/TextsController.js"></script>

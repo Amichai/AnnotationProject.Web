@@ -17,12 +17,46 @@
         float: right;
         padding-right: 10px;
         padding-left: 10px;
-
         padding-top: 5px;
         padding-bottom: 5px;
         margin-top: -10px;
         margin-right: 10px;
         border-radius: 5px;
+    }
+
+    #headerText {
+        font-weight: bold;
+        font-family: Georgia;
+        padding-top: 8px !important;
+        margin-top: 0px;
+        cursor: pointer;
+        color:wheat;
+    }
+
+    #loginDiv {
+        position: absolute;
+        right: 3%;
+        margin: 25px;
+    }
+
+    .tabSelected {
+        font-weight: bold;
+        color: #0193B7;
+    }
+
+    #tabMenu {
+        text-align: center;
+        background-color: white;
+        align-content:center;
+        align-items:center;
+    }
+
+    .tabMenuItem {
+        margin: 55px;
+        cursor: pointer;
+        font-size:20px;
+        /*font-family: Georgia;*/
+
     }
 </style>
 <script>
@@ -31,44 +65,58 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Annotation Project</title>
+    <title>Digression Project - @ViewBag.Title</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    @*#063E53*@
+    @*#735D41*@
+    @*#0193B7*@
     <header>
-        <div class="content-wrapper">
-            <div class="float-left">
-                <nav>
-                    <ul id="menu">
-                        <li style="font-family: Georgia">@Html.ActionLink("ANNOTATION PROJECT", "Index", "Home"
-                            )
-                        </li>
-                    </ul>
-                </nav>
+        <div class="row">
+            <div class="col-md-3 col-xs-3"></div>
+            <div style="text-align: center;" class="col-md-5 col-xs-5">
+                <h1 id="headerText" onclick="window.location = urlRoot;">Digression Project</h1>
             </div>
-            <div class="float-right">
-                <section id="login">
-                    @Html.Partial("_LoginPartial")
-                </section>
-            </div>
-            <div class="uploadBtn"><b><a style="color: black" href="~/Upload/Index">Upload a text</a></b></div>
-            <div ng-controller="NotificationCtrl" class="btn-group notifications">
-                <button style="background-color: #efeeef;"
-                    class="btn btn-default btn-sm dropdown-toggle" 
-                    ng-show="notifications.length > 0"
-                    type="button" data-toggle="dropdown">
-                    Most recent responses<span class="caret"></span>
-                </button>
-                <div class="dropdown-menu" style="width: 400px;">
-                    <div ng-repeat="n in notifications">
-                        <a href="~/TextView/Index?textID={{n.BaseTextID}}&annotationID={{n.AnnotationID}}"><b>{{n.BaseTextTitle}}</b> - {{n.PreviewText.substring(0, 30)}}...</a>
-                    </div>
-                </div>
-            </div>
+            <div class="col-md-2 col-xs-2" style="margin-top: 8px;">@Html.Partial("_LoginPartial")</div>
+        </div>
+        <div id="tabMenu" class="row">
+            <div class="col-md-12" style="text-align:center">
+            @{ 
+                var cont = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+            }
+            @*@if (cont == "home") { 
+                <div class="tabMenuItem col-md-2 col-xs-2 tabSelected" onclick="selectTab(this)">Home</div>
+            } else { 
+                <div class="tabMenuItem col-md-2 col-xs-2" onclick="selectTab(this)">Home</div>
+            }*@
+            @if (cont == "texts") { 
+                <span class="tabMenuItem tabSelected" onclick="selectTab(this)">Texts</span>
+            } else { 
+                <span class="tabMenuItem " onclick="selectTab(this)">Texts</span>
+            }
+            @if (cont == "annotations") { 
+                <span class="tabMenuItem  tabSelected" onclick="selectTab(this)">Annotations</span>    
+            } else { 
+                <span class="tabMenuItem " onclick="selectTab(this)">Annotations</span>
+            }
+            @if (@Request.IsAuthenticated) { 
+            if (cont == "responses") { 
+                <span class="tabMenuItem  tabSelected" onclick="selectTab(this)">Responses (0)</span>
+            } else { 
+                <span class="tabMenuItem " onclick="selectTab(this)">Responses (0)</span>                
+            }
+            }
 
+            @if (cont == "upload") {
+                <span class="tabMenuItem  tabSelected" onclick="selectTab(this)">Upload</span>
+            } else { 
+                <span class="tabMenuItem " onclick="selectTab(this)">Upload</span>
+            }
+                </div>
         </div>
     </header>
     <div id="body">
@@ -84,3 +132,16 @@
 </html>
 
 <script src="~/Scripts/Controllers/NotificationController.js"></script>
+<script>
+
+    function clear() {
+        $('.tabMenuItem').removeClass('tabSelected');
+    }
+    function selectTab(item) {
+        clear();
+        $(item).addClass('tabSelected');
+        var c = $(item).html().split(' ')[0];
+        window.location = urlRoot + c + '/index';
+    }
+
+</script>

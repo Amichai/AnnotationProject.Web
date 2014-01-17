@@ -203,10 +203,13 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AnnotationsController.cs" />
     <Compile Include="Controllers\ArchivedTextsController.cs" />
     <Compile Include="Controllers\DataApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ResponsesController.cs" />
     <Compile Include="Controllers\TagController.cs" />
+    <Compile Include="Controllers\TextsController.cs" />
     <Compile Include="Controllers\TextViewController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -334,8 +337,12 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Controllers\AdminController.js" />
+    <Content Include="Scripts\Controllers\AnnotationsController.js" />
     <Content Include="Scripts\Controllers\ArchivedTextsController.js" />
+    <Content Include="Scripts\Controllers\NotificationController.js" />
+    <Content Include="Scripts\Controllers\ResponsesController.js" />
     <Content Include="Scripts\Controllers\TagsController.js" />
+    <Content Include="Scripts\Controllers\TextsController.js" />
     <Content Include="Scripts\Controllers\TextViewController.js" />
     <Content Include="Scripts\Controllers\HomePageController.js" />
     <Content Include="Scripts\Controllers\UploadTextController.js" />
@@ -669,6 +676,9 @@
     <Content Include="Views\TextView\_SideBySide.cshtml" />
     <Content Include="Views\TextView\_Linear.cshtml" />
     <Content Include="Views\ArchivedTexts\Index.cshtml" />
+    <Content Include="Views\Annotations\Index.cshtml" />
+    <Content Include="Views\Texts\Index.cshtml" />
+    <Content Include="Views\Responses\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

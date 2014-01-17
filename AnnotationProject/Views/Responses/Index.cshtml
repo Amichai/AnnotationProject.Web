@@ -1,0 +1,39 @@
+﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "Responses";
+}
+
+<html ng-app>
+<body>
+    <div ng-controller="ResponsesCtrl" ng-cloak>
+        <h3>Most Recent Responses</h3>
+            <hr style="border-top: 1px solid darkgray" />
+
+        <div ng-repeat="ann in responses">
+            <div class="row">
+                <div class="col-md-1 col-xs-2">
+                    <p>{{ann.DateString}}</p>
+                </div>
+                <div class="col-md-2 col-xs-2" ng-if="ann.BaseTextTitle != undefined">
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
+                </div>
+                <div class="col-md-2 col-xs-2" ng-if="ann.BaseTextTitle == undefined">
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">textID:{{ann.BaseTextID}}</a>
+                </div>
+                <div class="col-md-2 col-xs-2" style="font-size: 15px">
+                    <a href="~/User/Index?user={{ann.Username}}"
+                        style="color: #428bca;">{{ann.Username}}</a>
+                </div>
+                <div class="col-md-7 col-xs-7">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
+            </div>
+            <hr style="border-top: 1px solid darkgray" />
+        </div>
+    </div>
+</body>
+</html>
+
+
+<script src="~/Scripts/jquery-1.9.1.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/ResponsesController.js"></script>

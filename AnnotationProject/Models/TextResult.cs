@@ -13,6 +13,8 @@ namespace AnnotationProject.Models {
         public string Tags { get; set; }
         public string Source { get; set; }
         public string Uploader { get; set; }
+        public string Timestamp { get; set; }
+
         public int AnnotationCount { get; set; }
         public string Snippet {
             get {

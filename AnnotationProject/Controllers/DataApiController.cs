@@ -77,8 +77,11 @@ namespace AnnotationProject.Controllers {
                 Tags = getTextTags(i),
                 AnnotationCount = i.AnnotationCount,
                 NextText = i.NextTextID,
-                PrevText = i.PrevTextID
+                PrevText = i.PrevTextID,
+                Uploader = getUsername(i.UserID),
+                Timestamp= i.Timestamp.ToString()
             }).ToList();
+            
             return result;
         }
 
@@ -93,7 +96,7 @@ namespace AnnotationProject.Controllers {
             return db.UserProfiles.Where(i => i.UserName == username).Single().UserId;
         }
 
-        private string getUsername(int userId) {
+        private static string getUsername(int userId) {
             var db = new UsersContext();
             var users = db.UserProfiles.Where(i => i.UserId == userId);
             if (users.Count() == 0) {
@@ -183,7 +186,7 @@ namespace AnnotationProject.Controllers {
                     AnnotationID = annotationIds[t.ID].ID,
                     Source = t.Source,
                     CommentCount = t.AnnotationCount,
-                    FavoriteCount = t.FavoritedCount
+                    FavoriteCount = t.FavoritedCount,
                 });
             }
 
@@ -409,7 +412,7 @@ namespace AnnotationProject.Controllers {
                 TextAnchor = i.TextAnchor,
                 BaseTextTitle = i.Text.Title,
                 Username = username,
-                Source = i.Text1.Source
+                Source = i.Text1.Source,
             }).OrderByDescending(i => i.Timestamp).ToList();
         }
 
@@ -467,7 +470,7 @@ namespace AnnotationProject.Controllers {
                     Username = getUsername(i.Text1.UserID),
                     AnnotationID = i.ID,
                     BaseTextTitle = i.Text.Title,
-                    Source = i.Text1.Source
+                    Source = i.Text1.Source,
                 }).ToList();
         }
 
