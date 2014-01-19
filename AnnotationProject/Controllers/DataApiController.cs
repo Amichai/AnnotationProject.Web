@@ -56,7 +56,7 @@ namespace AnnotationProject.Controllers {
                 titleQueryResult = db.Texts.Where(i => i.Title.ToLower().Contains(title.ToLower())).ToList();
             }
             if (author != null) {
-                titleQueryResult = db.Texts.Where(i => i.Author.ToLower().Contains(author.ToLower())).ToList();
+                authorQueryResult = db.Texts.Where(i => i.Author.ToLower().Contains(author.ToLower())).ToList();
             }
             var result = combineResults(tagQueryResult, titleQueryResult, authorQueryResult);
             if (result == null) {
@@ -65,6 +65,35 @@ namespace AnnotationProject.Controllers {
                 return toTextResult(result);
             }
         }
+
+        [HttpGet]
+        public List<TextResult> SearchTexts(string query) {
+            if (query == null) {
+                return GetAll();
+            }
+
+            var db = new TextAnnotationEntities();
+            List<Text> tagQueryResult = null;
+            List<Text> titleQueryResult = null;
+            List<Text> authorQueryResult = null;
+            List<Tag> inspectionTags = new List<Tag>();
+            foreach (var tag in parseTagString(query)) {
+                inspectionTags.AddRange(db.Tags.Where(i => i.Tag1.ToLower().Contains(tag.ToLower().Trim())));
+            }
+            tagQueryResult = inspectionTags.SelectMany(i => i.TextTags).Select(i => i.Text).Where(i => i.IsBaseText).ToList();
+
+            titleQueryResult = db.Texts.Where(i => i.Title.ToLower().Contains(query.ToLower())).ToList();
+
+            authorQueryResult = db.Texts.Where(i => i.Author.ToLower().Contains(query.ToLower())).ToList();
+
+            var result = tagQueryResult.Union(titleQueryResult).Union(authorQueryResult).ToList();
+            if (result == null) {
+                return new List<TextResult>();
+            } else {
+                return toTextResult(result);
+            }
+        }
+
 
         private static List<TextResult> toTextResult(List<Text> queryResults) {
             var result = queryResults.Select(i => new TextResult() {
@@ -79,9 +108,9 @@ namespace AnnotationProject.Controllers {
                 NextText = i.NextTextID,
                 PrevText = i.PrevTextID,
                 Uploader = getUsername(i.UserID),
-                Timestamp= i.Timestamp.ToString()
+                Timestamp = i.Timestamp.ToString()
             }).ToList();
-            
+
             return result;
         }
 
@@ -155,7 +184,7 @@ namespace AnnotationProject.Controllers {
         public List<AnnotationResult> GetAnnotations(int textID) {
             var db = new TextAnnotationEntities();
             var annotationIds = db.Annotations.Where(i => i.BaseTextID == textID).ToDictionary(
-                i => i.AnnotationTextID, i => new { i.TextAnchor, i.ID});
+                i => i.AnnotationTextID, i => new { i.TextAnchor, i.ID });
 
             var annotationTextIds = annotationIds.Keys.ToList();
             var toReturn = db.Texts.Where(i => annotationTextIds.Contains(i.ID) &&
@@ -396,7 +425,7 @@ namespace AnnotationProject.Controllers {
             }
             var db = new TextAnnotationEntities();
             var userId = getUserID(username);
-            var annotationTexts = db.Texts.Where(i => !i.IsBaseText && 
+            var annotationTexts = db.Texts.Where(i => !i.IsBaseText &&
                 i.UserID == userId &&
                 !i.IsArchived)
                 .OrderByDescending(i => i.Timestamp)
@@ -427,15 +456,7 @@ namespace AnnotationProject.Controllers {
             }
             var db = new TextAnnotationEntities();
             var userId = getUserID(username);
-            return db.Texts.Where(i => i.IsBaseText && i.UserID == userId).ToList().Select(i => new TextResult() {
-                Content = i.Content,
-                Title = i.Title,
-                Author = i.Author,
-                Description = i.Description,
-                Source = i.Source,
-                ID = i.ID,
-                Tags = getTextTags(i)
-            }).ToList();
+            return toTextResult(db.Texts.Where(i => i.IsBaseText && i.UserID == userId).ToList());
         }
 
         [HttpPost]

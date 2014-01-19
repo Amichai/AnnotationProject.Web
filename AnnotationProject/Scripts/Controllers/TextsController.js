@@ -15,8 +15,17 @@
 
     $scope.tableFunction = "Recent Texts";
 
-
     $scope.search = function () {
+        if ($scope.searchBySelection == "All") {
+            var query = $scope.searchQuery;
+            $http.get(urlRoot + 'api/DataApi/searchTexts?query=' + query).success(function (result) {
+                    $scope.results = result;
+                    $scope.tableFunction = "Search Results";
+                });
+            return;
+        }
+
+
         var title = "";
         var author = "";
         var tags = "";
@@ -24,9 +33,9 @@
             author = $scope.searchQuery;
         } else if ($scope.searchBySelection == "Tags") {
             tags = $scope.searchQuery;
-        } else {
+        } else if ($scope.searchBySelection == "Title") {
             title = $scope.searchQuery;
-        }
+        } 
         
         $http.get(urlRoot + 'api/DataApi/getText?title=' + title
             + '&tags=' +tags + '&author=' + author).success(function (result) {
@@ -39,6 +48,7 @@
         $scope.searchQuery = "";
         $http.get(urlRoot + 'api/DataApi/getAll').success(function (result) {
             $scope.results = result;
+            $scope.tableFunction = "Recent Texts";
         });
     }
 }

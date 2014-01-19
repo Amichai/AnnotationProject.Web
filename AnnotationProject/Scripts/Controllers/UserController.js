@@ -1,4 +1,5 @@
 ﻿function UserCtrl($scope, $http) {
+    $scope.busy = true;
 
     var QueryString = function () {
         // This function is anonymous, is executed immediately and 
@@ -24,16 +25,18 @@
     }();
 
     $scope.Username = QueryString.user;
-    
-    $http.get(urlRoot + 'api/DataApi/getUserAnnotations?username=' + QueryString.user).success(function (activity) {
-        $scope.annotations = activity;
-    });
+    if (QueryString.user != undefined) {
+        $http.get(urlRoot + 'api/DataApi/getUserAnnotations?username=' + QueryString.user).success(function (activity) {
+            $scope.annotations = activity;
+        });
+        $http.get(urlRoot + 'api/DataApi/getUserTexts?username=' + QueryString.user).success(function (activity) {
+            $scope.texts = activity;
+        });
 
-    $http.get(urlRoot + 'api/DataApi/getUserTexts?username=' + QueryString.user).success(function (activity) {
-        $scope.texts = activity;
-    });
+        $http.get(urlRoot + 'api/DataApi/getFavoriteAnnotations?username=' + QueryString.user).success(function (results) {
+            $scope.favorites = results;
+            $scope.busy = false;
+        });
+    }
 
-    $http.get(urlRoot + 'api/DataApi/getFavoriteAnnotations?username=' + QueryString.user).success(function (results) {
-        $scope.favorites = results;
-    });
 }

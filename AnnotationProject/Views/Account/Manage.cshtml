@@ -3,6 +3,9 @@
     ViewBag.Title = "Manage Account";
 }
 
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+
 <hgroup class="title">
     <h1>@ViewBag.Title.</h1>
 </hgroup>
@@ -11,12 +14,9 @@
 
 <p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
 
-@if (ViewBag.HasLocalPassword)
-{
+@if (ViewBag.HasLocalPassword) {
     @Html.Partial("_ChangePasswordPartial")
-}
-else
-{
+} else {
     @Html.Partial("_SetPasswordPartial")
 }
 
@@ -28,5 +28,7 @@ else
 </section>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-1.9.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/angular.js"></script>
 }

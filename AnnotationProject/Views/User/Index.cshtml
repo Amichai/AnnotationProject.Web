@@ -1,7 +1,7 @@
 ﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = @User.Identity.Name + " Profile";
 }
 
 
@@ -10,65 +10,89 @@
     <div ng-controller="UserCtrl" ng-cloak>
         <h4><b><a href="@Request.Url.PathAndQuery">User: {{Username}}</a></b></h4>
 
-        <hr />
-        <h3>Text Uploads:</h3>
-        <table>
-            <tr ng-show="texts.length > 0">
-                <th>Title</th>
-                <th>Author</th>
-                <th>Tags</th>
-                <th></th>
-            </tr>
-            <tr ng-repeat="result in texts">
-                <td style="width: 25%"><a href="~/TextView/Index?textID={{result.ID}}">{{result.Title}}</a></td>
-                <td style="width: 20%">{{result.Author}}</td>
-                <td style="width: 20%">{{result.Tags}}</td>
-                <td style="width: 35%" dir="auto">{{result.Snippet}}...</td>
-            </tr>
-        </table>
+        <h3>Text Uploads</h3>
+        <div class="row">
+            <div class="col-md-4 col-xs-4">
+                <b>Title</b>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <b>Author</b>
+            </div>
 
-        <h3>Annotations:</h3>
+            <div class="col-md-1 col-xs-1">
+                <b>Annotations</b>
+            </div>
+        </div>
+
+        <hr />
+
+        <div ng-repeat="text in texts">
+            <div class="row">
+                <div class="col-md-4 col-xs-4">
+                    <i><b><a href="~/TextView/Index?textID={{text.ID}}">{{text.Title}}</a></b></i>
+                    <br />
+                    <div>
+                        {{text.Timestamp}}
+                    </div>
+                </div>
+                <div class="col-md-2 col-xs-2">
+                    <p>{{text.Author}}</p>
+                </div>
+                <div class="col-md-1 col-xs-1">{{text.AnnotationCount}}</div>
+                <div class="col-md-5 col-xs-5">{{text.Snippet}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
+            </div>
+            <hr />
+        </div>
+
+        <h3>Annotations</h3>
+        <hr />
         <div ng-repeat="ann in annotations">
             <div class="row">
-                <div class="col-md-2 ">
-                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
+                <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle != undefined">
+                    <i><b><a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a></b></i>
                 </div>
-                <div class="col-md-3">{{ann.TextAnchor}}</div>
-                <div class="col-md-7">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
-            </div>
-            <div class="row">
-                <div class="col-md-1">
-                    <p>{{ann.DateString}}</p>
+                <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle == undefined">
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">textID:{{ann.BaseTextID}}</a>
                 </div>
-                <div class="col-md-4" style="font-size: 15px">
-                    <a href="~/User/Index?user={{ann.Username}}"
-                        style="color: #428bca;">{{ann.Username}}</a>
+                <div class="col-md-9 col-xs-9">
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}&annotationID={{ann.AnnotationID}}">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
+                    </a>
+                    <br />
+                    {{ann.DateString}} - 
+                <a ng-show="ann.Username.length > 0" href="~/User/Index?user={{ann.Username}}"
+                    style="color: #428bca;">{{ann.Username}}</a>
                 </div>
             </div>
             <hr />
         </div>
 
-        <h3>Favorites:</h3>
-        <div ng-repeat="ann in favorites">
+
+        <h3>Favorites</h3>
+        <hr />
+                <div ng-repeat="ann in favorites">
             <div class="row">
-                <div class="col-md-2 ">
-                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
+                <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle != undefined">
+                    <i><b><a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a></b></i>
                 </div>
-                <div class="col-md-3">{{ann.TextAnchor}}</div>
-                <div class="col-md-7">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
-            </div>
-            <div class="row">
-                <div class="col-md-1">
-                    <p>{{ann.DateString}}</p>
+                <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle == undefined">
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">textID:{{ann.BaseTextID}}</a>
                 </div>
-                <div class="col-md-4" style="font-size: 15px">
-                    <a href="~/User/Index?user={{ann.Username}}"
-                        style="color: #428bca;">{{ann.Username}}</a>
+                <div class="col-md-9 col-xs-9">
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}&annotationID={{ann.AnnotationID}}">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
+                    </a>
+                    <br />
+                    {{ann.DateString}} - 
+                <a ng-show="ann.Username.length > 0" href="~/User/Index?user={{ann.Username}}"
+                    style="color: #428bca;">{{ann.Username}}</a>
                 </div>
             </div>
             <hr />
         </div>
-        <a href="~/Account/Manage" style="color:#428bca;">Change your password</a>
+
+        <div id="loading-indicator" ng-show="busy">
+            <img src="~/Images/ajax-loader.gif" />
+        </div>
+        <a href="~/Account/Manage" style="color: #428bca;">Change your password</a>
 
     </div>
 </body>

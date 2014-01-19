@@ -17,10 +17,10 @@
             <span>
                 <span class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        {{searchBySelection}}
-      <span class="caret"></span>
+                        {{searchBySelection}}<span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
+                        <li><a ng-click="searchBy('All')">All</a></li>
                         <li><a ng-click="searchBy('Title')">Title</a></li>
                         <li><a ng-click="searchBy('Author')">Author</a></li>
                         <li><a ng-click="searchBy('Tags')">Tags</a></li>

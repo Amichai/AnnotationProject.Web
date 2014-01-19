@@ -11,8 +11,7 @@ html {
 }
 
 body {
-    /*background-color: #fff;*/
-    background-color:#0193B7;
+    /*background-color:#0193B7;*/
     color:black;
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
@@ -70,6 +69,7 @@ h4, h5, h6 {
     color: #000;
     margin-bottom: 0;
     padding-bottom: 0;
+
 }
 
 h1 {
@@ -86,6 +86,7 @@ h3 {
     font-size: 1.2em;
     font-family: Georgia !important;
         font-weight: bold;
+
 }
 
 h4 {
@@ -110,20 +111,16 @@ h5, h6 {
 }
 
 #body {
-    /*background-color: #efeeef;*/
     background-color: #D1c5b7;
     clear: both;
     padding-bottom: 35px;
 }
 
     .main-content {
-        /*background: url("../Images/accent.png") no-repeat;*/
         padding-left: 10px;
-        padding-top: 30px;
     }
 
     .featured + .main-content {
-        /*background: url("../Images/heroAccent.png") no-repeat;*/
     }
 
 header .content-wrapper {

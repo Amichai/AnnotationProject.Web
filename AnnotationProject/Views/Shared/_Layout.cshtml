@@ -30,6 +30,7 @@
         margin-top: 0px;
         cursor: pointer;
         color:wheat;
+        white-space:nowrap;
     }
 
     #loginDiv {
@@ -40,7 +41,15 @@
 
     .tabSelected {
         font-weight: bold;
-        color: #0193B7;
+        /*color: #0193B7;*/
+        color:white;
+        /*background-color:black;*/
+        background-color:#0193B7;
+        /*padding:10px;*/
+        padding-left:15px;
+        padding-right:15px;
+        padding-top:5px;
+        padding-bottom:5px;
     }
 
     #tabMenu {
@@ -82,20 +91,23 @@
     <header>
         <div ng-app>
             <div ng-controller="LayoutCtrl" ng-cloak>
-                <div class="row">
+                <div class="row" style="background-color:#0193B7;">
                     <div class="col-md-3 col-xs-3"></div>
                     <div style="text-align: center;" class="col-md-5 col-xs-5">
-                        <h1 id="headerText" onclick="window.location = urlRoot;">Digression Project</h1>
+                        <h1 id="headerText" onclick="window.location = urlRoot;" >Digression Project</h1>
                     </div>
                     <div class="col-md-2 col-xs-2" style="margin-top: 8px;">@Html.Partial("_LoginPartial")</div>
                 </div>
 
                 @{ 
                         var cont = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+                        if (cont == "user" && string.Concat(Request.Url.Query.Skip(6)) == User.Identity.Name) {
+                            cont = "profile";
+                        }
                 }
                 <div id="tabMenu" class="row">
                     <div class="col-md-12" style="text-align: center">
-                        <span ng-repeat="h in headerItems" class="tabMenuItem" ng-class="{ tabSelected: h.toLowerCase() == '@cont'}" onclick="selectTab(this)">
+                        <span ng-repeat="h in headerItems" class="tabMenuItem" ng-class="{ tabSelected: h.toLowerCase() == '@cont'}" onclick="selectTab(this, '@User.Identity.Name')">
                             {{h}}
                         </span>
                     </div>
@@ -118,18 +130,28 @@
 <script src="~/Scripts/Controllers/LayoutController.js"></script>
 
 <script>
-
-    function clear() {
-        $('.tabMenuItem').removeClass('tabSelected');
-    }
     function trim (str) {
         return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
     }
 
-    function selectTab(item) {
-        clear();
+    function selectTab(item, name) {
         var c = trim($(item).html());
-        window.location = urlRoot + c + '/index';
+        var url;
+        if (c == "Profile") {
+            url = urlRoot + 'User?user=' + name;
+        } else {
+            url = urlRoot + c + '/index';
+        }
+        if (window.event.ctrlKey) {
+            OpenInNewTab(url);
+        } else {
+            window.location = url;
+        }
+    }
+
+    function OpenInNewTab(url) {
+        var win = window.open(url, '_blank');
+        win.focus();
     }
 
 </script>
