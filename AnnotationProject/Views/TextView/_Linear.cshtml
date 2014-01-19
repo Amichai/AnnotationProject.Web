@@ -1,7 +1,8 @@
 ﻿<div class="contentLinear">
-    <div ng-repeat="ann in annotationsAndText" style="padding: 2px">
-        <div ng-click="expandAnnotationInText($index)"  ng-class="{isAnnotation : ann.TextAnchor != undefined}">
-            <b>{{ann.TextAnchor}}</b><br />
+    <div ng-repeat="ann in annotationsAndText" style="padding: 0px">
+        <div ng-click="expandAnnotationInText($index)" style="padding:10px;"
+             ng-class="{isAnnotation : ann.TextAnchor != undefined}" >
+            <b>{{ann.TextAnchor}}</b><br ng-show="ann.TextAnchor != undefined"/>
             <div style="white-space: pre-wrap" ng-show="!ann.EditMode" ><p>{{ann.Content}}</p></div>
 
             <textarea ng-model="ann.Content"

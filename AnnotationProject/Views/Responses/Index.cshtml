@@ -8,7 +8,9 @@
     <div ng-controller="ResponsesCtrl" ng-cloak>
         <h3>Most Recent Responses</h3>
         <hr />
-
+        <div ng-show="responses.length == 0">
+            You don't have any responses at this time...
+        </div>
         <div ng-repeat="ann in responses">
             <div class="row">
                 <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle != undefined">

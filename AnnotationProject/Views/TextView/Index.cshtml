@@ -56,7 +56,7 @@
         font-family: Georgia;
         font-size: 16px;
         z-index: 3;
-        background-color: lightblue;
+        /*background-color: lightblue;*/
     }
 
     #addAnnotationButton {
@@ -133,13 +133,17 @@
     }
 </style>
 
+@{
+    ViewBag.Title = "Text View";
+}
+
 <html ng-app>
 <body>
     <div ng-controller="TextViewCtrl" ng-cloak>
         <div style="text-align: center;" ng-show="isBaseText == true">
             <p class="georgia" style="font-size: 25px; white-space: nowrap; margin: 0px;">
                 <a href="@Request.Url.PathAndQuery"><i>{{title}}</i>, {{author}}</a>
-                <a data-toggle="modal" data-target="#myModal" 
+                <a data-toggle="modal" data-target="#editTextModal" 
                 ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px;cursor:pointer">edit</a>
             </p>
         </div>
@@ -153,85 +157,48 @@
                 <div style="float: right" class="glyphicon glyphicon-arrow-right"></div>
                 <div style="float: right" class="navLink">Next</div>
             </div>
-            <span id="layoutOptions">
-                <a ng-class="{pillSelected : !linearLayout}" ng-click="setLayoutSideBySide()">Side-by-side</a>
-                <a ng-class="{pillSelected : linearLayout}" ng-click="setLayoutLinear()">Linear</a>
-            </span>
-            <span style="white-space: nowrap">Filter:</span>
-            <span>
-            <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="font-size: 14px; width: auto;font-family:Arial" />
-                </span>
-            <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()"></span>
-            <span id="addAnnotationPane" >
-                @if (Request.IsAuthenticated) {
-                    <span class="btn-group" id="addAnnotationButton">
-                        <button style="background-color: #efeeef;"
-                            class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                            Add Annotation<span class="caret"></span>
-                        </button>
-                        <span class="dropdown-menu" id="addAnnotationDropDown">
-                            <div ng-click="stopPropagation($event)">
-                                <div><b>The word or words you want to annotate:</b></div>
-                                <div>
-                                    <input type="text" ng-model="anchor" ng-change="anchorUpdate()" style="width: 100%" />
-                                </div>
-                                <div>
-                                    <b>Annotation:</b>
-                                </div>
-                            </div>
-                            <div>
-                                <textarea ng-model="annotation" style="width: 100%; max-width: 100%" ng-click="stopPropagation($event)"></textarea>
-                            </div>
-                            <div ng-click="stopPropagation($event)">
-                                <div><b>Source:</b></div>
-                                <div>
-                                    <input type="text" ng-model="annotationSource" style="width: 100%" />
-                                </div>
-                                <div><b>Tags:</b></div>
-                                <div>
-                                    <input type="text" ng-model="annotationTags" style="width: 100%" />
-                                </div>
-                            </div>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" 
-                                        ng-click="addAnnotation('@User.Identity.Name')">
-                                                Add
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div><b>Matches:</b> {{matches}}</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </span>
+            <div>
+                <span>
+                    <span style="white-space: nowrap">Filter:</span>
+                    <span>
+                        <input ng-model="annotationSearch" ng-change="annotationSearchUpdate()" style="font-size: 14px; width: auto; font-family: Arial" />
                     </span>
-                } else { 
-                    @Html.ActionLink("Log in to add an annotation", "Login", "Account", routeValues: new { returnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })
-                }
-                <span ng-show="!linearLayout">Sort by:
-                        <a ng-click="sortByFavorited()" ng-class="{pillSelected : sortingScheme == 'favorited'}">Favorited</a>
-                    <a ng-click="sortByRecent()" ng-class="{pillSelected : sortingScheme == 'recent'}">Recent</a>
+                    <span class="glyphicon glyphicon-remove" ng-click="clearAnnotationSearch()"></span>
                 </span>
-            </span>
+
+                <span id="addAnnotationPane">
+                    @if (Request.IsAuthenticated) {
+                        <button class="btn btn-default btn-md" data-toggle="modal" data-target="#annotateModal">
+                            Annotate
+                        </button>
+                    } else { 
+                        @Html.ActionLink("Log in to annotate", "Login", "Account", routeValues: new { returnUrl = Request.Url.PathAndQuery }, htmlAttributes: new { id = "loginLink" })
+                    }
+                </span>
+
+                <span id="layoutOptions">Layout:
+                <a ng-class="{pillSelected : !linearLayout}" ng-click="setLayoutSideBySide()">Side-by-side</a>
+                    <a ng-class="{pillSelected : linearLayout}" ng-click="setLayoutLinear()">Linear</a>
+                </span>
+
+
+            </div>
+
         </div>
 
 
-        <div ng-if="!linearLayout" style="position:relative;height:100%">
+        <div ng-if="!linearLayout" style="position: relative; height: 100%">
             @Html.Partial("_SideBySide")
         </div>
         <div ng-if="linearLayout">
             @Html.Partial("_Linear")
         </div>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editTextModal" tabindex="-1" role="dialog" aria-labelledby="editTextModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Edit</h4>
+                        <h4 class="modal-title" id="editTextModalLabel">Edit</h4>
                     </div>
                     <table style="margin: 25px">
                         <tr>
@@ -287,6 +254,63 @@
             </div>
         </div>
 
+
+        <div class="modal fade" id="annotateModal" tabindex="-1" role="dialog" aria-labelledby="annotateModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="annotateModalLabel">Add an annotation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div ng-click="stopPropagation($event)">
+                            <div><b>The word or words you want to annotate:</b></div>
+                            <div>
+                                <input type="text" ng-model="anchor" ng-change="anchorUpdate()" style="width: 100%" />
+                            </div>
+                            <div>
+                                <b>Annotation:</b>
+                            </div>
+                        </div>
+                        <div>
+                            <textarea ng-model="annotation" style="width: 100%; max-width: 100%" ng-click="stopPropagation($event)"></textarea>
+                        </div>
+                        <div ng-click="stopPropagation($event)">
+                            <div><b>Source:</b></div>
+                            <div>
+                                <input type="text" ng-model="annotationSource" style="width: 100%" />
+                            </div>
+                            <div><b>Tags:</b></div>
+                            <div>
+                                <input type="text" ng-model="annotationTags" style="width: 100%" />
+                            </div>
+                        </div>
+                        <table>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <button type="button" data-loading-text="Loading..." class="btn btn-primary" style="margin: 5px" 
+                                        ng-click="addAnnotation('@User.Identity.Name')">
+                                            Add
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div><b>Matches:</b> {{matches}}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
     </div>
 </body>
 </html>
@@ -298,12 +322,16 @@
 <script src="~/Scripts/linq.js_ver2.2.0.2/linq.js"></script>
 <script src="~/Scripts/Controllers/TextViewController.js"></script>
 <script>
-    $(document).ready(function () {
+    function reposition() {
         var rect = document.getElementById('searchBox').getBoundingClientRect()
-        console.log(rect.top, rect.right, rect.bottom, rect.left);
         $('.annotationPane').css('top', rect.bottom);
         $('.contentBody').css('top', rect.bottom);
         $('.contentLinear').css('top', rect.bottom);
+    }
+
+    $(document).ready(function () {
+        reposition();
+
 
         var width = $(window).width();
         // fire on window resize
@@ -312,11 +340,7 @@
             if ($(window).width() == width) return;
             // update new width value
             width = $(window).width();
-            rect = document.getElementById('searchBox').getBoundingClientRect()
-
-            $('.annotationPane').css('top', rect.bottom);
-            $('.contentBody').css('top', rect.bottom);
-            $('.contentLinear').css('top', rect.bottom);
+            reposition();
 
             var width = $(window).width();
         });

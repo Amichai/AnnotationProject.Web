@@ -29,7 +29,8 @@
         padding-top: 8px !important;
         margin-top: 0px;
         cursor: pointer;
-        color:wheat;
+        /*color:wheat;*/
+        color:#FFD473;
         white-space:nowrap;
     }
 
@@ -41,11 +42,9 @@
 
     .tabSelected {
         font-weight: bold;
-        /*color: #0193B7;*/
         color:white;
-        /*background-color:black;*/
         background-color:#0193B7;
-        /*padding:10px;*/
+        /*background-color:#77BA9B;*/
         padding-left:15px;
         padding-right:15px;
         padding-top:5px;
@@ -69,7 +68,6 @@
 
     #loading-indicator {
         margin:30px;
-        background-color:#D1c5b7;
     }
 </style>
 <script>
@@ -78,7 +76,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Digression Project - @ViewBag.Title</title>
+    <title>Annotation Project - @ViewBag.Title</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
     @Styles.Render("~/Content/css")
@@ -94,7 +92,7 @@
                 <div class="row" style="background-color:#0193B7;">
                     <div class="col-md-3 col-xs-3"></div>
                     <div style="text-align: center;" class="col-md-5 col-xs-5">
-                        <h1 id="headerText" onclick="window.location = urlRoot;" >Digression Project</h1>
+                        <h1 id="headerText" onclick="window.location = urlRoot;" >Annotation Project</h1>
                     </div>
                     <div class="col-md-2 col-xs-2" style="margin-top: 8px;">@Html.Partial("_LoginPartial")</div>
                 </div>

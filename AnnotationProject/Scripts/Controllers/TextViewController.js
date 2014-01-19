@@ -393,6 +393,10 @@ function TextViewCtrl($scope, $http) {
     $scope.clearAnnotationSearch = function () {
         $scope.annotationSearch = "";
         $scope.annotations = $scope.allAnnotations;
+        $scope.sortingScheme = "";
+        if ($scope.linearLayout) {
+            setLayoutLinear();
+        }
     }
 
     $scope.navigatePrevious = function () {

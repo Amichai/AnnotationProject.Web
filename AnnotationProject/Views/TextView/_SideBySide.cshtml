@@ -1,5 +1,11 @@
 ﻿<div>
     <div class="annotationPane">
+        
+        <span ng-show="!linearLayout">Annotations: {{annotations.length}}<br />Sort by:
+                        <a ng-click="sortByFavorited()" ng-class="{pillSelected : sortingScheme == 'favorited'}">Favorited</a>
+            <a ng-click="sortByRecent()" ng-class="{pillSelected : sortingScheme == 'recent'}">Recent</a>
+        </span>
+            <hr />
         <div ng-repeat="ann in annotations" style="padding: 2px">
             <div ng-mouseover="hover($index)" ng-click="expand($index)"
                 ng-mouseenter="isMouseOver = true"

@@ -3,8 +3,8 @@
     }
 
 html {
-    /*background-color: #efeeef;*/
-    background-color: #D1c5b7;
+    background-color: #efeeef;
+    /*background-color: #D1c5b7;*/
 
     margin: 0;
     padding: 0;
@@ -111,7 +111,9 @@ h5, h6 {
 }
 
 #body {
-    background-color: #D1c5b7;
+    /*background-color: #D1c5b7;*/
+    background-color: #efeeef;
+
     clear: both;
     padding-bottom: 35px;
 }

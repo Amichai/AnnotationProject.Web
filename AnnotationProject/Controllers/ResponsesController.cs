@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace AnnotationProject.Controllers
 {
+    [Authorize]
     public class ResponsesController : Controller
     {
         //

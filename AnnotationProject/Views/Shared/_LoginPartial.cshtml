@@ -1,13 +1,13 @@
 ﻿@if (Request.IsAuthenticated) {
     <text>
-        @Html.ActionLink(User.Identity.Name, "Index", "User", routeValues: new { user = User.Identity.Name }, htmlAttributes: new { @class = "username", title = "Manage", style = "color:wheat" })
+        @Html.ActionLink(User.Identity.Name, "Index", "User", routeValues: new { user = User.Identity.Name }, htmlAttributes: new { @class = "username", title = "Manage", style = "color:#FFD473" })
         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
             @Html.AntiForgeryToken()
-            <a href="javascript:document.getElementById('logoutForm').submit()" style="color:wheat">Log off</a>
+            <a href="javascript:document.getElementById('logoutForm').submit()" style="color:#FFD473">Log off</a>
         }
     </text>
 } else {
     
-       @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" ,style = "color:wheat" })
+       @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" ,style = "color:#FFD473" })
 }
     
