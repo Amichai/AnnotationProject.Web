@@ -51,11 +51,17 @@
                 <b>Annotations</b>
             </div>
         </div>
-        <hr style="border-top: 1px solid darkgray" />
+        <hr />
         <div ng-repeat="text in results">
             <div class="row">
                 <div class="col-md-4 col-xs-4">
-                    <i><a href="~/TextView/Index?textID={{text.ID}}">{{text.Title}}</a></i>
+                    <i><b><a href="~/TextView/Index?textID={{text.ID}}">{{text.Title}}</a></b></i>
+                    <br />
+                    <div>
+                        {{text.Timestamp}}
+                <a ng-show="text.Uploader.length > 0" href="~/User/Index?user={{text.Uploader}}"
+                    style="color: #428bca;">{{text.Uploader}}</a>
+                    </div>
                 </div>
                 <div class="col-md-2 col-xs-2">
                     <p>{{text.Author}}</p>
@@ -63,14 +69,10 @@
                 <div class="col-md-1 col-xs-1">{{text.AnnotationCount}}</div>
                 <div class="col-md-5 col-xs-5">{{text.Snippet}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
             </div>
-            <div class="row" style="margin: 8px">
-                <div class="col-md-offset-7 col-xs-offset-7">
-                    Uploaded {{text.Timestamp}}
-                <a ng-show="text.Uploader.length > 0" href="~/User/Index?user={{text.Uploader}}"
-                    style="color: #428bca;">{{text.Uploader}}</a>
-                </div>
-            </div>
-            <hr style="border-top: 1px solid darkgray" />
+            <hr />
+        </div>
+        <div id="loading-indicator" ng-show="busy">
+            <img src="~/Images/ajax-loader.gif" />
         </div>
     </div>
 </body>

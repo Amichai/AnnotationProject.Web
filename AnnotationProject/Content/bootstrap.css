@@ -368,10 +368,8 @@ img {
 }
 
 hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
   border: 0;
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid darkgray;
 }
 
 .sr-only {
@@ -826,10 +824,10 @@ pre code {
   }
 }
 
-.row {
+/*.row {
   margin-right: -15px;
   margin-left: -15px;
-}
+}*/
 
 .row:before,
 .row:after {
@@ -901,8 +899,8 @@ pre code {
 .col-lg-12 {
   position: relative;
   min-height: 1px;
-  padding-right: 15px;
-  padding-left: 15px;
+  /*padding-right: 15px;
+  padding-left: 15px;*/
 }
 
 .col-xs-1,

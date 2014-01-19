@@ -7,31 +7,34 @@
 <body>
     <div ng-controller="ResponsesCtrl" ng-cloak>
         <h3>Most Recent Responses</h3>
-            <hr style="border-top: 1px solid darkgray" />
+        <hr />
 
         <div ng-repeat="ann in responses">
             <div class="row">
-                <div class="col-md-1 col-xs-2">
-                    <p>{{ann.DateString}}</p>
+                <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle != undefined">
+                    <i><b><a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a></b></i>
                 </div>
-                <div class="col-md-2 col-xs-2" ng-if="ann.BaseTextTitle != undefined">
-                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a>
-                </div>
-                <div class="col-md-2 col-xs-2" ng-if="ann.BaseTextTitle == undefined">
+                <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle == undefined">
                     <a href="~/TextView/Index?textID={{ann.BaseTextID}}">textID:{{ann.BaseTextID}}</a>
                 </div>
-                <div class="col-md-2 col-xs-2" style="font-size: 15px">
-                    <a href="~/User/Index?user={{ann.Username}}"
-                        style="color: #428bca;">{{ann.Username}}</a>
+                <div class="col-md-9 col-xs-9">
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}&annotationID={{ann.AnnotationID}}">
+                    {{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
+                        </a>
+                    <br />
+                    {{ann.DateString}} - 
+                <a ng-show="ann.Username.length > 0" href="~/User/Index?user={{ann.Username}}"
+                    style="color: #428bca;">{{ann.Username}}</a>
                 </div>
-                <div class="col-md-7 col-xs-7">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
             </div>
-            <hr style="border-top: 1px solid darkgray" />
+            <hr />
+        </div>
+        <div id="loading-indicator" ng-show="busy">
+            <img src="~/Images/ajax-loader.gif" />
         </div>
     </div>
 </body>
 </html>
-
 
 <script src="~/Scripts/jquery-1.9.1.js"></script>
 <script src="~/Scripts/bootstrap.js"></script>

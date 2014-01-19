@@ -10,7 +10,7 @@
     <div ng-controller="UserCtrl" ng-cloak>
         <h4><b><a href="@Request.Url.PathAndQuery">User: {{Username}}</a></b></h4>
 
-        <hr style="border-top: 1px solid black" />
+        <hr />
         <h3>Text Uploads:</h3>
         <table>
             <tr ng-show="texts.length > 0">
@@ -45,7 +45,7 @@
                         style="color: #428bca;">{{ann.Username}}</a>
                 </div>
             </div>
-            <hr style="border-top: 1px solid black" />
+            <hr />
         </div>
 
         <h3>Favorites:</h3>
@@ -66,7 +66,7 @@
                         style="color: #428bca;">{{ann.Username}}</a>
                 </div>
             </div>
-            <hr style="border-top: 1px solid black" />
+            <hr />
         </div>
         <a href="~/Account/Manage" style="color:#428bca;">Change your password</a>
 

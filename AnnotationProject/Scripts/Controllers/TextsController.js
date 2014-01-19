@@ -1,6 +1,9 @@
 ﻿function TextsCtrl($scope, $http) {
+    $scope.busy = true;
+
     $http.get(urlRoot + 'api/DataApi/getAll').success(function (result) {
         $scope.results = result;
+        $scope.busy = false;
     });
 
     $scope.searchBySelection = "Title";
@@ -11,6 +14,7 @@
     }
 
     $scope.tableFunction = "Recent Texts";
+
 
     $scope.search = function () {
         var title = "";

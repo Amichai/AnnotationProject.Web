@@ -206,6 +206,7 @@
     <Compile Include="Controllers\AnnotationsController.cs" />
     <Compile Include="Controllers\ArchivedTextsController.cs" />
     <Compile Include="Controllers\DataApiController.cs" />
+    <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ResponsesController.cs" />
     <Compile Include="Controllers\TagController.cs" />
@@ -339,6 +340,7 @@
     <Content Include="Scripts\Controllers\AdminController.js" />
     <Content Include="Scripts\Controllers\AnnotationsController.js" />
     <Content Include="Scripts\Controllers\ArchivedTextsController.js" />
+    <Content Include="Scripts\Controllers\LayoutController.js" />
     <Content Include="Scripts\Controllers\NotificationController.js" />
     <Content Include="Scripts\Controllers\ResponsesController.js" />
     <Content Include="Scripts\Controllers\TagsController.js" />
@@ -679,6 +681,7 @@
     <Content Include="Views\Annotations\Index.cshtml" />
     <Content Include="Views\Texts\Index.cshtml" />
     <Content Include="Views\Responses\Index.cshtml" />
+    <Content Include="Views\Groups\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
