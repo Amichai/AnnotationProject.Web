@@ -10,7 +10,8 @@
                 ng-click="editModeTextBoxClick($event)"></textarea>
 
             <div ng-show="ann.Expanded">
-                <p>{{ann.DateString}}, by <a href="~/User/Index?user={{ann.Username}}"
+                <p>{{ann.DateString}}, by 
+                    <a href="~/User/Index?user={{ann.Username}}"
                         ng-click="stopPropagation($event)"
                         style="color: #428bca;">{{ann.Username}}</a>
                 </p>

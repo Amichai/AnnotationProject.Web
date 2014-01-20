@@ -49,7 +49,7 @@ namespace AnnotationProject.Controllers {
         public ActionResult LogOff() {
             WebSecurity.Logout();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Texts");
         }
 
         //
@@ -72,7 +72,7 @@ namespace AnnotationProject.Controllers {
                 try {
                     WebSecurity.CreateUserAndAccount(model.RegisterModel.UserName, model.RegisterModel.Password);
                     WebSecurity.Login(model.RegisterModel.UserName, model.RegisterModel.Password);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Texts");
                 } catch (MembershipCreateUserException e) {
                     ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
                 }
@@ -201,7 +201,7 @@ namespace AnnotationProject.Controllers {
                 string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
                 ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData });
+                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = "", ExternalLoginData = loginData });
             }
         }
 
@@ -282,7 +282,7 @@ namespace AnnotationProject.Controllers {
             if (Url.IsLocalUrl(returnUrl)) {
                 return Redirect(returnUrl);
             } else {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Texts");
             }
         }
 

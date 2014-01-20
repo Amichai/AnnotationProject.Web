@@ -21,9 +21,9 @@
                 <td>{{user.Username}}</td>
                 <td>{{user.Roles}}</td>
                 <td><input type="text" style="width:150px" ng-model="users[$index].RoleToAdd"/></td>
-                <td><button type="btn" class="btn btn-primary btn-xs" ng-click="addRole($index)">Add</button></td>
-                <td><button type="btn" class="btn btn-danger btn-xs" ng-click="removeRole($index)">Remove</button></td>
-
+                <td><button type="button" class="btn btn-primary btn-xs" ng-click="addRole($index)">Add</button></td>
+                <td><button type="button" class="btn btn-danger btn-xs" ng-click="removeRole($index)">Remove Tag</button></td>
+                <td><button type="button" class="btn btn-danger btn-xs" ng-click="deleteUser($index)">Delete User</button></td>
             </tr>
         </table>
     </div>

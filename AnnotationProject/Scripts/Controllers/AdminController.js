@@ -22,4 +22,12 @@
 	        $scope.users = result;
 	    });
 	};
+
+	$scope.deleteUser = function (idx) {
+	    var user = $scope.users[idx].Username;
+	    $http.post(urlRoot + 'api/dataApi/deleteUser?user=' + user).success(function (result) {
+	        $scope.users = result;
+	    });
+
+	}
 }

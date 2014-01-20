@@ -381,6 +381,16 @@ namespace AnnotationProject.Controllers {
         }
 
         [HttpPost]
+        public List<UserAdminModel> DeleteUser(string user) {
+            var roles = Roles.GetRolesForUser(user);
+            foreach (var r in roles) {
+                Roles.RemoveUserFromRole(user, r);
+            }
+            Membership.DeleteUser(user);
+            return GetUsers();
+        }
+
+        [HttpPost]
         public List<AnnotationResult> ArchiveAnnotation(int annotationID, int textID) {
             var db = new TextAnnotationEntities();
 
@@ -434,15 +444,7 @@ namespace AnnotationProject.Controllers {
 
             var annotations = db.Annotations.Where(i => annotationIDs.Contains(i.AnnotationTextID)
                 );
-            return annotations.Select(i => new AnnotationResult() {
-                Content = i.Text1.Content,
-                Timestamp = i.Text1.Timestamp,
-                BaseTextID = i.BaseTextID,
-                TextAnchor = i.TextAnchor,
-                BaseTextTitle = i.Text.Title,
-                Username = username,
-                Source = i.Text1.Source,
-            }).OrderByDescending(i => i.Timestamp).ToList();
+            return toAnnotationResult(annotations).OrderByDescending(i => i.Timestamp).ToList();
         }
 
         private static string getTextTags(Text i) {
@@ -534,6 +536,8 @@ namespace AnnotationProject.Controllers {
             var annotations = db.Annotations.Where(i => i.Text.UserID == id && !i.Text.IsArchived && !i.Text1.IsArchived).OrderByDescending(i => i.Text1.Timestamp).Take(10);
             return toAnnotationResult(annotations);
         }
+
+        
     }
 }
 /*

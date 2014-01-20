@@ -1,10 +1,12 @@
-﻿@model AnnotationProject.Models.RegisterExternalLoginModel
+﻿
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+@model AnnotationProject.Models.RegisterExternalLoginModel
 @{
     ViewBag.Title = "Register";
 }
 
 <hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
     <h2>Associate your @ViewBag.ProviderDisplayName account.</h2>
 </hgroup>
 
@@ -14,14 +16,11 @@
 
     <fieldset>
         <legend>Association Form</legend>
-        <p>
-            You've successfully authenticated with <strong>@ViewBag.ProviderDisplayName</strong>.
-            Please enter a user name for this site below and click the Confirm button to finish
-            logging in.
-        </p>
+        <h3>
+            Select a username:
+        </h3>
         <ol>
             <li class="name">
-                @Html.LabelFor(m => m.UserName)
                 @Html.TextBoxFor(m => m.UserName)
                 @Html.ValidationMessageFor(m => m.UserName)
             </li>
