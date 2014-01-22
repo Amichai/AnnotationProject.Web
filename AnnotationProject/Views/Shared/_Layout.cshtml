@@ -30,8 +30,8 @@
         margin-top: 0px;
         cursor: pointer;
         /*color:wheat;*/
-        color:#FFD473;
-        white-space:nowrap;
+        color: #FFD473;
+        white-space: nowrap;
     }
 
     #loginDiv {
@@ -42,32 +42,32 @@
 
     .tabSelected {
         font-weight: bold;
-        color:white;
-        background-color:#0193B7;
+        color: white;
+        background-color: #0193B7;
         /*background-color:#77BA9B;*/
-        padding-left:15px;
-        padding-right:15px;
-        padding-top:5px;
-        padding-bottom:5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     #tabMenu {
         text-align: center;
         background-color: white;
-        align-content:center;
-        align-items:center;
-        font-family:Georgia;
+        align-content: center;
+        align-items: center;
+        font-family: Georgia;
     }
 
     .tabMenuItem {
         cursor: pointer;
-        font-size:20px;
-        margin-left:15px;
-        margin-right:15px;
+        font-size: 20px;
+        margin-left: 15px;
+        margin-right: 15px;
     }
 
     #loading-indicator {
-        margin:30px;
+        margin: 30px;
     }
 </style>
 <script>
@@ -89,28 +89,27 @@
     <header>
         <div ng-app>
             <div ng-controller="LayoutCtrl" ng-cloak>
-                <div class="row" style="background-color:#0193B7;">
+                <div class="row" style="background-color: #0193B7;">
                     <div class="col-md-3 col-xs-3"></div>
                     <div style="text-align: center;" class="col-md-5 col-xs-5">
-                        <h1 id="headerText" onclick="window.location = urlRoot;" >Annotation Project</h1>
+                        <h1 id="headerText" onclick="window.location = urlRoot;">Annotation Project</h1>
                     </div>
                     <div class="col-md-2 col-xs-2" style="margin-top: 8px;">@Html.Partial("_LoginPartial")</div>
                 </div>
 
                 @{ 
-                        var cont = ViewContext.RouteData.Values["controller"].ToString().ToLower();
-                        if (cont == "user" && string.Concat(Request.Url.Query.Skip(6)) == User.Identity.Name) {
-                            cont = "profile";
-                        }
+                    var cont = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+                    if (cont == "user" && string.Concat(Request.Url.Query.Skip(6)) == User.Identity.Name) {
+                        cont = "profile";
+                    }
                 }
                 <div id="tabMenu" class="row">
                     <div class="col-md-12" style="text-align: center">
-                        <span ng-repeat="h in headerItems" class="tabMenuItem" ng-class="{ tabSelected: h.toLowerCase() == '@cont'}" onclick="selectTab(this, '@User.Identity.Name')">
-                            {{h}}
+                        <span ng-repeat="h in headerItems" class="tabMenuItem" ng-class="{ tabSelected: h.toLowerCase() == '@cont'}" onclick="selectTab(this, '@User.Identity.Name')">{{h}}
                         </span>
                     </div>
                 </div>
-        </div>
+            </div>
     </header>
     <div id="body">
         @RenderSection("featured", required: false)
@@ -128,7 +127,7 @@
 <script src="~/Scripts/Controllers/LayoutController.js"></script>
 
 <script>
-    function trim (str) {
+    function trim(str) {
         return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
     }
 
@@ -140,16 +139,15 @@
         } else {
             url = urlRoot + c + '/index';
         }
-        //if (window.event.ctrlKey) {
-        //    OpenInNewTab(url);
-        //} else {
-        //}
-        window.location = url;
+        if (window == undefined || window.event == undefined || !window.event.ctrlKey) {
+            window.location = url;
+        } else {
+            OpenInNewTab(url);
+        }
     }
 
     function OpenInNewTab(url) {
         var win = window.open(url, '_blank');
         win.focus();
     }
-
 </script>

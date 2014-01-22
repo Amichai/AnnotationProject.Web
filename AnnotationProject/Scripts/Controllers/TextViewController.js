@@ -40,9 +40,13 @@ function TextViewCtrl($scope, $http) {
         }
         $scope.textID = query_string["textID"];
         $scope.annotationIDQuery = query_string["annotationID"];
+        $scope.usernameQuery = query_string["user"];
+        if ($scope.usernameQuery != undefined) {
+            $scope.annotationSearch += "user:" + $scope.usernameQuery;
+        }
 
         if ($scope.annotationIDQuery != undefined) {
-            $scope.annotationSearch = "id:" + $scope.annotationIDQuery;
+            $scope.annotationSearch += "id:" + $scope.annotationIDQuery;
         }
         if (query_string["linear"] == 'true') {
             $scope.linearLayout = true;
@@ -198,6 +202,13 @@ function TextViewCtrl($scope, $http) {
         }).ToArray();
     }
 
+    function filterByUsername(username) {
+        return Enumerable.From($scope.allAnnotations).Where(function (x) {
+            var result = x.Username == username;
+            return result;
+        }).ToArray();
+    }
+
     var highlightedText = "";
 
     function highlight(text) {
@@ -296,6 +307,9 @@ function TextViewCtrl($scope, $http) {
             $scope.annotations = result;
             if (QueryString.annotationID != undefined) {
                 $scope.annotations = filterById(QueryString.annotationID);
+            }
+            if (QueryString.user != undefined) {
+                $scope.annotations = filterByUsername(QueryString.user);
             }
             if ($scope.linearLayout) {
                 setLayoutLinear();

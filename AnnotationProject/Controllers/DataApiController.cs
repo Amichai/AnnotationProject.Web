@@ -327,6 +327,27 @@ namespace AnnotationProject.Controllers {
         }
 
         [HttpGet]
+        public List<SiteUsersModel> GetSiteUsers() {
+            var udb = new UsersContext();
+            List<SiteUsersModel> users = new List<SiteUsersModel>();
+            var db = new TextAnnotationEntities();
+            foreach (var u in udb.UserProfiles) {
+                var likes = db.UserLikes.Where(i => i.Annotation.Text.UserID == u.UserId).Count();
+
+                var annotations = db.Annotations.Where(i => i.Text1.UserID == u.UserId);
+                var texts = annotations.ToList().Select(i => i.Text.ID.ToString() + "." + i.Text.Title).Distinct().Where(i => i.Split(new char[] {'.'}, StringSplitOptions.RemoveEmptyEntries).Count() > 1).ToList();
+                
+                users.Add(new SiteUsersModel() {
+                    Username = u.UserName,
+                    Favorited = likes,
+                    Annotations = annotations.Count(),
+                    Texts = texts,
+                });
+            }
+            return users.OrderByDescending(i => i.Favorited).ToList();
+        }
+
+        [HttpGet]
         public List<UserAdminModel> GetUsers() {
             var db = new UsersContext();
             List<UserAdminModel> users = new List<UserAdminModel>();
@@ -537,7 +558,7 @@ namespace AnnotationProject.Controllers {
             return toAnnotationResult(annotations);
         }
 
-        
+
     }
 }
 /*

@@ -4,10 +4,98 @@
     ViewBag.Title = "Users";
 }
 
-<h3>Users</h3>
-<hr />
-<p>Coming soon...</p>
+<html ng-app>
+<body>
+    <div ng-controller="UsersCtrl" ng-cloak>
+
+        <h3>Users</h3>
+
+        <table ng-show="!busy">
+            <tr style="border-bottom: darkgray solid 1px;">
+                <th style="width:15%"></th>
+                <th style="width:15%">Annotations</th>
+                <th style="width:15%">Favorited</th>
+                <th style="width:55%">Texts</th>
+            </tr>
+            
+            <tr ng-repeat="user in users" style="border-bottom: darkgray solid 1px;">
+                <td class="col-md-2 col-xs-2">
+                    <b><a href="~/User/Index?user={{user.Username}}">{{user.Username}}</a></b>
+                </td>
+                <td class="col-md-2 col-xs-2">
+                    <p>{{user.Annotations}}</p>
+                </td>
+                <td class="col-md-1 col-xs-1">
+                    <p>{{user.Favorited}}</p>
+                </td>
+                <td class="col-md-7 col-xs-7">
+                    <span ng-repeat="t in user.Texts track by $index">
+                        <span ng-if="$index != user.Texts.length - 1">
+                            <a href="~/TextView/Index?textID={{t.split('.').splice(0,1).toString()}}&user={{user.Username}}">{{t.split('.').splice(1,1).toString()}},
+                            </a>
+                        </span>
+                        <span ng-if="$index == user.Texts.length - 1">
+                            <a href="~/TextView/Index?textID={{t.split('.').splice(0,1).toString()}}&user={{user.Username}}">{{t.split('.').splice(1,1).toString()}}
+                            </a>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+        </table>
+
+
+        @*<div class="row">
+            <div class="col-md-2 col-xs-2">
+                <b></b>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <b>Annotations</b>
+            </div>
+
+            <div class="col-md-1 col-xs-1">
+                <b>Favorited</b>
+            </div>
+
+            <div class="col-md-2 col-xs-2">
+                <b>Active Texts</b>
+            </div>
+        </div>
+        <hr />
+        <div ng-repeat="user in users">
+            <div class="row">
+                <div class="col-md-2 col-xs-2">
+                    <b><a href="~/User/Index?user={{user.Username}}">{{user.Username}}</a></b>
+                </div>
+                <div class="col-md-2 col-xs-2">
+                    <p>{{user.Annotations}}</p>
+                </div>
+                <div class="col-md-1 col-xs-1">
+                    <p>{{user.Favorited}}</p>
+                </div>
+                <div class="col-md-7 col-xs-7">
+                    <span ng-repeat="t in user.Texts track by $index">
+                        <span ng-if="$index != user.Texts.length - 1">
+                            <a href="~/TextView/Index?textID={{t.split('.').splice(0,1).toString()}}&userID={{user.UserID}}">{{t.split('.').splice(1,1).toString()}},
+                            </a>
+                        </span>
+                        <span ng-if="$index == user.Texts.length - 1">
+                            <a href="~/TextView/Index?textID={{t.split('.').splice(0,1).toString()}}">{{t.split('.').splice(1,1).toString()}}
+                            </a>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <hr />
+        </div>*@
+        <div id="loading-indicator" ng-show="busy">
+            <img src="~/Images/ajax-loader.gif" />
+        </div>
+    </div>
+</body>
+</html>
+
 
 <script src="~/Scripts/jquery-1.9.1.js"></script>
 <script src="~/Scripts/bootstrap.js"></script>
 <script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Controllers/UsersController.js"></script>

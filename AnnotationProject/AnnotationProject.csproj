@@ -221,6 +221,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AnnotationResult.cs" />
+    <Compile Include="Models\SiteUsersModel.cs" />
     <Compile Include="Models\TextResult.cs" />
     <Compile Include="Models\UserAdminModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -351,6 +352,7 @@
     <Content Include="Scripts\Controllers\HomePageController.js" />
     <Content Include="Scripts\Controllers\UploadTextController.js" />
     <Content Include="Scripts\Controllers\UserController.js" />
+    <Content Include="Scripts\Controllers\UsersController.js" />
     <Content Include="Scripts\errors.json" />
     <Content Include="Scripts\angular-touch.min.js.map" />
     <Content Include="Scripts\angular-sanitize.min.js.map" />
