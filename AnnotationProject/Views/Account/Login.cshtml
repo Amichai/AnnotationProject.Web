@@ -7,96 +7,14 @@
 }
 
 <hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
+    <h3>@ViewBag.Title</h3>
 </hgroup>
 
-<section id="loginForm">
-    <h2>Use a local account to log in.</h2>
-    @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
+<div style="margin: 10px;">Have an account on one of these sites? Click the logo to log in with it here:</div>
+<div style="margin: 10px;">
 
-        <fieldset>
-            <legend>Log in Form</legend>
-            <ol>
-                <li>
-                    @Html.LabelFor(m => m.LoginModel.UserName)
-                </li>
-                <li>
-                    @Html.TextBoxFor(m => m.LoginModel.UserName)
-                </li>
-                <li>
-                    @Html.ValidationMessageFor(m => m.LoginModel.UserName)
-                </li>
-                <li>
-                    @Html.LabelFor(m => m.LoginModel.Password)
-                </li>
-                <li>
-                    @Html.PasswordFor(m => m.LoginModel.Password)
-                </li>
-                <li>
-                    @Html.ValidationMessageFor(m => m.LoginModel.Password)
-                </li>
-                <li>
-                    @Html.CheckBoxFor(m => m.LoginModel.RememberMe)
-                    @Html.LabelFor(m => m.LoginModel.RememberMe, new { @class = "checkbox" })
-                </li>
-            </ol>
-            <button type="submit"
-                class="btn btn-primary">
-                Log in</button>
-        </fieldset>
-@*<p>
-        @Html.ActionLink("Register", "Register") if you don't have an account.
-    </p>*@
-    }
-
-    <h2>Use another service to log in.</h2>
     @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
-</section>
-
-
-
-<section class="social" id="socialLoginForm">
-
-    <hgroup class="title">
-        <h2>Create a new account.</h2>
-    </hgroup>
-
-    @using (Html.BeginForm("Register", "Account")) {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary()
-
-        <fieldset>
-            <legend>Registration Form</legend>
-            <ol>
-                <li>
-                    @Html.LabelFor(m => m.RegisterModel.UserName)
-                </li>
-                <li>
-                    @Html.TextBoxFor(m => m.RegisterModel.UserName)
-                </li>
-                <li>
-                    @Html.LabelFor(m => m.RegisterModel.Password)
-                </li>
-                <li>
-                    @Html.PasswordFor(m => m.RegisterModel.Password)
-                </li>
-                <li>
-                    @Html.LabelFor(m => m.RegisterModel.ConfirmPassword)
-                </li>
-                <li>
-                    @Html.PasswordFor(m => m.RegisterModel.ConfirmPassword)
-                </li>
-            </ol>
-            <button type="submit"
-                class="btn btn-primary">
-                Register</button>
-        </fieldset>
-    }
-
-
-</section>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
