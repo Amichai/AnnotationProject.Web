@@ -3,7 +3,7 @@
         <div ng-click="expandAnnotationInText($index)" style="padding:10px;"
              ng-class="{isAnnotation : ann.TextAnchor != undefined}" >
             <b>{{ann.TextAnchor}}</b><br ng-show="ann.TextAnchor != undefined"/>
-            <div style="white-space: pre-wrap" ng-show="!ann.EditMode" ><p>{{ann.Content}}</p></div>
+            <div style="white-space: pre-wrap" ng-show="!ann.EditMode" ><p ng-bind-html="sanitize(ann.Content)"></p></div>
 
             <textarea ng-model="ann.Content"
                 ng-show="ann.EditMode" style="white-space: pre-wrap; width: 100%"

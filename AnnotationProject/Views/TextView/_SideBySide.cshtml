@@ -13,20 +13,17 @@
                 ng-class="{highlight: isMouseOver}">
                 <b>{{ann.TextAnchor}}</b><br />
                 <div ng-show="!ann.Expanded">
-                    {{ann.PreviewText}}<span ng-show="ann.PreviewText.length != ann.Content.length">...</span>
+                    {{ann.PreviewText}}<span ng-show="ann.PreviewText.length != ann.ContentNoHtml.length">...</span>
                 </div>
-                <div ng-show="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p>{{ann.Content}}</p></div>
-
+                <div ng-show="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p
+                    ng-bind-html="sanitize(ann.Content)"></p></div>
                 <textarea ng-model="ann.Content"
                     ng-show="ann.Expanded && ann.EditMode" style="white-space: pre-wrap; width: 100%"
                     ng-click="editModeTextBoxClick($event)"></textarea>
-                <div ng-show="ann.Expanded">
-                    <p>
-                        {{ann.DateString}}, by 
+                <div ng-show="ann.Expanded"><p>{{ann.DateString}}, by 
                         <a href="~/User/Index?user={{ann.Username}}"
                             ng-click="stopPropagation($event)"
-                            style="color: #428bca;">{{ann.Username}}</a>
-                    </p>
+                            style="color: #428bca;">{{ann.Username}}</a></p>
                     <p ng-show="!ann.EditMode">Tags: {{ann.Tags}}</p>
                     <p ng-show="!ann.EditMode">Source: {{ann.Source}}</p>
                     <input type="text"
@@ -34,7 +31,6 @@
                         ng-model="ann.Tags"
                         ng-show="ann.EditMode"
                         style="white-space: pre-wrap" ng-click="editModeTextBoxClick($event)" />
-
                 </div>
                 <div ng-show="ann.Expanded">
                     <div ng-show="(ann.Username != undefined && ann.Username == '@User.Identity.Name') || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" >

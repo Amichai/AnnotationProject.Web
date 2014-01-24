@@ -8,6 +8,7 @@ namespace AnnotationProject.Models {
         public int AnnotationID { get; set; }
         public int TextID { get; set; }
         public string Username { get; set; }
+        public string ContentNoHtml { get; set; }
         public string Content { get; set; }
         public DateTime Timestamp { get; set; }
         public string Tags { get; set; }
@@ -24,7 +25,7 @@ namespace AnnotationProject.Models {
         }
         public string PreviewText {
             get {
-                return string.Concat(Content.Take(200));
+                return string.Concat(ContentNoHtml.Take(200));
             }
         }
         public string DateString {

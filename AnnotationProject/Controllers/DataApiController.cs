@@ -1,4 +1,6 @@
 ﻿using AnnotationProject.Models;
+using AnnotationProject.Util;
+using Microsoft.Security.Application;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,13 +93,20 @@ namespace AnnotationProject.Controllers {
                 return new List<TextResult>();
             } else {
                 return toTextResult(result);
-            }
+            }        
         }
 
+        private static string getSafeHtml(string input) {
+            return HtmlUtility.Instance.SanitizeHtml(m.Transform(input));
+        }
+
+        private static MarkdownSharp.Markdown m = new MarkdownSharp.Markdown(new MarkdownSharp.MarkdownOptions() { EncodeProblemUrlCharacters = false }); 
 
         private static List<TextResult> toTextResult(List<Text> queryResults) {
+            
             var result = queryResults.Select(i => new TextResult() {
-                Content = i.Content,
+                ContentNoHtml = i.Content,
+                Content = getSafeHtml(i.Content),
                 Title = i.Title,
                 Author = i.Author,
                 Description = i.Description,
@@ -108,7 +117,8 @@ namespace AnnotationProject.Controllers {
                 NextText = i.NextTextID,
                 PrevText = i.PrevTextID,
                 Uploader = getUsername(i.UserID),
-                Timestamp = i.Timestamp.ToString()
+                Timestamp = i.Timestamp.ToString(),
+                IsBaseText = i.IsBaseText
             }).ToList();
 
             return result;
@@ -138,19 +148,7 @@ namespace AnnotationProject.Controllers {
         public TextResult GetText(int id) {
             var db = new TextAnnotationEntities();
             var toReturn = db.Texts.Where(i => i.ID == id).ToList();
-            return toReturn.Select(i => new TextResult() {
-                Content = i.Content,
-                Title = i.Title,
-                Author = i.Author,
-                Description = i.Description,
-                Source = i.Source,
-                ID = i.ID,
-                Uploader = getUsername(i.UserID),
-                Tags = getTextTags(i),
-                NextText = i.NextTextID,
-                PrevText = i.PrevTextID,
-                IsBaseText = i.IsBaseText
-            }).Single();
+            return toTextResult(toReturn).Single();
         }
 
         [HttpGet]
@@ -164,16 +162,7 @@ namespace AnnotationProject.Controllers {
 
             var annotations = db.Annotations.Where(i => annotationIDs.Contains(i.AnnotationTextID)
                 );
-            return annotations.ToList().Select(i => new AnnotationResult() {
-                Content = i.Text1.Content,
-                Timestamp = i.Text1.Timestamp,
-                BaseTextID = i.BaseTextID,
-                TextAnchor = i.TextAnchor,
-                BaseTextTitle = i.Text.Title,
-                Username = getUsername(i.Text1.UserID),
-                Source = i.Text1.Source,
-                AnnotationID = i.ID,
-            }).OrderByDescending(i => i.Timestamp).ToList();
+            return toAnnotationResult(annotations.ToList()).OrderByDescending(i => i.Timestamp).ToList(); 
         }
 
         private static string getTextTags(int id, TextAnnotationEntities db) {
@@ -202,9 +191,11 @@ namespace AnnotationProject.Controllers {
                     var userID = (int)user.ProviderUserKey;
                     var annID = annotationIds[t.ID].ID;
                     userFavorited = db.UserLikes.Any(i => i.AnnotationID == annID && i.UserID == userID);
+                
                 }
                 results.Add(new AnnotationResult() {
-                    Content = t.Content,
+                    ContentNoHtml = t.Content,
+                    Content = getSafeHtml(t.Content),
                     Timestamp = t.Timestamp,
                     BaseTextID = textID,
                     TextAnchor = annotationIds[t.ID].TextAnchor,
@@ -294,6 +285,7 @@ namespace AnnotationProject.Controllers {
             var newText = new Text() {
                 Title = text.Title,
                 Content = text.Content,
+                //Content = text.Content,
                 Timestamp = DateTime.Now,
                 Author = text.Author,
                 Description = text.Description,
@@ -506,7 +498,8 @@ namespace AnnotationProject.Controllers {
         private List<AnnotationResult> toAnnotationResult(IEnumerable<Annotation> annotations) {
             return annotations.ToList().Select(i =>
                 new AnnotationResult() {
-                    Content = i.Text1.Content,
+                    ContentNoHtml = i.Text1.Content,
+                    Content = getSafeHtml(i.Text1.Content),
                     Timestamp = i.Text1.Timestamp,
                     BaseTextID = i.Text.ID,
                     TextAnchor = i.TextAnchor,

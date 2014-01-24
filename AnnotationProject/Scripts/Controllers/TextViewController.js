@@ -1,5 +1,5 @@
 ﻿/// <reference path="../linq.js_ver2.2.0.2/linq.js" />
-function TextViewCtrl($scope, $http) {
+function TextViewCtrl($scope, $http, $sce) {
     $scope.annotation = "";
     $scope.anchor = "";
     $scope.matches = 0;
@@ -157,6 +157,17 @@ function TextViewCtrl($scope, $http) {
 
         });
         p.ev.stopPropagation();
+    }
+
+    function strip(html) {
+        var tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+    }
+
+    $scope.sanitize = function (t) {
+        var a = $sce.trustAsHtml(t);
+        return a;
     }
 
     $scope.anchorUpdate = function () {
