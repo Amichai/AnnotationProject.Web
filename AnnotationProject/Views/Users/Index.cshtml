@@ -20,7 +20,7 @@
             
             <tr ng-repeat="user in users" style="border-bottom: darkgray solid 1px;">
                 <td class="col-md-2 col-xs-2">
-                    <b><a href="~/User/Index?user={{user.Username}}">{{user.Username}}</a></b>
+                    <b><a href="~/User/Index?user={{user.Username}}" class="blackLink">{{user.Username}}</a></b>
                 </td>
                 <td class="col-md-2 col-xs-2">
                     <p>{{user.Annotations}}</p>
@@ -31,11 +31,13 @@
                 <td class="col-md-7 col-xs-7">
                     <span ng-repeat="t in user.Texts track by $index">
                         <span ng-if="$index != user.Texts.length - 1">
-                            <a href="~/TextView/Index?textID={{t.split('.').splice(0,1).toString()}}&user={{user.Username}}">{{t.split('.').splice(1,1).toString()}},
+                            <a href="~/TextView/Index?textID={{t.split('.').splice(0,1).toString()}}&user={{user.Username}}"
+                                >{{t.split('.').splice(1,1).toString()}},
                             </a>
                         </span>
                         <span ng-if="$index == user.Texts.length - 1">
-                            <a href="~/TextView/Index?textID={{t.split('.').splice(0,1).toString()}}&user={{user.Username}}">{{t.split('.').splice(1,1).toString()}}
+                            <a href="~/TextView/Index?textID={{t.split('.').splice(0,1).toString()}}&user={{user.Username}}"
+                                >{{t.split('.').splice(1,1).toString()}}
                             </a>
                         </span>
                     </span>

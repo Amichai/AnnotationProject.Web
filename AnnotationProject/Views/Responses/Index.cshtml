@@ -14,13 +14,13 @@
         <div ng-repeat="ann in responses">
             <div class="row">
                 <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle != undefined">
-                    <i><b><a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a></b></i>
+                    <i><b><a href="~/TextView/Index?textID={{ann.BaseTextID}}" class="blackLink">{{ann.BaseTextTitle}}</a></b></i>
                 </div>
                 <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle == undefined">
                     <a href="~/TextView/Index?textID={{ann.BaseTextID}}">textID:{{ann.BaseTextID}}</a>
                 </div>
                 <div class="col-md-9 col-xs-9">
-                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}&annotationID={{ann.AnnotationID}}">
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}&annotationID={{ann.AnnotationID}}" class="blackLink">
                     {{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
                         </a>
                     <br />

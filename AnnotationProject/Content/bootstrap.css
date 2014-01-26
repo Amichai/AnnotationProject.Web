@@ -305,7 +305,8 @@ html {
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  line-height: 1.428571429;
+  /*line-height: 1.428571429;*/
+  line-height: 1;
   color: #333333;
   /*background-color: #ffffff;*/
 }
@@ -319,16 +320,16 @@ textarea {
   line-height: inherit;
 }
 
-a {
+/*a {
   color: #428bca;
   text-decoration: none;
-}
+}*/
 
-a:hover,
+/*a:hover,
 a:focus {
   color: #2a6496;
   text-decoration: underline;
-}
+}*/
 
 a:focus {
   outline: thin dotted;
@@ -6063,14 +6064,14 @@ button.close {
 }
 
 @media screen and (min-width: 768px) {
-  .modal-dialog {
+  /*.modal-dialog {
     width: 600px;
     margin: 30px auto;
   }
   .modal-content {
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-  }
+  }*/
 }
 
 .tooltip {

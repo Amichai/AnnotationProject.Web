@@ -17,11 +17,7 @@ namespace AnnotationProject.Models {
         public string Timestamp { get; set; }
 
         public int AnnotationCount { get; set; }
-        public string Snippet {
-            get {
-                return string.Concat(this.ContentNoHtml.Take(100));
-            }
-        }
+        public string Snippet { get; set; }
 
         public int? PrevText { get; set; }
         public int? NextText { get; set; }

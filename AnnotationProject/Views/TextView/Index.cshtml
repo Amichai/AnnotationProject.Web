@@ -1,6 +1,8 @@
 ﻿<link href="~/Content/bootstrap.css" rel="stylesheet" />
 
 <style>
+
+
     .isAnnotation {
         background-color: white;
         font-size: 15px;
@@ -141,8 +143,8 @@
 <body>
     <div ng-controller="TextViewCtrl" ng-cloak>
         <div style="text-align: center;" ng-show="isBaseText == true">
-            <p class="georgia" style="font-size: 25px; white-space: nowrap; margin: 0px;">
-                <a href="@Request.Url.PathAndQuery"><i>{{title}}</i>, {{author}}</a>
+            <p class="georgia" style="font-size: 25px; white-space: nowrap; margin: 0px;padding-top:7px">
+                <a href="@Request.Url.PathAndQuery" class="blackLink"><i>{{title}}</i>, {{author}}</a>
                 <a data-toggle="modal" data-target="#editTextModal" 
                 ng-show="uploader == '@User.Identity.Name' || @Roles.IsUserInRole("CanEdit").ToString().ToLower()" style="font-size:12px;cursor:pointer">edit</a>
             </p>
@@ -200,49 +202,49 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title" id="editTextModalLabel">Edit</h4>
                     </div>
-                    <table style="margin: 25px">
+                    <table style="margin: 25px;width:100%">
                         <tr>
-                            <td>Author:</td>
+                            <td style="width: 20%">Author:</td>
                             <td>
-                                <input type="text" ng-model="author" />
+                                <input type="text" ng-model="author" style="width: 100%;max-width:100%"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Title:</td>
                             <td>
-                                <input type="text" ng-model="title" />
+                                <input type="text" ng-model="title" style="width: 100%" />
                             </td>
                         </tr>
                         <tr>
                             <td>Content:</td>
                             <td>
-                                <textarea ng-model="text" style="width: 100%"></textarea>
+                                <textarea ng-model="textNoHtml" style="width: 100%; max-width:100%"></textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Source:</td>
                             <td>
-                                <input type="text" ng-model="source" />
+                                <input type="text" ng-model="source" style="width: 100%"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Tags:</td>
                             <td>
-                                <input type="text" ng-model="tags" />
+                                <input type="text" ng-model="tags" style="width: 100%" />
                             </td>
                         </tr>
 
                         <tr>
                             <td>Next text id:</td>
                             <td>
-                                <input type="text" ng-model="nextText" />
+                                <input type="text" ng-model="nextText" style="width: 100%" />
                             </td>
                         </tr>
 
                         <tr>
                             <td>Previous text id:</td>
                             <td>
-                                <input type="text" ng-model="prevText" />
+                                <input type="text" ng-model="prevText" style="width: 100%" />
                             </td>
                         </tr>
                     </table>

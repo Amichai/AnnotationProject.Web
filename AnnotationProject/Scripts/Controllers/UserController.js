@@ -28,7 +28,6 @@
     if (QueryString.user != undefined) {
         $http.get(urlRoot + 'api/DataApi/getUserAnnotations?username=' + QueryString.user).success(function (activity) {
             $scope.annotations = activity;
-            debugger;
         });
         $http.get(urlRoot + 'api/DataApi/getUserTexts?username=' + QueryString.user).success(function (activity) {
             $scope.texts = activity;

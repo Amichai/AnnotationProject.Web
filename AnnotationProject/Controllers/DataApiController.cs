@@ -103,9 +103,9 @@ namespace AnnotationProject.Controllers {
         private static MarkdownSharp.Markdown m = new MarkdownSharp.Markdown(new MarkdownSharp.MarkdownOptions() { EncodeProblemUrlCharacters = false }); 
 
         private static List<TextResult> toTextResult(List<Text> queryResults) {
-            
             var result = queryResults.Select(i => new TextResult() {
                 ContentNoHtml = i.Content,
+                Snippet = string.Concat(i.Content.Take(100)),
                 Content = getSafeHtml(i.Content),
                 Title = i.Title,
                 Author = i.Author,
@@ -194,7 +194,9 @@ namespace AnnotationProject.Controllers {
                 
                 }
                 results.Add(new AnnotationResult() {
+                    PreviewText = string.Concat(t.Content.Take(100)),
                     ContentNoHtml = t.Content,
+                    Ellipse = t.Content.Count() > 100,
                     Content = getSafeHtml(t.Content),
                     Timestamp = t.Timestamp,
                     BaseTextID = textID,
@@ -420,7 +422,7 @@ namespace AnnotationProject.Controllers {
         public List<AnnotationResult> UpdateAnnotation(AnnotationResult ann) {
             var db = new TextAnnotationEntities();
             var toEdit = db.Texts.Where(i => i.ID == ann.TextID).Single();
-            toEdit.Content = ann.Content;
+            toEdit.Content = ann.ContentNoHtml;
             updateTags(ann.Tags, ann.TextID, db, toEdit);
             db.SaveChanges();
             return GetAnnotations(ann.BaseTextID);
@@ -430,7 +432,7 @@ namespace AnnotationProject.Controllers {
         public void UpdateTextDetails(TextResult text) {
             var db = new TextAnnotationEntities();
             var toEdit = db.Texts.Where(i => i.ID == text.ID).Single();
-            toEdit.Content = text.Content;
+            toEdit.Content = text.ContentNoHtml;
             toEdit.Author = text.Author;
             toEdit.Description = text.Description;
             toEdit.Title = text.Title;
@@ -498,7 +500,8 @@ namespace AnnotationProject.Controllers {
         private List<AnnotationResult> toAnnotationResult(IEnumerable<Annotation> annotations) {
             return annotations.ToList().Select(i =>
                 new AnnotationResult() {
-                    ContentNoHtml = i.Text1.Content,
+                    PreviewText = string.Concat(i.Text1.Content.Take(100)),
+                    Ellipse = i.Text1.Content.Count() > 100,
                     Content = getSafeHtml(i.Text1.Content),
                     Timestamp = i.Text1.Timestamp,
                     BaseTextID = i.Text.ID,

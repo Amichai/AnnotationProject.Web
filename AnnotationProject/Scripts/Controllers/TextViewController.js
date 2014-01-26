@@ -127,7 +127,7 @@ function TextViewCtrl($scope, $http, $sce) {
             $scope.allAnnotations = result;
             $scope.annotationSearchUpdate();
             setLayoutLinear();
-            $scope.annotationAndTexts[idx].Expanded = true;
+            $scope.annotationsAndText[idx].Expanded = true;
         });
     }
 
@@ -304,6 +304,7 @@ function TextViewCtrl($scope, $http, $sce) {
 
     $http.get(urlRoot + 'api/DataApi/getText?id=' + $scope.textID).success(function (result) {
         $scope.text = result.Content;
+        $scope.textNoHtml = result.ContentNoHtml;
         $scope.title = result.Title;
         $scope.author = result.Author;
         $scope.description = result.Description;
@@ -330,7 +331,7 @@ function TextViewCtrl($scope, $http, $sce) {
 
     $scope.updateTextDetails = function () {
         var updatedText = new Object();
-        updatedText.Content = $scope.text;
+        updatedText.ContentNoHtml = $scope.textNoHtml;
         updatedText.Title = $scope.title;
         updatedText.Author = $scope.author;
         updatedText.Tags = $scope.tags;

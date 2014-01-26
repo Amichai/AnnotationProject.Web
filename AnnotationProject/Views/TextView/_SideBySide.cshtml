@@ -13,11 +13,11 @@
                 ng-class="{highlight: isMouseOver}">
                 <b>{{ann.TextAnchor}}</b><br />
                 <div ng-show="!ann.Expanded">
-                    {{ann.PreviewText}}<span ng-show="ann.PreviewText.length != ann.ContentNoHtml.length">...</span>
+                    {{ann.PreviewText}}<span ng-show="ann.Ellipse">...</span>
                 </div>
-                <div ng-show="ann.Expanded && !ann.EditMode" style="white-space: pre-wrap"><p
+                <div ng-show="ann.Expanded && !ann.EditMode"><p
                     ng-bind-html="sanitize(ann.Content)"></p></div>
-                <textarea ng-model="ann.Content"
+                <textarea ng-model="ann.ContentNoHtml"
                     ng-show="ann.Expanded && ann.EditMode" style="white-space: pre-wrap; width: 100%"
                     ng-click="editModeTextBoxClick($event)"></textarea>
                 <div ng-show="ann.Expanded"><p>{{ann.DateString}}, by 
@@ -61,6 +61,6 @@
 
 
 </div>
-<div class="contentBody">
-    <p id="content" style="white-space: pre-wrap;" dir="auto">{{text}}</p>
+<div class="contentBody userContentFormatting">
+    <p id="content" style="white-space: pre-wrap;" dir="auto" ng-bind-html="sanitize(text)"></p>
 </div>

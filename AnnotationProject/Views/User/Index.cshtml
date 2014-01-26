@@ -8,7 +8,7 @@
 <html ng-app>
 <body>
     <div ng-controller="UserCtrl" ng-cloak>
-        <h4><b><a href="@Request.Url.PathAndQuery">User: {{Username}}</a></b></h4>
+        <h4><b><a href="@Request.Url.PathAndQuery" class="blackLink">User: {{Username}}</a></b></h4>
 
         <h3>Text Uploads</h3>
         <div class="row">
@@ -29,14 +29,14 @@
         <div ng-repeat="text in texts">
             <div class="row">
                 <div class="col-md-4 col-xs-4">
-                    <i><b><a href="~/TextView/Index?textID={{text.ID}}">{{text.Title}}</a></b></i>
+                    <i><b><a href="~/TextView/Index?textID={{text.ID}}" class="blackLink">{{text.Title}}</a></b></i>
                     <br />
                     <div>
                         {{text.Timestamp}}
                     </div>
                 </div>
                 <div class="col-md-2 col-xs-2">
-                    <p><a href="~/?author={{text.Author}}">{{text.Author}}</a></p>
+                    <p><a href="~/?author={{text.Author}}" class="blackLink">{{text.Author}}</a></p>
                 </div>
                 <div class="col-md-1 col-xs-1">{{text.AnnotationCount}}</div>
                 <div class="col-md-5 col-xs-5">{{text.Snippet}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span></div>
@@ -49,13 +49,13 @@
         <div ng-repeat="ann in annotations">
             <div class="row">
                 <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle != undefined">
-                    <i><b><a href="~/TextView/Index?textID={{ann.BaseTextID}}">{{ann.BaseTextTitle}}</a></b></i>
+                    <i><b><a href="~/TextView/Index?textID={{ann.BaseTextID}}" class="blackLink">{{ann.BaseTextTitle}}</a></b></i>
                 </div>
                 <div class="col-md-3 col-xs-3" ng-if="ann.BaseTextTitle == undefined">
                     <a href="~/TextView/Index?textID={{ann.BaseTextID}}">textID:{{ann.BaseTextID}}</a>
                 </div>
                 <div class="col-md-9 col-xs-9">
-                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}&annotationID={{ann.AnnotationID}}">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
+                    <a href="~/TextView/Index?textID={{ann.BaseTextID}}&annotationID={{ann.AnnotationID}}" class="blackLink">{{ann.PreviewText}}<span ng-if="ann.PreviewText.length != ann.Content.length">...</span>
                     </a>
                     <br />
                     {{ann.DateString}} - 
